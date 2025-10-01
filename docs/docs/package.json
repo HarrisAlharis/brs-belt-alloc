@@ -1,0 +1,10 @@
+{
+  "name": "brs-belt-alloc",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "playwright": "^1.45.0",
+    "simple-git": "^3.22.0",
+    "dayjs": "^1.11.10"
+  }
+}
