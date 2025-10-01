@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>BRS Belt Allocations — Live</title>
+<style>
+ body{font-family:system-ui,Segoe UI,Arial,sans-serif;margin:16px;color:#111}
+ h1{font-size:18px;margin-bottom:6px}
+ .meta{color:#555;font-size:12px;margin-bottom:12px}
+ table{width:100%;border-collapse:collapse}
+ th,td{border:1px solid #ddd;padding:6px;font-size:13px}
+ th{background:#f7f7f7}
+ .cta{background:#fff8cc}
+ .dom{background:#e7f7ff}
+ .warn{background:#ffeaea}
+</style>
+</head>
+<body>
+<h1>BRS Belt Allocations — Live (ETA-based)</h1>
+<div class="meta">Auto-refreshes every 60 seconds. Next 3 hours.</div>
+
+<table id="tbl">
+  <thead>
+    <tr>
+      <th>Flight</th><th>Origin</th><th>ETA (UTC)</th><th>Status</th><th>Flow</th><th>Belt</th><th>Start</th><th>End</th><th>Reason</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<script>
+async function loadData(){
+  const res = await fetch('assignments.json?nocache='+Date.now());
+  const d = await res.json();
+  const tb = document.querySelector('#tbl tbody');
+  tb.innerHTML='';
+  d.rows.sort((a,b)=>new Date(a.eta)-new Date(b.eta));
+  for(const x of d.rows){
+    const tr = document.createElement('tr');
+    if(x.flow==='CTA') tr.className='cta';
+    if(x.flow==='DOMESTIC') tr.className='dom';
+    if(!x.belt) tr.className='warn';
+    const toHHMM = s => new Date(s).toISOString().slice(11,16);
+    tr.innerHTML = `<td>${x.flight}</td>
+                    <td>${x.origin||''}</td>
+                    <td>${toHHMM(x.eta)}</td>
+                    <td>${x.status||''}</td>
+                    <td>${x.flow||''}</td>
+                    <td>${x.belt||'--'}</td>
+                    <td>${toHHMM(x.start)}</td>
+                    <td>${toHHMM(x.end)}</td>
+                    <td>${x.reason||''}</td>`;
+    tb.appendChild(tr);
+  }
+}
+loadData();
+setInterval(loadData, 60000);
+</script>
+</body>
+</html>
