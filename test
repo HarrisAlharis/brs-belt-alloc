@@ -1,0 +1,19 @@
+{
+  "generated_at":"2025-10-01T06:15:00Z",
+  "horizon_minutes":180,
+  "rules_version":"v1.0",
+  "outages":[{"belt":3,"start":"2025-10-01T08:00Z","end":"2025-10-01T16:00Z","reason":"Engineering"}],
+  "rows":[
+    {
+      "flight":"EZY2773",
+      "origin":"CDG",
+      "eta":"2025-10-01T07:15:00Z",
+      "status":"en route",
+      "flow":"INTERNATIONAL",
+      "belt":1,
+      "start":"2025-10-01T07:25:00Z",
+      "end":"2025-10-01T07:55:00Z",
+      "reason":"intl_spread"
+    }
+  ]
+}
