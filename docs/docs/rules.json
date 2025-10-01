@@ -1,0 +1,34 @@
+{
+  "airport": "BRS",
+  "horizon_minutes": 180,
+  "density_minutes": 10,
+  "max_queue_per_belt": 2,
+  "belts": [
+    { "id": 1, "type": "standard" },
+    { "id": 2, "type": "standard" },
+    { "id": 3, "type": "standard" },
+    { "id": 4, "type": "standard" },
+    { "id": 5, "type": "long" },
+    { "id": 6, "type": "standard", "preferred_flows": ["CTA"] },
+    { "id": 7, "type": "domestic" }
+  ],
+  "flows": {
+    "CTA": {
+      "iata_origins": ["DUB","ORK","SNN","BHD","BFS","EDI","GLA","INV","IOM","JER","GCI"],
+      "buffers": { "start": 10, "dwell": 20, "cleanup": 5 },
+      "targets": [6,1,2,3,4,5]
+    },
+    "DOMESTIC": {
+      "iata_origins": ["ABZ","EDI","GLA","INV","NCL","LHR","LGW","LTN","LCY","STN","MAN","BHD","BFS"],
+      "buffers": { "start": 5, "dwell": 15, "cleanup": 5 },
+      "targets": [7]
+    },
+    "INTERNATIONAL": {
+      "buffers": { "start": 10, "dwell": 25, "cleanup": 5 },
+      "targets": [1,2,3,4,5,6]
+    }
+  },
+  "status_include": ["en route", "estimated", "approaching", "landing", "arrived"],
+  "status_exclude": ["scheduled", "not departed", "cancelled", "diverted"],
+  "outages": []
+}
