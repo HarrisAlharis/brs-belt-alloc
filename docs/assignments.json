@@ -1,16 +1,16 @@
 {
-  "generated_at": "2025-10-02T01:00:15.464Z",
+  "generated_at": "2025-10-02T01:29:01.341Z",
   "horizon_minutes": 180,
   "rows": [
     {
       "flight": "BY699",
-      "origin": "",
-      "eta": "2025-10-02T01:40:00.000Z",
+      "origin": "HRG",
+      "eta": "2025-10-02T01:34:00.000Z",
       "status": "estimated",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-02T01:50:00.000Z",
-      "end": "2025-10-02T02:20:00.000Z",
+      "start": "2025-10-02T01:44:00.000Z",
+      "end": "2025-10-02T02:14:00.000Z",
       "reason": "spread"
     }
   ]
