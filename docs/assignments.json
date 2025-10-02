@@ -1,94 +1,17 @@
 {
-  "generated_at": "2025-10-02T13:54:33.092Z",
+  "generated_at": "2025-10-02T14:15:53.882Z",
   "horizon_minutes": 180,
   "rows": [
     {
       "flight": "SSZ102",
-      "origin": "MXP",
-      "eta": "2025-10-02T14:08:00.000Z",
+      "origin": "RKE",
+      "eta": "2025-10-02T14:30:00.000Z",
       "status": "estimated",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-02T14:18:00.000Z",
-      "end": "2025-10-02T14:48:00.000Z",
+      "start": "2025-10-02T14:40:00.000Z",
+      "end": "2025-10-02T15:10:00.000Z",
       "reason": "spread"
-    },
-    {
-      "flight": "SSZ102",
-      "origin": "MXP",
-      "eta": "2025-10-02T14:08:00.000Z",
-      "status": "estimated",
-      "flow": "INTERNATIONAL",
-      "belt": 2,
-      "start": "2025-10-02T14:18:00.000Z",
-      "end": "2025-10-02T14:48:00.000Z",
-      "reason": "spread"
-    },
-    {
-      "flight": "SSZ102",
-      "origin": "MXP",
-      "eta": "2025-10-02T14:08:00.000Z",
-      "status": "estimated",
-      "flow": "INTERNATIONAL",
-      "belt": 3,
-      "start": "2025-10-02T14:18:00.000Z",
-      "end": "2025-10-02T14:48:00.000Z",
-      "reason": "spread"
-    },
-    {
-      "flight": "SSZ102",
-      "origin": "MXP",
-      "eta": "2025-10-02T14:08:00.000Z",
-      "status": "estimated",
-      "flow": "INTERNATIONAL",
-      "belt": 4,
-      "start": "2025-10-02T14:18:00.000Z",
-      "end": "2025-10-02T14:48:00.000Z",
-      "reason": "spread"
-    },
-    {
-      "flight": "SSZ102",
-      "origin": "MXP",
-      "eta": "2025-10-02T14:08:00.000Z",
-      "status": "estimated",
-      "flow": "INTERNATIONAL",
-      "belt": 5,
-      "start": "2025-10-02T14:18:00.000Z",
-      "end": "2025-10-02T14:48:00.000Z",
-      "reason": "density_overflow"
-    },
-    {
-      "flight": "SSZ102",
-      "origin": "MXP",
-      "eta": "2025-10-02T14:08:00.000Z",
-      "status": "estimated",
-      "flow": "INTERNATIONAL",
-      "belt": 6,
-      "start": "2025-10-02T14:18:00.000Z",
-      "end": "2025-10-02T14:48:00.000Z",
-      "reason": "spread"
-    },
-    {
-      "flight": "SSZ102",
-      "origin": "MXP",
-      "eta": "2025-10-02T14:08:00.000Z",
-      "status": "estimated",
-      "flow": "INTERNATIONAL",
-      "belt": "",
-      "start": "2025-10-02T14:18:00.000Z",
-      "end": "2025-10-02T14:48:00.000Z",
-      "reason": "UNASSIGNED"
-    },
-    {
-      "flight": "SSZ102",
-      "origin": "RKE",
-      "eta": "2025-10-02T14:32:00.000Z",
-      "status": "estimated",
-      "flow": "INTERNATIONAL",
-      "belt": "",
-      "start": "2025-10-02T14:42:00.000Z",
-      "end": "2025-10-02T15:12:00.000Z",
-      "reason": "UNASSIGNED"
     },
     {
       "flight": "LS1892",
@@ -96,9 +19,31 @@
       "eta": "2025-10-02T14:38:00.000Z",
       "status": "estimated",
       "flow": "INTERNATIONAL",
-      "belt": 1,
+      "belt": 2,
       "start": "2025-10-02T14:48:00.000Z",
       "end": "2025-10-02T15:18:00.000Z",
+      "reason": "spread"
+    },
+    {
+      "flight": "EI3284",
+      "origin": "DUB",
+      "eta": "2025-10-02T14:51:00.000Z",
+      "status": "estimated",
+      "flow": "CTA",
+      "belt": 3,
+      "start": "2025-10-02T15:01:00.000Z",
+      "end": "2025-10-02T15:26:00.000Z",
+      "reason": "spread"
+    },
+    {
+      "flight": "AT76",
+      "origin": "DUB",
+      "eta": "2025-10-02T15:00:00.000Z",
+      "status": "estimated",
+      "flow": "CTA",
+      "belt": 4,
+      "start": "2025-10-02T15:10:00.000Z",
+      "end": "2025-10-02T15:35:00.000Z",
       "reason": "spread"
     },
     {
@@ -107,7 +52,7 @@
       "eta": "2025-10-02T16:36:00.000Z",
       "status": "delayed",
       "flow": "INTERNATIONAL",
-      "belt": 2,
+      "belt": 5,
       "start": "2025-10-02T16:46:00.000Z",
       "end": "2025-10-02T17:16:00.000Z",
       "reason": "spread"
