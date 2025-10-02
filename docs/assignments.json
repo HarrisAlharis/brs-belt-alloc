@@ -1,5 +1,17 @@
 {
-  "generated_at": "2025-10-02T15:16:21.142Z",
+  "generated_at": "2025-10-02T15:24:16.235Z",
   "horizon_minutes": 180,
-  "rows": []
+  "rows": [
+    {
+      "flight": "EZY2788",
+      "origin": "CDG",
+      "eta": "2025-10-02T15:30:00.000Z",
+      "status": "16:30",
+      "flow": "INTERNATIONAL",
+      "belt": 1,
+      "start": "2025-10-02T15:40:00.000Z",
+      "end": "2025-10-02T16:10:00.000Z",
+      "reason": "spread"
+    }
+  ]
 }
