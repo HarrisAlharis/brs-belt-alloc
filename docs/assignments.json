@@ -1,0 +1,105 @@
+{
+  "generated_at": "2025-10-02T00:31:52.201Z",
+  "horizon_minutes": 180,
+  "rows": [
+    {
+      "flight": "LS1876",
+      "origin": "",
+      "eta": "2025-10-02T00:37:00.000Z",
+      "status": "estimated",
+      "flow": "INTERNATIONAL",
+      "belt": 1,
+      "start": "2025-10-02T00:47:00.000Z",
+      "end": "2025-10-02T01:17:00.000Z",
+      "reason": "spread"
+    },
+    {
+      "flight": "LS1876",
+      "origin": "BRS",
+      "eta": "2025-10-02T01:01:00.000Z",
+      "status": "estimated",
+      "flow": "INTERNATIONAL",
+      "belt": 2,
+      "start": "2025-10-02T01:11:00.000Z",
+      "end": "2025-10-02T01:41:00.000Z",
+      "reason": "spread"
+    },
+    {
+      "flight": "LS1876",
+      "origin": "BRS",
+      "eta": "2025-10-02T01:01:00.000Z",
+      "status": "estimated",
+      "flow": "INTERNATIONAL",
+      "belt": 3,
+      "start": "2025-10-02T01:11:00.000Z",
+      "end": "2025-10-02T01:41:00.000Z",
+      "reason": "spread"
+    },
+    {
+      "flight": "LS1876",
+      "origin": "BRS",
+      "eta": "2025-10-02T01:01:00.000Z",
+      "status": "estimated",
+      "flow": "INTERNATIONAL",
+      "belt": 4,
+      "start": "2025-10-02T01:11:00.000Z",
+      "end": "2025-10-02T01:41:00.000Z",
+      "reason": "spread"
+    },
+    {
+      "flight": "LS1876",
+      "origin": "NEO",
+      "eta": "2025-10-02T01:01:00.000Z",
+      "status": "estimated",
+      "flow": "INTERNATIONAL",
+      "belt": 5,
+      "start": "2025-10-02T01:11:00.000Z",
+      "end": "2025-10-02T01:41:00.000Z",
+      "reason": "density_overflow"
+    },
+    {
+      "flight": "LS1876",
+      "origin": "NEO",
+      "eta": "2025-10-02T01:01:00.000Z",
+      "status": "estimated",
+      "flow": "INTERNATIONAL",
+      "belt": 6,
+      "start": "2025-10-02T01:11:00.000Z",
+      "end": "2025-10-02T01:41:00.000Z",
+      "reason": "spread"
+    },
+    {
+      "flight": "LS1876",
+      "origin": "NEO",
+      "eta": "2025-10-02T01:01:00.000Z",
+      "status": "estimated",
+      "flow": "INTERNATIONAL",
+      "belt": "",
+      "start": "2025-10-02T01:11:00.000Z",
+      "end": "2025-10-02T01:41:00.000Z",
+      "reason": "UNASSIGNED"
+    },
+    {
+      "flight": "LS1876",
+      "origin": "NEO",
+      "eta": "2025-10-02T01:01:00.000Z",
+      "status": "estimated",
+      "flow": "INTERNATIONAL",
+      "belt": "",
+      "start": "2025-10-02T01:11:00.000Z",
+      "end": "2025-10-02T01:41:00.000Z",
+      "reason": "UNASSIGNED"
+    },
+    {
+      "flight": "BY699",
+      "origin": "",
+      "eta": "2025-10-02T01:42:00.000Z",
+      "status": "estimated",
+      "flow": "INTERNATIONAL",
+      "belt": 1,
+      "start": "2025-10-02T01:52:00.000Z",
+      "end": "2025-10-02T02:22:00.000Z",
+      "reason": "spread"
+    }
+  ]
+}
