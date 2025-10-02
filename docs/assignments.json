@@ -1,27 +1,16 @@
 {
-  "generated_at": "2025-10-02T14:42:56.815Z",
+  "generated_at": "2025-10-02T14:50:32.314Z",
   "horizon_minutes": 180,
   "rows": [
     {
-      "flight": "EI3284",
-      "origin": "DUB",
-      "eta": "2025-10-02T15:10:00.000Z",
-      "status": "estimated",
-      "flow": "CTA",
-      "belt": 1,
-      "start": "2025-10-02T15:20:00.000Z",
-      "end": "2025-10-02T15:45:00.000Z",
-      "reason": "spread"
-    },
-    {
       "flight": "LS1888",
       "origin": "CHQ",
-      "eta": "2025-10-02T16:42:00.000Z",
-      "status": "delayed",
+      "eta": "2025-10-02T16:15:00.000Z",
+      "status": "delayed 17:36",
       "flow": "INTERNATIONAL",
-      "belt": 2,
-      "start": "2025-10-02T16:52:00.000Z",
-      "end": "2025-10-02T17:22:00.000Z",
+      "belt": 1,
+      "start": "2025-10-02T16:25:00.000Z",
+      "end": "2025-10-02T16:55:00.000Z",
       "reason": "spread"
     }
   ]
