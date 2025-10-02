@@ -1,12 +1,12 @@
 {
-  "generated_at": "2025-10-02T14:50:32.314Z",
+  "generated_at": "2025-10-02T14:56:38.895Z",
   "horizon_minutes": 180,
   "rows": [
     {
       "flight": "LS1888",
       "origin": "CHQ",
       "eta": "2025-10-02T16:15:00.000Z",
-      "status": "delayed 17:36",
+      "status": "delayed",
       "flow": "INTERNATIONAL",
       "belt": 1,
       "start": "2025-10-02T16:25:00.000Z",
