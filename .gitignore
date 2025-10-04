@@ -1,0 +1,13 @@
+﻿node_modules/
+data/
+feeder/
+feeder.log
+package-lock.json
+*.bat
+rules.json
+
+# debug artifacts – keep local
+docs/fr24.png
+docs/fr24.html
+docs/fr24_dropped_debug.json
+docs/raw-arrivals-sample.json
