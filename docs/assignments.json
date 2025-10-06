@@ -1,7 +1,26 @@
 {
-  "generated_at_utc": "2025-10-06T07:46:27.051Z",
-  "generated_at_local": "2025-10-06T08:46:27",
+  "generated_at_utc": "2025-10-06T07:50:03.263Z",
+  "generated_at_local": "2025-10-06T08:50:03",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
-  "rows": []
+  "rows": [
+    {
+      "flight": "U2224",
+      "origin": "(BFS)",
+      "origin_iata": "BFS",
+      "eta": "2025-10-06T08:34:00.000Z",
+      "status": "estimated 09:34",
+      "flow": "DOMESTIC",
+      "belt": 6,
+      "start": "2025-10-06T08:49:00.000Z",
+      "end": "2025-10-06T09:19:00.000Z",
+      "reason": "domestic_default",
+      "airline": "easyJet",
+      "aircraft": "(G-EZWK)",
+      "pax_estimate": 162,
+      "scheduled_local": "09:45",
+      "eta_local": "09:34",
+      "delay_min": -11
+    }
+  ]
 }
