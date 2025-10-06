@@ -1,44 +1,26 @@
 {
-  "generated_at_utc": "2025-10-06T07:33:51.412Z",
-  "generated_at_local": "2025-10-06T08:33:51",
+  "generated_at_utc": "2025-10-06T07:42:27.049Z",
+  "generated_at_local": "2025-10-06T08:42:27",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
     {
-      "flight": "",
-      "origin": "(AMS)",
-      "origin_iata": "AMS",
-      "eta": "2025-10-06T07:36:00.000Z",
-      "status": "estimated 08:36",
-      "flow": "INTERNATIONAL",
-      "belt": 1,
-      "start": "2025-10-06T07:51:00.000Z",
-      "end": "2025-10-06T08:21:00.000Z",
-      "reason": "intl_spread",
-      "airline": "KLM",
-      "aircraft": "(PH-EXG)",
-      "pax_estimate": 166,
-      "scheduled_local": "08:50",
-      "eta_local": "08:36",
-      "delay_min": -14
-    },
-    {
       "flight": "FR4148",
       "origin": "(FAO)",
       "origin_iata": "FAO",
-      "eta": "2025-10-06T07:44:00.000Z",
-      "status": "estimated 08:44",
+      "eta": "2025-10-06T07:45:00.000Z",
+      "status": "estimated 08:45",
       "flow": "INTERNATIONAL",
-      "belt": 2,
-      "start": "2025-10-06T07:59:00.000Z",
-      "end": "2025-10-06T08:29:00.000Z",
+      "belt": 1,
+      "start": "2025-10-06T08:00:00.000Z",
+      "end": "2025-10-06T08:30:00.000Z",
       "reason": "intl_spread",
       "airline": "Ryanair",
       "aircraft": "(9H-QBI)",
       "pax_estimate": 166,
       "scheduled_local": "09:00",
-      "eta_local": "08:44",
-      "delay_min": -16
+      "eta_local": "08:45",
+      "delay_min": -15
     }
   ]
 }
