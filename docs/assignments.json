@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-19T19:03:37.171Z",
-  "generated_at_local": "2025-10-19T20:03:37",
+  "generated_at_utc": "2025-10-19T19:05:01.343Z",
+  "generated_at_local": "2025-10-19T20:05:01",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -46,19 +46,19 @@
       "flight": "FR624",
       "origin": "(BUD)",
       "origin_iata": "BUD",
-      "eta": "2025-10-19T20:45:00.000Z",
-      "status": "delayed 21:45",
+      "eta": "2025-10-19T20:48:00.000Z",
+      "status": "delayed 21:48",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-19T21:00:00.000Z",
-      "end": "2025-10-19T21:30:00.000Z",
+      "start": "2025-10-19T21:03:00.000Z",
+      "end": "2025-10-19T21:33:00.000Z",
       "reason": "intl_spread",
       "airline": "Ryanair",
       "aircraft": "(9H-QAJ)",
       "pax_estimate": 166,
       "scheduled_local": "21:00",
-      "eta_local": "21:45",
-      "delay_min": 45,
+      "eta_local": "21:48",
+      "delay_min": 48,
       "flight_from": "cell"
     },
     {
@@ -97,6 +97,25 @@
       "scheduled_local": "22:55",
       "eta_local": "22:54",
       "delay_min": -1,
+      "flight_from": "cell"
+    },
+    {
+      "flight": "LS1864",
+      "origin": "(LPA)",
+      "origin_iata": "LPA",
+      "eta": "2025-10-19T22:02:00.000Z",
+      "status": "estimated 23:02",
+      "flow": "INTERNATIONAL",
+      "belt": 2,
+      "start": "2025-10-19T22:17:00.000Z",
+      "end": "2025-10-19T22:47:00.000Z",
+      "reason": "intl_spread",
+      "airline": "Jet2",
+      "aircraft": "(G-JZHS)",
+      "pax_estimate": 171,
+      "scheduled_local": "23:10",
+      "eta_local": "23:02",
+      "delay_min": -8,
       "flight_from": "cell"
     }
   ]
