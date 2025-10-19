@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-19T19:13:36.015Z",
-  "generated_at_local": "2025-10-19T20:13:36",
+  "generated_at_utc": "2025-10-19T19:15:01.199Z",
+  "generated_at_local": "2025-10-19T20:15:01",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -135,6 +135,25 @@
       "scheduled_local": "23:10",
       "eta_local": "23:06",
       "delay_min": -4,
+      "flight_from": "cell"
+    },
+    {
+      "flight": "LS1804",
+      "origin": "(ACE)",
+      "origin_iata": "ACE",
+      "eta": "2025-10-19T22:15:00.000Z",
+      "status": "estimated 23:15",
+      "flow": "INTERNATIONAL",
+      "belt": 3,
+      "start": "2025-10-19T22:30:00.000Z",
+      "end": "2025-10-19T23:00:00.000Z",
+      "reason": "intl_spread",
+      "airline": "Jet2",
+      "aircraft": "(G-JZBV)",
+      "pax_estimate": 171,
+      "scheduled_local": "23:20",
+      "eta_local": "23:15",
+      "delay_min": -5,
       "flight_from": "cell"
     }
   ]
