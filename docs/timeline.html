@@ -2,63 +2,61 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>BRS – Belt Plan (Interactive Timeline)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="timeline.css">
-  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <title>BRS — Arrivals Belt Timeline</title>
+  <link rel="stylesheet" href="timeline.css" />
 </head>
 <body>
-  <header class="topbar">
-    <div class="lhs">
-      <h1>BRS – Arrivals Belt Plan</h1>
-      <div id="meta" class="meta"></div>
+  <header class="hdr">
+    <div class="hdr-left">
+      <h1>BRS — Arrivals Belt Timeline</h1>
+      <div id="page-meta" class="muted small"></div>
     </div>
-    <div class="rhs controls">
-      <div class="control">
-        <label>Belts</label>
-        <div id="belt-filter" class="chips"></div>
+
+    <div class="hdr-right">
+      <!-- Belt filter -->
+      <div class="toolbar-group">
+        <span class="lbl">Belt filter:</span>
+        <button class="chip" data-belt="1">Belt 1</button>
+        <button class="chip" data-belt="2">Belt 2</button>
+        <button class="chip" data-belt="3">Belt 3</button>
+        <button class="chip" data-belt="5">Belt 5</button>
+        <button class="chip" data-belt="6">Belt 6</button>
+        <button class="chip" data-belt="7">Belt 7</button>
+        <button class="chip chip-primary" data-filter="all">All</button>
+        <button class="chip" data-filter="none">None</button>
       </div>
-      <div class="control">
-        <label>Window</label>
-        <select id="back">
-          <option value="15">Back 15 min</option>
-          <option value="30">Back 30 min</option>
-          <option value="60">Back 1 h</option>
-          <option value="120">Back 2 h</option>
+
+      <!-- Zoom & Now -->
+      <div class="toolbar-group">
+        <span class="lbl">Zoom:</span>
+        <select data-role="px-per-min" class="sel">
+          <option value="3">3 px/min (narrow)</option>
+          <option value="6" selected>6 px/min (default)</option>
+          <option value="10">10 px/min (wide)</option>
         </select>
-        <select id="ahead">
-          <option value="90">Ahead 1.5 h</option>
-          <option value="180" selected>Ahead 3 h</option>
-          <option value="240">Ahead 4 h</option>
-          <option value="360">Ahead 6 h</option>
-        </select>
-        <button id="now" class="btn">Now</button>
+
+        <button class="btn" data-action="jump-now">Now</button>
       </div>
-      <div class="control">
-        <label>Zoom</label>
-        <select id="zoomPreset">
-          <option value="1">1 px/min (wide)</option>
-          <option value="2">2 px/min</option>
-          <option value="3" selected>3 px/min</option>
-          <option value="6">6 px/min (tight)</option>
-        </select>
-      </div>
-      <div class="legend">
-        <span class="dot ontime"></span>On time
-        <span class="dot slip10"></span>+10–19
-        <span class="dot slip20"></span>+20+
-        <span class="dot early"></span>Early
+
+      <!-- Legend -->
+      <div class="toolbar-group legend">
+        <span class="pill pill-green">On time / small slip</span>
+        <span class="pill pill-amber">+10–19</span>
+        <span class="pill pill-red">+20+</span>
+        <span class="pill pill-blue">Early</span>
       </div>
     </div>
   </header>
 
-  <div id="host" class="host">
-    <svg id="chart"></svg>
-  </div>
+  <!-- SCROLL CONTAINER -->
+  <main id="tl-scroller">
+    <div id="tl-canvas"></div>
+  </main>
 
-  <div class="footnote">Wheel/trackpad to pan • Shift+Wheel to zoom • Click a puck for details</div>
-
-  <div id="tooltip" class="tooltip" style="display:none;"></div>
+  <footer class="ftr small muted">
+    Source: FR24 (screen-scrape) • View updates automatically when JSON changes.
+  </footer>
 
   <script src="timeline.js"></script>
 </body>
