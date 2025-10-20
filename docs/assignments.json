@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-20T19:10:00.570Z",
-  "generated_at_local": "2025-10-20T20:10:00",
+  "generated_at_utc": "2025-10-20T19:11:20.248Z",
+  "generated_at_local": "2025-10-20T20:11:20",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -26,19 +26,19 @@
       "flight": "U2319",
       "origin": "(EDI)",
       "origin_iata": "EDI",
-      "eta": "2025-10-20T19:52:00.000Z",
-      "status": "estimated 20:52",
+      "eta": "2025-10-20T19:54:00.000Z",
+      "status": "estimated 20:54",
       "flow": "DOMESTIC",
       "belt": 7,
-      "start": "2025-10-20T20:07:00.000Z",
-      "end": "2025-10-20T20:37:00.000Z",
+      "start": "2025-10-20T20:09:00.000Z",
+      "end": "2025-10-20T20:39:00.000Z",
       "reason": "domestic→7",
       "airline": "easyJet",
       "aircraft": "(G-EZRX)",
       "pax_estimate": 162,
       "scheduled_local": "20:40",
-      "eta_local": "20:52",
-      "delay_min": 12
+      "eta_local": "20:54",
+      "delay_min": 14
     },
     {
       "flight": "LS1814",
