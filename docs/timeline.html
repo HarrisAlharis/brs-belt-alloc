@@ -3,71 +3,57 @@
 <head>
   <meta charset="utf-8" />
   <title>BRS — Arrivals Belt Timeline</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link rel="stylesheet" href="timeline.css">
 </head>
 <body>
   <header class="topbar">
     <div class="brand">BRS — Arrivals Belt Timeline</div>
-    <div class="meta" id="meta">Generated …</div>
+    <div class="meta" id="meta"></div>
   </header>
 
   <div class="controls">
-    <div class="chip-group" id="beltFilter">
-      <span class="label">Belt filter:</span>
-      <button class="chip" data-belt="1">Belt 1</button>
-      <button class="chip" data-belt="2">Belt 2</button>
-      <button class="chip" data-belt="3">Belt 3</button>
-      <button class="chip" data-belt="5">Belt 5</button>
-      <button class="chip" data-belt="6">Belt 6</button>
-      <button class="chip" data-belt="7">Belt 7</button>
-      <button class="chip chip--primary" data-belt="all">All</button>
-      <button class="chip" data-belt="none">None</button>
-    </div>
+    <div class="chiprow" id="beltChips"></div>
 
-    <div class="spacer"></div>
-
-    <div class="chip-group">
-      <label for="zoomSel" class="label">Zoom:</label>
-      <select id="zoomSel" class="select">
+    <div class="right-controls">
+      <label class="lbl">Zoom:</label>
+      <select id="zoom">
         <option value="3">3 px/min (narrow)</option>
+        <option value="4">4 px/min</option>
         <option value="6" selected>6 px/min (default)</option>
-        <option value="10">10 px/min (wide)</option>
+        <option value="8">8 px/min</option>
+        <option value="12">12 px/min (wide)</option>
       </select>
-      <button id="nowBtn" class="chip chip--primary">Now</button>
-    </div>
+      <button id="nowBtn" class="btn">Now</button>
 
-    <div class="legend">
-      <span class="dot dot--green"></span> On time / small slip
-      <span class="dot dot--amber"></span> +10–19
-      <span class="dot dot--red"></span> +20+
-      <span class="dot dot--blue"></span> Early
-      <span class="dot dot--grey"></span> >60 min ago
-    </div>
-  </div>
-
-  <!-- Timeline wrapper: left column (sticky) + right scrollable canvas -->
-  <div class="frame">
-    <div class="col col--labels">
-      <div class="ruler ruler--corner"></div>
-      <div class="labels" id="laneLabels"></div>
-    </div>
-
-    <div class="col col--timeline">
-      <div class="ruler" id="timeRuler"></div>
-      <div class="scroll" id="scrollArea">
-        <div class="lanes" id="lanes"></div>
-        <div class="nowline" id="nowLine"></div>
+      <div class="legend">
+        <span class="dot dot-ok"></span> On time / small slip
+        <span class="dot dot-10"></span> +10–19
+        <span class="dot dot-20"></span> +20+
+        <span class="dot dot-early"></span> Early
+        <span class="dot dot-stale"></span> &gt;60 min ago
       </div>
     </div>
   </div>
 
-  <footer class="footer small">
-    <span>Source: FR24 (screen-scrape)</span>
-    <span>•</span>
-    <span>Auto-refresh ~90s</span>
-    <span>•</span>
-    <span>4-hour local history kept in your browser.</span>
+  <!-- Main scroller -->
+  <div id="viewport" class="viewport">
+    <!-- Sticky belt column -->
+    <div class="belts-col" id="beltsCol"></div>
+
+    <!-- Scrollable content -->
+    <div class="scroll-outer" id="scrollOuter">
+      <div class="scroll-inner" id="scrollInner">
+        <!-- dynamic: ruler, rows, pucks, now line -->
+        <canvas id="ruler" class="ruler" height="44"></canvas>
+        <div id="rows" class="rows"></div>
+        <div id="nowLine" class="now-line"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="foot">
+    <div>Source: FR24 (screen-scrape) • Auto-refresh ~90s • 4-hour local history kept in your browser.</div>
   </footer>
 
   <script src="timeline.js"></script>

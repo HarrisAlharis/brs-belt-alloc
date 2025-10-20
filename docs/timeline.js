@@ -1,297 +1,351 @@
-﻿/*  BRS Timeline (hour-anchored ruler + robust dedupe + frozen belt labels)
-    v2025-10-20
-*/
+﻿/* Timeline renderer — scroll-aware ruler, NOW line, sticky belts, and de-duped pucks */
 
-(function(){
-  // -------- config --------
-  const JSON_URL = 'assignments.json';
-  const BELTS = [1,2,3,5,6,7];          // lanes in order
-  const HISTORY_HOURS = 4;              // show last 4h locally
-  const POLL_MS = 90_000;               // auto refresh
-  const RULER_STEP_MIN = 60;            // major tick every hour
-  const STORAGE_KEY = 'brs_timeline_history_v3'; // bump to reset old caches
-
-  // DOM
+(() => {
+  // ---------- DOM ----------
   const metaEl = document.getElementById('meta');
-  const labelsEl = document.getElementById('laneLabels');
-  const lanesEl = document.getElementById('lanes');
-  const rulerEl = document.getElementById('timeRuler');
+  const beltsCol = document.getElementById('beltsCol');
+  const rowsEl = document.getElementById('rows');
+  const ruler = document.getElementById('ruler');
+  const scrollOuter = document.getElementById('scrollOuter');
+  const scrollInner = document.getElementById('scrollInner');
   const nowLine = document.getElementById('nowLine');
-  const scrollArea = document.getElementById('scrollArea');
-  const zoomSel = document.getElementById('zoomSel');
-  const beltFilterGroup = document.getElementById('beltFilter');
+  const zoomSel = document.getElementById('zoom');
   const nowBtn = document.getElementById('nowBtn');
+  const beltChips = document.getElementById('beltChips');
 
-  // state
-  let pxPerMin = parseFloat(zoomSel.value || '6');
-  let activeBelts = new Set(BELTS);         // belt filter
-  let history = loadHistory();              // local 4h memory
-  let lastPayload = null;
+  // ---------- CONFIG ----------
+  const BELTS = [1,2,3,5,6,7];
+  const HISTORY_KEEP_MIN = 240; // 4 hours in browser
+  const REFRESH_MS = 90_000;    // ~90s pull
+  const RULER_STEP_MIN = 60;    // major tick spacing
+  const RULER_SUB_MIN  = 15;    // minor tick spacing
 
-  // -------- utils --------
-  const pad = n=>String(n).padStart(2,'0');
-  const mins = ms => Math.floor(ms/60000);
+  // State
+  let pxPerMin = +zoomSel.value;
+  let windowStart = alignHour(new Date());       // start at the nearest hour
+  windowStart.setMinutes(windowStart.getMinutes()-60); // show 1h back initially
+  windowStart.setSeconds(0,0);
+  let windowHours = 8;                            // total virtual width hours
+  let beltFilter = new Set(BELTS);                // start showing all
 
-  function hhmm(iso){
-    const d = new Date(iso);
-    return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  // ---------- INIT ----------
+  renderChips();
+  renderBeltsColumn();
+  sizeCanvas();
+  drawRuler(); // initial
+  boot();
+
+  // ---------- Wiring ----------
+  zoomSel.addEventListener('change', () => {
+    pxPerMin = +zoomSel.value;
+    redrawAll();
+  });
+
+  nowBtn.addEventListener('click', () => {
+    // recenter to keep "now" roughly 35% from left
+    const nowX = xForTime(new Date());
+    const target = Math.max(0, nowX - scrollOuter.clientWidth*0.35);
+    scrollOuter.scrollTo({left: target, behavior:'smooth'});
+  });
+
+  scrollOuter.addEventListener('scroll', () => {
+    drawRuler();   // make scale match scroll
+    placeNowLine();
+  });
+
+  window.addEventListener('resize', () => {
+    sizeCanvas();
+    drawRuler();
+    placeNowLine();
+  });
+
+  // ---------- Main loop ----------
+  async function boot(){
+    await loadAndRender();           // first paint
+    setInterval(loadAndRender, REFRESH_MS);
+    setInterval(() => { placeNowLine(); }, 15_000); // keep now line fresh
   }
 
-  function floorToHour(d){
+  async function loadAndRender(){
+    const data = await fetchJSON('assignments.json');
+    const gen = data?.generated_at_local || data?.generated_at_utc || '';
+    metaEl.textContent = `Generated ${gen} • Horizon ${data?.horizon_minutes || ''} min`;
+
+    const rows = Array.isArray(data?.rows) ? data.rows : [];
+    // stamp "seen" time as now for history
+    const seenAt = Date.now();
+
+    // 1) Read browser history
+    const hist = readHistory();
+
+    // 2) Merge: map by key flight|eta-minute -> newest row
+    const mergedMap = new Map();
+    function put(r){
+      if(!r.eta) return;
+      const k = `${(r.flight||'').trim()}|${isoMinute(r.eta)}`;
+      const v = {...r, _seenAt: seenAt};
+      mergedMap.set(k, v);
+    }
+    for(const k in hist){
+      const r = hist[k];
+      put(r);
+    }
+    for(const r of rows){
+      put(r);
+    }
+
+    // 3) Filter to last HISTORY_KEEP_MIN (by ETA) and de-dupe
+    const now = Date.now();
+    const kept = [];
+    for(const r of mergedMap.values()){
+      const etaMs = +new Date(r.eta);
+      const ageMin = Math.round((now - etaMs)/60000);
+      if (ageMin <= HISTORY_KEEP_MIN && ageMin > - (windowHours*60)) {
+        kept.push(r);
+      }
+    }
+    kept.sort((a,b)=> new Date(a.eta) - new Date(b.eta));
+
+    // 4) Persist back the kept items
+    const toStore = {};
+    for(const r of kept){
+      const k = `${(r.flight||'').trim()}|${isoMinute(r.eta)}`;
+      toStore[k] = r;
+    }
+    writeHistory(toStore);
+
+    // 5) Render rows/pucks
+    renderGrid(kept);
+
+    // 6) Sync ruler & now line
+    sizeCanvas();
+    drawRuler();
+    placeNowLine();
+  }
+
+  // ---------- Rendering ----------
+  function renderChips(){
+    // belt chips & toggles
+    const frag = document.createDocumentFragment();
+    const mk = (label, val) => {
+      const c = document.createElement('div');
+      c.className = 'chip active';
+      c.textContent = `Belt ${label}`;
+      c.dataset.val = val;
+      c.addEventListener('click', () => {
+        if (beltFilter.has(val) && beltFilter.size>1) beltFilter.delete(val);
+        else beltFilter.add(val);
+        c.classList.toggle('active', beltFilter.has(val));
+        updateRowVisibility();
+      });
+      return c;
+    }
+    BELTS.forEach(b => frag.appendChild(mk(b,b)));
+    // All / None
+    const all = document.createElement('div');
+    all.className = 'chip';
+    all.textContent = 'All';
+    all.addEventListener('click', () => {
+      beltFilter = new Set(BELTS);
+      for(const el of beltChips.children){ el.classList.add('active'); }
+      updateRowVisibility();
+    });
+    const none = document.createElement('div');
+    none.className = 'chip';
+    none.textContent = 'None';
+    none.addEventListener('click', () => {
+      beltFilter.clear();
+      for(const el of beltChips.children){ el.classList.remove('active'); }
+      updateRowVisibility();
+    });
+
+    frag.appendChild(all); frag.appendChild(none);
+    beltChips.innerHTML = '';
+    beltChips.appendChild(frag);
+  }
+
+  function renderBeltsColumn(){
+    beltsCol.innerHTML = '';
+    const topPad = document.createElement('div');
+    topPad.style.height = `var(--ruler-h)`;
+    beltsCol.appendChild(topPad);
+    for(const b of BELTS){
+      const d = document.createElement('div');
+      d.className = 'belt-label';
+      d.textContent = `Belt ${b}`;
+      d.dataset.belt = b;
+      beltsCol.appendChild(d);
+    }
+  }
+
+  function renderGrid(items){
+    // rows container
+    rowsEl.innerHTML = '';
+    // compute scroll width based on hours
+    const totalMin = windowHours * 60;
+    const width = totalMin * pxPerMin + 2000; // a bit extra room
+    scrollInner.style.width = `${width}px`;
+
+    // build rows
+    const rowMap = new Map(); // belt -> rowEl
+    for(const b of BELTS){
+      const row = document.createElement('div');
+      row.className = 'row';
+      row.dataset.belt = b;
+      rowsEl.appendChild(row);
+      rowMap.set(b, row);
+    }
+
+    // place pucks (de-dup already handled in load)
+    for(const r of items){
+      const belt = r.belt ?? '';
+      if (!rowMap.has(belt)) continue;
+
+      const row = rowMap.get(belt);
+      const start = new Date(r.start || r.eta);
+      const end   = new Date(r.end   || +new Date(r.eta)+45*60000);
+
+      const x = xForTime(start);
+      const w = Math.max(120, Math.round((end - start)/60000) * pxPerMin);
+
+      const p = document.createElement('div');
+      p.className = 'puck ' + severityClass(r);
+      p.style.left = `${x}px`;
+      p.style.width = `${w}px`;
+
+      const t1 = document.createElement('div');
+      t1.className = 't1';
+      t1.textContent = `${(r.flight||'').trim()} • ${(r.origin_iata||r.origin||'').replace(/[()]/g,'').trim()}`;
+
+      const t2 = document.createElement('div');
+      t2.className = 't2';
+      t2.textContent = `${hhmmLocal(r.start||r.eta)} → ${hhmmLocal(r.end||(+new Date(r.eta)+45*60000))}`;
+
+      p.title = [
+        t1.textContent,
+        `Time: ${t2.textContent}`,
+        `Flow: ${(r.flow||'').toUpperCase()}`,
+        `Belt: ${r.belt ?? '?'}`,
+        `Reason: ${r.reason||''}`
+      ].join('\n');
+
+      p.appendChild(t1); p.appendChild(t2);
+      row.appendChild(p);
+    }
+
+    updateRowVisibility();
+  }
+
+  function updateRowVisibility(){
+    for(const row of rowsEl.children){
+      const b = +row.dataset.belt;
+      row.style.display = beltFilter.has(b) ? '' : 'none';
+    }
+    for(const lab of beltsCol.querySelectorAll('.belt-label')){
+      const b = +lab.dataset.belt;
+      lab.style.visibility = beltFilter.has(b) ? 'visible' : 'hidden';
+    }
+  }
+
+  // ---------- Ruler / NOW ----------
+  function sizeCanvas(){
+    ruler.width = scrollOuter.clientWidth;
+  }
+
+  function drawRuler(){
+    const ctx = ruler.getContext('2d');
+    const w = ruler.width, h = ruler.height;
+    ctx.clearRect(0,0,w,h);
+    ctx.font = '12px system-ui'; ctx.textBaseline = 'top';
+
+    const leftMin = scrollOuter.scrollLeft / pxPerMin; // minutes from windowStart
+    const startTime = new Date(windowStart.getTime() + leftMin*60000);
+
+    // choose first major tick on/after the view-left rounded to hour
+    const firstMajor = new Date(startTime);
+    firstMajor.setMinutes(0,0,0);
+    while(firstMajor < startTime) firstMajor.setMinutes(firstMajor.getMinutes()+RULER_STEP_MIN);
+
+    // draw ticks across visible width
+    const maxMinSpan = Math.ceil(w / pxPerMin) + RULER_STEP_MIN;
+    const viewStartMinAbs = minutesSince(windowStart, firstMajor);
+
+    // minor ticks each RULER_SUB_MIN
+    ctx.fillStyle = 'rgba(255,255,255,.6)';
+    ctx.strokeStyle = 'rgba(255,255,255,.15)';
+
+    // draw minor
+    for(let m=viewStartMinAbs - 120; m<viewStartMinAbs + maxMinSpan + 120; m += RULER_SUB_MIN){
+      const x = Math.round(m*pxPerMin - (scrollOuter.scrollLeft % (RULER_SUB_MIN*pxPerMin)));
+      // thin line
+      ctx.beginPath(); ctx.moveTo(x+0.5, 24); ctx.lineTo(x+0.5, h); ctx.stroke();
+    }
+
+    // major ticks + labels
+    for(let m=viewStartMinAbs; m<viewStartMinAbs + maxMinSpan; m += RULER_STEP_MIN){
+      const tickTime = new Date(windowStart.getTime() + m*60000);
+      const x = Math.round(m*pxPerMin - (scrollOuter.scrollLeft % (RULER_SUB_MIN*pxPerMin)));
+      ctx.fillStyle = 'rgba(255,255,255,.9)';
+      const label = hhmm(tickTime);
+      // label bg
+      const tw = ctx.measureText(label).width + 10;
+      ctx.fillStyle = 'rgba(0,0,0,.35)';
+      ctx.fillRect(x-4, 4, tw, 16);
+      ctx.fillStyle = '#cfe0ff';
+      ctx.fillText(label, x, 6);
+      // bold grid
+      ctx.strokeStyle = 'rgba(255,255,255,.22)';
+      ctx.beginPath(); ctx.moveTo(x+0.5, 20); ctx.lineTo(x+0.5, h); ctx.stroke();
+    }
+  }
+
+  function placeNowLine(){
+    const x = xForTime(new Date());
+    nowLine.style.left = `${x}px`;
+  }
+
+  // ---------- Utils ----------
+  function severityClass(r){
+    const dm = typeof r.delay_min === 'number' ? r.delay_min : null;
+    if (dm == null) return 'ok';
+    if (dm >= 20) return 'd20';
+    if (dm >= 10) return 'd10';
+    if (dm <= -1) return 'early';
+    return 'ok';
+  }
+  function xForTime(t){
+    const ms = +t - +windowStart;
+    const min = ms/60000;
+    return Math.round(min * pxPerMin);
+  }
+  function alignHour(d){
     const x = new Date(d);
     x.setMinutes(0,0,0);
     return x;
   }
-  function ceilToNextHour(d){
-    const f = floorToHour(d);
-    return (f.getTime() < d.getTime()) ? new Date(f.getTime() + 3600000) : f;
+  function minutesSince(a,b){ return Math.round((+b - +a)/60000); }
+  function hhmm(d){
+    const h = String(d.getHours()).padStart(2,'0');
+    const m = String(d.getMinutes()).padStart(2,'0');
+    return `${h}:${m}`;
   }
+  function hhmmLocal(isoOrDate){
+    const d = (isoOrDate instanceof Date) ? isoOrDate : new Date(isoOrDate);
+    return hhmm(d);
+  }
+  function isoMinute(iso){ const d=new Date(iso); d.setSeconds(0,0); return d.toISOString().slice(0,16); }
 
-  function loadHistory(){
+  async function fetchJSON(path){
+    const res = await fetch(`${path}?v=${Date.now()}`, {cache:'no-store'});
+    return res.ok ? res.json() : {};
+  }
+  function readHistory(){
     try{
-      const s = localStorage.getItem(STORAGE_KEY) || '[]';
-      const arr = JSON.parse(s);
-      return Array.isArray(arr)?arr:[];
-    }catch{ return []; }
+      const raw = localStorage.getItem('brs_timeline_hist');
+      return raw ? JSON.parse(raw) : {};
+    }catch{ return {}; }
   }
-  function saveHistory(arr){
-    try{
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
-    }catch{}
+  function writeHistory(obj){
+    try{ localStorage.setItem('brs_timeline_hist', JSON.stringify(obj)); }catch{}
   }
-
-  // relaxed, robust key: flight|belt|startMin|endMin (minute precision)
-  function relaxedKey(r){
-    const f = (r.flight||'').trim().toUpperCase();
-    const b = String(r.belt ?? '');
-    const s = r.start ? mins(new Date(r.start).getTime()) : '';
-    const e = r.end   ? mins(new Date(r.end).getTime())   : '';
-    return [f,b,s,e].join('|');
-  }
-
-  // de-dupe: keep newest generated_at_utc per relaxedKey
-  function dedupeKeepNewest(list){
-    const map = new Map();
-    for(const r of list){
-      const k = relaxedKey(r);
-      const existing = map.get(k);
-      if(!existing){
-        map.set(k, r);
-      }else{
-        const ga = new Date(existing.generated_at_utc||0).getTime();
-        const gb = new Date(r.generated_at_utc||0).getTime();
-        if(gb > ga) map.set(k, r);
-      }
-    }
-    return [...map.values()];
-  }
-
-  function delayClass(r){
-    const dm = (typeof r.delay_min === 'number') ? r.delay_min : null;
-    if(dm==null) return 'puck--green';
-    if(dm >= 20) return 'puck--red';
-    if(dm >= 10) return 'puck--amber';
-    if(dm <= -1) return 'puck--blue';
-    return 'puck--green';
-  }
-
-  // -------- layout/time --------
-  function buildTimeWindow(){
-    // Window spans from (now - HISTORY_HOURS) to (now + 6h), horizontally scrollable
-    const now = new Date();
-    const start = new Date(now.getTime() - HISTORY_HOURS*60*60000);
-    const end   = new Date(now.getTime() + 6*60*60000);
-    return {start, end, now};
-  }
-
-  function minsBetween(a,b){ return (b.getTime() - a.getTime())/60000; }
-
-  function setCanvasWidth(win){
-    const totalMin = Math.ceil(minsBetween(win.start, win.end));
-    const widthPx = Math.max(2000, totalMin * pxPerMin);
-    lanesEl.style.width = `${widthPx}px`;
-  }
-
-  // hour-anchored ruler
-  function drawRuler(win){
-    rulerEl.innerHTML = '';
-    const firstTick = ceilToNextHour(win.start);
-    for(let t = firstTick.getTime(); t <= win.end.getTime(); t += RULER_STEP_MIN*60000){
-      const d = new Date(t);
-      const x = minsBetween(win.start, d) * pxPerMin;
-
-      const tick = document.createElement('div');
-      tick.className = 'tick';
-      tick.style.left = `${x}px`;
-
-      const lbl = document.createElement('div');
-      lbl.className = 'tlabel';
-      lbl.textContent = `${pad(d.getHours())}:00`;
-      tick.appendChild(lbl);
-
-      rulerEl.appendChild(tick);
-    }
-  }
-
-  function drawLabels(){
-    labelsEl.innerHTML = '';
-    for(const b of BELTS){
-      const row = document.createElement('div');
-      row.className = 'label-row';
-      row.textContent = `Belt ${b}`;
-      labelsEl.appendChild(row);
-    }
-  }
-
-  function placeNowLine(win){
-    const x = minsBetween(win.start, win.now) * pxPerMin;
-    nowLine.style.left = `${x}px`;
-  }
-
-  // -------- data & render --------
-  function mergeIntoHistory(currentRows, generated_at_utc){
-    const add = currentRows.map(r => ({...r, generated_at_utc}));
-    // combine then keep newest per relaxedKey
-    const merged = dedupeKeepNewest([...history, ...add]);
-
-    // keep only last HISTORY_HOURS window around “now”
-    const cutoffMs = Date.now() - HISTORY_HOURS*60*60000;
-    const trimmed = merged.filter(r => {
-      const s = r.start ? new Date(r.start).getTime() : 0;
-      const e = r.end ? new Date(r.end).getTime() : 0;
-      return (s>=cutoffMs || e>=cutoffMs); // anything touching last 4h
-    });
-
-    history = dedupeKeepNewest(trimmed);
-    saveHistory(history);
-  }
-
-  function filteredRows(win){
-    // include items whose [start,end] overlaps timeline window and pass belt filter
-    const startMs = win.start.getTime();
-    const endMs = win.end.getTime();
-    const rows = dedupeKeepNewest(history).filter(r => {
-      if(!activeBelts.has(Number(r.belt))) return false;
-      const s = r.start ? new Date(r.start).getTime() : 0;
-      const e = r.end ? new Date(r.end).getTime() : 0;
-      return (s <= endMs && e >= startMs);
-    });
-
-    // stable sort by start then belt
-    rows.sort((a,b)=>{
-      const sa = a.start ? new Date(a.start).getTime() : 0;
-      const sb = b.start ? new Date(b.start).getTime() : 0;
-      if(sa!==sb) return sa-sb;
-      return (Number(a.belt)||0) - (Number(b.belt)||0);
-    });
-    return rows;
-  }
-
-  function puckTooltip(r){
-    const lines = [
-      `${(r.flight||'—').toUpperCase()} • ${(r.origin_iata||'').toUpperCase()}`,
-      `${hhmm(r.start)} → ${hhmm(r.end)}`,
-      `Status: ${r.status || '—'}`,
-      `Flow: ${r.flow || '—'}`,
-      `Belt: ${r.belt || '—'}`,
-      `Reason: ${r.reason || '—'}`
-    ];
-    return lines.join('\n');
-  }
-
-  function render(win){
-    setCanvasWidth(win);
-    drawRuler(win);
-    placeNowLine(win);
-
-    lanesEl.innerHTML = ''; // clear to prevent visual duplicates
-
-    const laneH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--lane-h'));
-    const puckH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--puck-h'));
-    const vPad = (laneH - puckH)/2;
-
-    const rows = filteredRows(win);
-    for(const r of rows){
-      const sMin = minsBetween(win.start, new Date(r.start));
-      const eMin = minsBetween(win.start, new Date(r.end));
-      const left = sMin * pxPerMin;
-      const width = Math.max(24, (eMin - sMin) * pxPerMin);
-
-      const laneIndex = BELTS.indexOf(Number(r.belt));
-      if(laneIndex < 0) continue;
-      const top = laneIndex * laneH + vPad;
-
-      const puck = document.createElement('div');
-      puck.className = `puck ${delayClass(r)}`;
-      puck.style.left = `${left}px`;
-      puck.style.top = `${top}px`;
-      puck.style.width = `${width}px`;
-      puck.setAttribute('data-tip', puckTooltip(r));
-
-      const title = document.createElement('div');
-      title.className = 'title';
-      title.textContent = `${(r.flight||'').toUpperCase()} • ${(r.origin_iata||'').toUpperCase()}`;
-      const time = document.createElement('div');
-      time.className = 'time';
-      time.textContent = `${hhmm(r.start)} → ${hhmm(r.end)}`;
-
-      puck.appendChild(title);
-      puck.appendChild(time);
-      lanesEl.appendChild(puck);
-    }
-
-    // update meta
-    metaEl.textContent = `Generated ${lastPayload?.generated_at_local || '—'} • Horizon ${lastPayload?.horizon_minutes || ''} min`;
-  }
-
-  // -------- actions --------
-  async function loadOnce(){
-    const res = await fetch(`${JSON_URL}?v=${Date.now()}`);
-    const data = await res.json();
-    lastPayload = data;
-
-    const rows = Array.isArray(data.rows) ? data.rows : [];
-    mergeIntoHistory(rows, data.generated_at_utc || new Date().toISOString());
-
-    render(buildTimeWindow());
-  }
-
-  function tick(){
-    placeNowLine(buildTimeWindow());
-  }
-
-  // -------- UI wiring --------
-  function init(){
-    drawLabels();
-
-    beltFilterGroup.addEventListener('click', (e)=>{
-      const b = e.target?.dataset?.belt;
-      if(!b) return;
-      if(b==='all'){ activeBelts = new Set(BELTS); }
-      else if(b==='none'){ activeBelts = new Set(); }
-      else {
-        const n = Number(b);
-        if(activeBelts.has(n)) activeBelts.delete(n); else activeBelts.add(n);
-      }
-      render(buildTimeWindow());
-    });
-
-    zoomSel.addEventListener('change', ()=>{
-      pxPerMin = parseFloat(zoomSel.value||'6');
-      render(buildTimeWindow());
-    });
-
-    nowBtn.addEventListener('click', ()=>{
-      const win = buildTimeWindow();
-      const x = minsBetween(win.start, win.now) * pxPerMin;
-      const half = scrollArea.clientWidth/2;
-      scrollArea.scrollTo({ left: Math.max(0, x - half), behavior:'smooth' });
-    });
-
-    loadOnce().catch(console.error);
-    setInterval(loadOnce, POLL_MS);
-    setInterval(tick, 10_000);
-  }
-
-  init();
 })();
