@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-20T19:03:35.886Z",
-  "generated_at_local": "2025-10-20T20:03:35",
+  "generated_at_utc": "2025-10-20T19:05:00.739Z",
+  "generated_at_local": "2025-10-20T20:05:00",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -8,37 +8,37 @@
       "flight": "U27267",
       "origin": "(PMI)",
       "origin_iata": "PMI",
-      "eta": "2025-10-20T19:24:00.000Z",
-      "status": "estimated 20:24",
+      "eta": "2025-10-20T19:23:00.000Z",
+      "status": "estimated 20:23",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-20T19:39:00.000Z",
-      "end": "2025-10-20T20:09:00.000Z",
+      "start": "2025-10-20T19:38:00.000Z",
+      "end": "2025-10-20T20:08:00.000Z",
       "reason": "intl_spread",
       "airline": "easyJet",
       "aircraft": "(OE-LQL)",
       "pax_estimate": 162,
       "scheduled_local": "20:10",
-      "eta_local": "20:24",
-      "delay_min": 14
+      "eta_local": "20:23",
+      "delay_min": 13
     },
     {
       "flight": "LS1814",
       "origin": "(BJV)",
       "origin_iata": "BJV",
-      "eta": "2025-10-20T22:02:00.000Z",
-      "status": "estimated 23:02",
+      "eta": "2025-10-20T22:00:00.000Z",
+      "status": "estimated 23:00",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-20T22:17:00.000Z",
-      "end": "2025-10-20T22:47:00.000Z",
+      "start": "2025-10-20T22:15:00.000Z",
+      "end": "2025-10-20T22:45:00.000Z",
       "reason": "intl_spread",
       "airline": "Jet2",
       "aircraft": "(G-JZBW)",
       "pax_estimate": 176,
       "scheduled_local": "23:10",
-      "eta_local": "23:02",
-      "delay_min": -8
+      "eta_local": "23:00",
+      "delay_min": -10
     }
   ]
 }
