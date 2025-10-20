@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-20T00:20:01.517Z",
-  "generated_at_local": "2025-10-20T01:20:01",
+  "generated_at_utc": "2025-10-20T00:21:19.291Z",
+  "generated_at_local": "2025-10-20T01:21:19",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -22,7 +22,7 @@
       "eta_local": "01:53",
       "delay_min": -12,
       "ui_state": "upcoming",
-      "ui_age_min": -78
+      "ui_age_min": -77
     },
     {
       "flight": "U22852",
@@ -42,7 +42,7 @@
       "eta_local": "01:59",
       "delay_min": 14,
       "ui_state": "upcoming",
-      "ui_age_min": -84
+      "ui_age_min": -83
     },
     {
       "flight": "U22950",
@@ -62,27 +62,27 @@
       "eta_local": "02:01",
       "delay_min": 41,
       "ui_state": "upcoming",
-      "ui_age_min": -86
+      "ui_age_min": -85
     },
     {
       "flight": "U22858",
       "origin": "(AYT)",
       "origin_iata": "AYT",
-      "eta": "2025-10-20T01:06:00.000Z",
-      "status": "delayed 02:06",
+      "eta": "2025-10-20T01:04:00.000Z",
+      "status": "delayed 02:04",
       "flow": "INTERNATIONAL",
       "belt": 3,
-      "start": "2025-10-20T01:21:00.000Z",
-      "end": "2025-10-20T01:51:00.000Z",
+      "start": "2025-10-20T01:19:00.000Z",
+      "end": "2025-10-20T01:49:00.000Z",
       "reason": "intl_spread",
       "airline": "easyJet",
       "aircraft": "(G-UZLD)",
       "pax_estimate": 162,
       "scheduled_local": "01:30",
-      "eta_local": "02:06",
-      "delay_min": 36,
+      "eta_local": "02:04",
+      "delay_min": 34,
       "ui_state": "upcoming",
-      "ui_age_min": -91
+      "ui_age_min": -88
     },
     {
       "flight": "LS1846",
@@ -102,27 +102,27 @@
       "eta_local": "02:53",
       "delay_min": 23,
       "ui_state": "upcoming",
-      "ui_age_min": -138
+      "ui_age_min": -137
     },
     {
       "flight": "BY6765",
       "origin": "(LCA)",
       "origin_iata": "LCA",
-      "eta": "2025-10-20T03:09:00.000Z",
-      "status": "estimated 04:09",
+      "eta": "2025-10-20T03:12:00.000Z",
+      "status": "estimated 04:12",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-20T03:24:00.000Z",
-      "end": "2025-10-20T03:54:00.000Z",
+      "start": "2025-10-20T03:27:00.000Z",
+      "end": "2025-10-20T03:57:00.000Z",
       "reason": "intl_spread",
       "airline": "TUI",
       "aircraft": "(G-TUMG)",
       "pax_estimate": 166,
       "scheduled_local": "04:20",
-      "eta_local": "04:09",
-      "delay_min": -11,
+      "eta_local": "04:12",
+      "delay_min": -8,
       "ui_state": "upcoming",
-      "ui_age_min": -214
+      "ui_age_min": -216
     }
   ]
 }
