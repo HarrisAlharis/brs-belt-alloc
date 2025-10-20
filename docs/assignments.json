@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-20T20:15:00.292Z",
-  "generated_at_local": "2025-10-20T21:15:00",
+  "generated_at_utc": "2025-10-20T20:16:19.167Z",
+  "generated_at_local": "2025-10-20T21:16:19",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -22,27 +22,7 @@
       "eta_local": "21:56",
       "delay_min": -9,
       "ui_state": "upcoming",
-      "ui_age_min": -86
-    },
-    {
-      "flight": "U22934",
-      "origin": "(BER)",
-      "origin_iata": "BER",
-      "eta": "2025-10-20T21:24:00.000Z",
-      "status": "estimated 22:24",
-      "flow": "INTERNATIONAL",
-      "belt": 5,
-      "start": "2025-10-20T21:39:00.000Z",
-      "end": "2025-10-20T22:09:00.000Z",
-      "reason": "density→belt5",
-      "airline": "easyJet",
-      "aircraft": "(G-UZEG)",
-      "pax_estimate": 162,
-      "scheduled_local": "22:35",
-      "eta_local": "22:24",
-      "delay_min": -11,
-      "ui_state": "upcoming",
-      "ui_age_min": -114
+      "ui_age_min": -85
     },
     {
       "flight": "FR8235",
@@ -51,10 +31,10 @@
       "eta": "2025-10-20T21:24:00.000Z",
       "status": "estimated 22:24",
       "flow": "INTERNATIONAL",
-      "belt": 2,
+      "belt": 5,
       "start": "2025-10-20T21:39:00.000Z",
       "end": "2025-10-20T22:09:00.000Z",
-      "reason": "intl_spread",
+      "reason": "density→belt5",
       "airline": "Buzz",
       "aircraft": "(SP-RZG)",
       "pax_estimate": 166,
@@ -62,7 +42,27 @@
       "eta_local": "22:24",
       "delay_min": -16,
       "ui_state": "upcoming",
-      "ui_age_min": -114
+      "ui_age_min": -113
+    },
+    {
+      "flight": "U22934",
+      "origin": "(BER)",
+      "origin_iata": "BER",
+      "eta": "2025-10-20T21:26:00.000Z",
+      "status": "estimated 22:26",
+      "flow": "INTERNATIONAL",
+      "belt": 2,
+      "start": "2025-10-20T21:41:00.000Z",
+      "end": "2025-10-20T22:11:00.000Z",
+      "reason": "intl_spread",
+      "airline": "easyJet",
+      "aircraft": "(G-UZEG)",
+      "pax_estimate": 162,
+      "scheduled_local": "22:35",
+      "eta_local": "22:26",
+      "delay_min": -9,
+      "ui_state": "upcoming",
+      "ui_age_min": -115
     },
     {
       "flight": "FR3160",
@@ -82,27 +82,27 @@
       "eta_local": "22:39",
       "delay_min": 9,
       "ui_state": "upcoming",
-      "ui_age_min": -129
+      "ui_age_min": -128
     },
     {
       "flight": "U22748",
       "origin": "(BCN)",
       "origin_iata": "BCN",
-      "eta": "2025-10-20T21:45:00.000Z",
-      "status": "estimated 22:45",
+      "eta": "2025-10-20T21:43:00.000Z",
+      "status": "estimated 22:43",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-20T22:00:00.000Z",
-      "end": "2025-10-20T22:30:00.000Z",
+      "start": "2025-10-20T21:58:00.000Z",
+      "end": "2025-10-20T22:28:00.000Z",
       "reason": "intl_spread",
       "airline": "easyJet",
       "aircraft": "(G-EZTD)",
       "pax_estimate": 162,
       "scheduled_local": "22:55",
-      "eta_local": "22:45",
-      "delay_min": -10,
+      "eta_local": "22:43",
+      "delay_min": -12,
       "ui_state": "upcoming",
-      "ui_age_min": -135
+      "ui_age_min": -132
     },
     {
       "flight": "U22834",
@@ -122,7 +122,7 @@
       "eta_local": "22:56",
       "delay_min": -14,
       "ui_state": "upcoming",
-      "ui_age_min": -146
+      "ui_age_min": -145
     },
     {
       "flight": "LS1814",
@@ -142,7 +142,7 @@
       "eta_local": "22:58",
       "delay_min": -12,
       "ui_state": "upcoming",
-      "ui_age_min": -148
+      "ui_age_min": -147
     },
     {
       "flight": "LS1810",
@@ -162,7 +162,7 @@
       "eta_local": "23:28",
       "delay_min": 8,
       "ui_state": "upcoming",
-      "ui_age_min": -178
+      "ui_age_min": -177
     },
     {
       "flight": "LS1818",
@@ -182,7 +182,7 @@
       "eta_local": "23:34",
       "delay_min": 14,
       "ui_state": "upcoming",
-      "ui_age_min": -184
+      "ui_age_min": -183
     },
     {
       "flight": "U22856",
@@ -202,7 +202,7 @@
       "eta_local": "23:36",
       "delay_min": 6,
       "ui_state": "upcoming",
-      "ui_age_min": -186
+      "ui_age_min": -185
     }
   ]
 }
