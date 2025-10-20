@@ -1,240 +1,321 @@
-﻿(() => {
-  // ------- CONFIG -------
-  const HISTORY_HOURS = 4;                 // keep 4h of past flights
-  const FADE_AFTER_MIN = 60;               // fade after 60 min in the past
-  const DEFAULT_AHEAD_HOURS = 3;           // render forward window
-  const BELTS = [1,2,3,5,6,7];             // lanes to show
-  const LS_KEY = 'brs_timeline_history_v1';
+﻿/*  BRS Timeline (frozen belt column + horizontal scroll + de-dup + tooltips)
+    - Pucks show only “FLIGHT • ORIGIN” (details on hover)
+    - Left belt labels stay frozen (sticky) while you scroll time
+    - Dedupe ensures no duplicate pucks even with history + live merges
+*/
 
-  // ------- DOM -------
-  const $meta = document.getElementById('meta');
-  const $zoom = document.getElementById('zoom');
-  const $nowBtn = document.getElementById('nowBtn');
-  const $viewport = document.getElementById('viewport');
-  const $canvas = document.getElementById('canvas');
-  const $grid = document.getElementById('grid');
-  const $lanes = document.getElementById('lanes');
-  const $nowLine = document.getElementById('nowLine');
+(function(){
+  // -------- config --------
+  const JSON_URL = 'assignments.json';
+  const BELTS = [1,2,3,5,6,7];          // lanes in order
+  const HISTORY_HOURS = 4;              // show last 4h locally
+  const POLL_MS = 90_000;               // auto refresh
+  const RULER_MAJOR_MIN = 60;
+  const RULER_MINOR_MIN = 15;
+
+  // DOM
+  const metaEl = document.getElementById('meta');
+  const labelsEl = document.getElementById('laneLabels');
+  const lanesEl = document.getElementById('lanes');
+  const rulerEl = document.getElementById('timeRuler');
+  const nowLine = document.getElementById('nowLine');
+  const scrollArea = document.getElementById('scrollArea');
+  const zoomSel = document.getElementById('zoomSel');
+  const beltFilterGroup = document.getElementById('beltFilter');
+  const nowBtn = document.getElementById('nowBtn');
 
   // state
-  let pxPerMin = parseFloat($zoom.value);
-  let filterBelt = 'all';
+  let pxPerMin = parseFloat(zoomSel.value || '6');
+  let activeBelts = new Set(BELTS);         // belt filter
+  let history = loadHistory();              // local 4h memory
+  let lastDraw = null;
 
-  // ------- utils -------
-  const pad = n => String(n).padStart(2,'0');
-  const hhmm = d => `${pad(d.getHours())}:${pad(d.getMinutes())}`;
-  const toDate = iso => new Date(iso);
-  const addMin = (d, m) => new Date(d.getTime() + m*60000);
+  // -------- utils --------
+  const pad = n=>String(n).padStart(2,'0');
+  const hhmm = iso => {
+    const d = new Date(iso); return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  };
+  const mins = ms => Math.floor(ms/60000);
+  const clamp = (v,a,b)=>Math.max(a,Math.min(b,v));
 
-  function keyOf(r){
-    return `${(r.flight||'').trim()}|${(r.eta||'').slice(0,16)}`;
-  }
-  function loadCache(){
-    try { return JSON.parse(localStorage.getItem(LS_KEY)||'[]'); } catch{ return []; }
-  }
-  function saveCache(arr){
-    try { localStorage.setItem(LS_KEY, JSON.stringify(arr)); } catch{}
-  }
-  function mergeHistory(rows){
-    const cache = loadCache();
-    const map = new Map(cache.map(r => [keyOf(r), r]));
-    for (const r of rows) {
-      if (!r.eta) continue;
-      map.set(keyOf(r), r);
-    }
-    // prune older than HISTORY_HOURS (by end time)
-    const now = new Date();
-    const cutoff = addMin(now, -HISTORY_HOURS*60);
-    const kept = [];
-    for (const r of map.values()){
-      const endIso = r.end || r.eta;
-      const end = toDate(endIso);
-      if (end >= cutoff) kept.push(r);
-    }
-    saveCache(kept);
-    return kept;
-  }
-
-  function classify(r){
-    // status colour
-    let cls = 'ok';
-    const s = (r.status||'').toLowerCase();
-    if (typeof r.delay_min === 'number') {
-      if (r.delay_min >= 20) cls = 'y20';
-      else if (r.delay_min >= 10) cls = 'y10';
-      else if (r.delay_min < 0) cls = 'early';
-      else cls = 'ok';
-    } else {
-      if (s.includes('delayed')) cls = 'y10';
-      else if (s.includes('estimated')) cls = 'ok';
-    }
-    // fade if older than 60 min
-    const now = new Date();
-    const end = toDate(r.end || r.eta);
-    const ageMin = Math.round((now - end)/60000);
-    const faded = ageMin > FADE_AFTER_MIN;
-    return { cls, faded };
-  }
-
-  function computeWindow(){
-    const now = new Date();
-    const backStart = addMin(now, -HISTORY_HOURS*60);         // past 4h
-    const aheadEnd  = addMin(now,  DEFAULT_AHEAD_HOURS*60);   // next 3h
-    return { start: addMin(backStart,-15), end: addMin(aheadEnd, 30), now };
-  }
-
-  function xFrom(rangeStart, date){ return (date - rangeStart)/60000 * pxPerMin; }
-
-  function buildGrid(range){
-    $grid.innerHTML = '';
-    // Canvas width
-    const minsTotal = Math.ceil((range.end - range.start)/60000);
-    $canvas.style.width = `${minsTotal * pxPerMin + 200}px`;
-
-    // Hour lines & labels
-    const firstHour = new Date(range.start); firstHour.setMinutes(0,0,0);
-    if (firstHour < range.start) firstHour.setHours(firstHour.getHours()+1);
-
-    for (let t = new Date(firstHour); t <= range.end; t = addMin(t, 60)) {
-      const left = xFrom(range.start, t);
-      const el = document.createElement('div');
-      el.className = 'grid-hour';
-      el.style.left = `${left}px`;
-      const label = document.createElement('div');
-      label.className = 'label';
-      label.textContent = hhmm(t);
-      el.appendChild(label);
-      $grid.appendChild(el);
-    }
-
-    // Now line
-    const nowLeft = xFrom(range.start, range.now);
-    $nowLine.style.left = `${Math.max(0, nowLeft)}px`;
-  }
-
-  function renderLanes(data, range){
-    $lanes.innerHTML = '';
-    const byBelt = new Map(BELTS.map(b => [b, []]));
-    for (const r of data){
-      if (!r.belt || !byBelt.has(Number(r.belt))) continue;
-      if (filterBelt !== 'all' && Number(filterBelt) !== Number(r.belt)) continue;
-      byBelt.get(Number(r.belt)).push(r);
-    }
-
-    for (const belt of BELTS){
-      if (filterBelt !== 'all' && Number(filterBelt) !== belt) continue;
-
-      const lane = document.createElement('div');
-      lane.className = 'lane';
-      const label = document.createElement('div');
-      label.className = 'belt-label';
-      label.textContent = `Belt ${belt}`;
-      lane.appendChild(label);
-
-      const rows = byBelt.get(belt)||[];
-      for (const r of rows){
-        const eta = toDate(r.eta);
-        const start = r.start ? toDate(r.start) : addMin(eta, 15);
-        const end   = r.end   ? toDate(r.end)   : addMin(start, 30);
-
-        if (end < range.start || start > range.end) continue;
-
-        const left = xFrom(range.start, start);
-        const width = Math.max(4, (end - start)/60000 * pxPerMin);
-
-        const { cls, faded } = classify(r);
-        const puck = document.createElement('div');
-        puck.className = `puck ${cls} ${faded ? 'faded':''}`;
-        puck.style.left = `${left}px`;
-        puck.style.width = `${width}px`;
-
-        // Minimal in-puck text
-        const flightAndOrigin = `${(r.flight||'').trim()} • ${(r.origin_iata||r.origin||'').replace(/[()]/g,'').trim()}`;
-        const times = `${r.scheduled_local||'--:--'} → ${r.eta_local||'--:--'}`;
-
-        puck.innerHTML = `
-          <div class="col">
-            <div class="title">${escapeHtml(flightAndOrigin)}</div>
-            <div class="sub">${escapeHtml(times)}</div>
-          </div>
-        `;
-
-        // Full details in native tooltip (hover)
-        const details = [
-          `Flight: ${(r.flight||'').trim()}`,
-          `Origin: ${(r.origin||'').trim()} ${r.origin_iata?`(${r.origin_iata})`:''}`.trim(),
-          `Scheduled → ETA: ${r.scheduled_local||'--:--'} → ${r.eta_local||'--:--'}`,
-          `Status: ${r.status||'-'}`,
-          `Belt: ${r.belt}`,
-          `Start: ${fmtIso(r.start)}  End: ${fmtIso(r.end)}`,
-          `Flow: ${r.flow||'-'}`,
-          `Reason: ${r.reason||'-'}`
-        ].join('\n');
-        puck.setAttribute('title', details);
-
-        lane.appendChild(puck);
-      }
-
-      $lanes.appendChild(lane);
-    }
-  }
-
-  function fmtIso(iso){
-    if(!iso) return '--:--';
-    const d = new Date(iso);
-    return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
-  }
-
-  function escapeHtml(s){
-    return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-  }
-
-  async function loadAssignments(){
-    const url = `assignments.json?v=${Date.now()}`;
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`Failed to fetch ${url}`);
-    const json = await res.json();
-    $meta.textContent = `Generated ${json.generated_at_local || json.generated_at_utc || ''} • Horizon ${json.horizon_minutes||''} min`;
-    return Array.isArray(json.rows) ? json.rows : [];
-  }
-
-  async function refresh(){
+  function loadHistory(){
     try{
-      const liveRows = await loadAssignments();
-      const merged = mergeHistory(liveRows);
-      const range = computeWindow();
-      buildGrid(range);
-      renderLanes(merged, range);
-    } catch(e){
-      console.error(e);
-      $meta.textContent = 'Failed to load data. Retrying…';
+      const s = localStorage.getItem('brs_timeline_history_v2') || '[]';
+      const arr = JSON.parse(s);
+      return Array.isArray(arr)?arr:[];
+    }catch{ return []; }
+  }
+  function saveHistory(arr){
+    try{
+      localStorage.setItem('brs_timeline_history_v2', JSON.stringify(arr));
+    }catch{}
+  }
+
+  function keyFor(r){
+    return [
+      r.flight||'',
+      r.origin_iata||'',
+      r.belt||'',
+      r.start||'',
+      r.end||''
+    ].join('|');
+  }
+
+  // dedupe: keep the newest copy when keys collide
+  function dedupe(list){
+    const seen = new Map();
+    for(const r of list){
+      const k = keyFor(r);
+      if(!seen.has(k)) { seen.set(k, r); continue; }
+      // choose the one with latest generated_at if present, else keep first
+      const a = seen.get(k);
+      const ga = new Date(a.generated_at_utc||0).getTime();
+      const gb = new Date(r.generated_at_utc||0).getTime();
+      if(gb > ga) seen.set(k, r);
+    }
+    return [...seen.values()];
+  }
+
+  function delayClass(r){
+    const dm = (typeof r.delay_min === 'number') ? r.delay_min : null;
+    if(dm==null) return 'puck--green';
+    if(dm >= 20) return 'puck--red';
+    if(dm >= 10) return 'puck--amber';
+    if(dm <= -1) return 'puck--blue';
+    return 'puck--green';
+  }
+
+  // -------- layout/time --------
+  function buildTimeWindow(){
+    // Window spans from (now - HISTORY_HOURS) to (now + 6h), horizontally scrollable
+    const now = new Date();
+    const start = new Date(now.getTime() - HISTORY_HOURS*60*60000);
+    const end   = new Date(now.getTime() + 6*60*60000);
+    return {start, end, now};
+  }
+
+  function minsBetween(a,b){ return (b.getTime() - a.getTime())/60000; }
+
+  function setCanvasWidth(win){
+    const totalMin = Math.ceil(minsBetween(win.start, win.end));
+    const widthPx = Math.max(2000, totalMin * pxPerMin);
+    lanesEl.style.width = `${widthPx}px`;
+
+    // set the repeating grid backgrounds (major = 60 min, minor = 15 min)
+    const majorW = RULER_MAJOR_MIN * pxPerMin;
+    const minorW = RULER_MINOR_MIN * pxPerMin;
+    lanesEl.style.setProperty('--majorW', `${majorW}px`);
+    lanesEl.style.setProperty('--minorW', `${minorW}px`);
+    lanesEl.style.backgroundSize = `100% var(--lane-h)`;
+    lanesEl.style.setProperty('--laneRepeat','');
+
+    // draw grid verticals via ::before:  we need sizes on that pseudo element
+    lanesEl.style.setProperty('--majorX', `${majorW}px`);
+    lanesEl.style.setProperty('--minorX', `${minorW}px`);
+    lanesEl.style.setProperty('background-position', '0 0');
+
+    // apply to ::before
+    lanesEl.style.setProperty('--before-major', `${majorW}px`);
+    lanesEl.style.setProperty('--before-minor', `${minorW}px`);
+    lanesEl.style.setProperty('--before-height', `100%`);
+    lanesEl.style.setProperty('--before-left', `0`);
+    lanesEl.style.setProperty('--before-top', `0`);
+
+    // using style here to position grid in CSS:
+    lanesEl.style.setProperty('--majorW', `${majorW}px`);
+    lanesEl.style.setProperty('--minorW', `${minorW}px`);
+    lanesEl.style.setProperty('--gridMajor', `repeating-linear-gradient(90deg, var(--grid) 0 1px, transparent 1px ${majorW}px)`);
+    lanesEl.style.setProperty('--gridMinor', `repeating-linear-gradient(90deg, var(--grid-soft) 0 1px, transparent 1px ${minorW}px)`);
+    lanesEl.style.setProperty('--gridBoth', `linear-gradient(90deg, var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid-soft) 1px, transparent 1px)`);
+    lanesEl.style.setProperty('--gridMajorSize', `${majorW}px 100%`);
+    lanesEl.style.setProperty('--gridMinorSize', `${minorW}px 100%`);
+
+    // emulate ::before via CSS rule (configured earlier in CSS):
+    lanesEl.style.setProperty('--dummy','');
+    lanesEl.style.setProperty('--gridMajorSize','');
+  }
+
+  function drawRuler(win){
+    rulerEl.innerHTML = '';
+    const totalMin = Math.ceil(minsBetween(win.start, win.end));
+    const step = 60; // major hour ticks
+    for(let m=0;m<=totalMin;m+=step){
+      const x = m * pxPerMin;
+      const tick = document.createElement('div');
+      tick.className = 'tick';
+      tick.style.left = `${x}px`;
+      const d = new Date(win.start.getTime() + m*60000);
+      const lbl = document.createElement('div');
+      lbl.className = 'tlabel';
+      lbl.textContent = `${pad(d.getHours())}:00`;
+      tick.appendChild(lbl);
+      rulerEl.appendChild(tick);
     }
   }
 
-  function centerOnNow(){
-    const range = computeWindow();
-    const left = Math.max(0, (range.now - range.start)/60000 * pxPerMin - ($viewport.clientWidth * 0.4));
-    $viewport.scrollTo({ left, behavior:'smooth' });
+  function drawLabels(){
+    labelsEl.innerHTML = '';
+    for(const b of BELTS){
+      const row = document.createElement('div');
+      row.className = 'label-row';
+      row.textContent = `Belt ${b}`;
+      labelsEl.appendChild(row);
+    }
   }
 
-  // ------- events -------
-  document.querySelectorAll('[data-belt]').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      document.querySelectorAll('[data-belt]').forEach(b=>b.classList.remove('chip--primary'));
-      btn.classList.add('chip--primary');
-      filterBelt = btn.dataset.belt;
-      refresh();
+  function beltToY(beltIndexZero){
+    return beltIndexZero * parseInt(getComputedStyle(document.documentElement).getPropertyValue('--lane-h'));
+  }
+
+  function placeNowLine(win){
+    const m = minsBetween(win.start, win.now);
+    nowLine.style.left = `${m*pxPerMin}px`;
+  }
+
+  // -------- data & render --------
+  function mergeIntoHistory(currentRows, generated_at_utc){
+    const add = currentRows.map(r => ({...r, generated_at_utc}));
+    const merged = dedupe([...history, ...add]);
+    // keep only last HISTORY_HOURS window around “now”
+    const cutoffMs = Date.now() - HISTORY_HOURS*60*60000;
+    const trimmed = merged.filter(r => {
+      const s = r.start ? new Date(r.start).getTime() : 0;
+      const e = r.end ? new Date(r.end).getTime() : 0;
+      return (s>=cutoffMs || e>=cutoffMs); // anything touching last 4h
     });
-  });
+    history = trimmed;
+    saveHistory(history);
+  }
 
-  $zoom.addEventListener('change', ()=>{
-    pxPerMin = parseFloat($zoom.value);
-    refresh();
-  });
+  function filteredRows(win){
+    // include items whose [start,end] overlaps timeline window
+    const startMs = win.start.getTime();
+    const endMs = win.end.getTime();
+    return dedupe(history).filter(r => {
+      if(!activeBelts.has(Number(r.belt))) return false;
+      const s = r.start ? new Date(r.start).getTime() : 0;
+      const e = r.end ? new Date(r.end).getTime() : 0;
+      return (s <= endMs && e >= startMs);
+    });
+  }
 
-  $nowBtn.addEventListener('click', centerOnNow);
+  function puckTooltip(r){
+    const lines = [
+      `${r.flight || '—'} • ${ (r.origin_iata||'').toUpperCase() }`,
+      `${hhmm(r.start)} → ${hhmm(r.end)}`,
+      `Status: ${r.status || '—'}`,
+      `Flow: ${r.flow || '—'}`,
+      `Belt: ${r.belt || '—'}`,
+      `Reason: ${r.reason || '—'}`
+    ];
+    return lines.join('\n');
+  }
 
-  // ------- boot -------
-  refresh().then(centerOnNow);
-  setInterval(refresh, 90*1000);
+  function render(win){
+    // avoid unnecessary reflow if same width/zoom
+    setCanvasWidth(win);
+    drawRuler(win);
+    placeNowLine(win);
+
+    lanesEl.innerHTML = ''; // clear (prevents visual duplicates)
+    const laneH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--lane-h'));
+
+    const rows = filteredRows(win);
+    for(const r of rows){
+      // compute x/width
+      const sMin = minsBetween(win.start, new Date(r.start));
+      const eMin = minsBetween(win.start, new Date(r.end));
+      const left = sMin * pxPerMin;
+      const width = Math.max(24, (eMin - sMin) * pxPerMin);
+
+      const laneIndex = BELTS.indexOf(Number(r.belt));
+      if(laneIndex < 0) continue;
+      const top = laneIndex * laneH + (laneH - parseInt(getComputedStyle(document.documentElement).getPropertyValue('--puck-h')))/2;
+
+      const puck = document.createElement('div');
+      puck.className = `puck ${delayClass(r)}`;
+      puck.style.left = `${left}px`;
+      puck.style.top = `${top}px`;
+      puck.style.width = `${width}px`;
+      puck.setAttribute('data-tip', puckTooltip(r));
+
+      const title = document.createElement('div');
+      title.className = 'title';
+      const origin = (r.origin_iata||'').toUpperCase();
+      title.textContent = `${(r.flight||'').toUpperCase()} • ${origin}`;
+      const time = document.createElement('div');
+      time.className = 'time';
+      time.textContent = `${hhmm(r.start)} → ${hhmm(r.end)}`;
+
+      puck.appendChild(title);
+      puck.appendChild(time);
+      lanesEl.appendChild(puck);
+    }
+
+    // update meta
+    const gen = lastDraw?.generated_at_local || '—';
+    metaEl.textContent = `Generated ${gen} • Horizon ${lastDraw?.horizon_minutes || ''} min`;
+  }
+
+  // -------- actions --------
+  async function loadOnce(){
+    const url = `${JSON_URL}?v=${Date.now()}`;
+    const res = await fetch(url);
+    const data = await res.json();
+
+    // stash for meta
+    lastDraw = data;
+
+    // merge rows into local 4h history
+    const rows = Array.isArray(data.rows) ? data.rows : [];
+    mergeIntoHistory(rows, data.generated_at_utc || new Date().toISOString());
+
+    const win = buildTimeWindow();
+    render(win);
+  }
+
+  function tick(){
+    const win = buildTimeWindow();
+    placeNowLine(win);
+  }
+
+  // -------- UI wiring --------
+  function init(){
+    // labels (frozen)
+    drawLabels();
+
+    // belt filter
+    beltFilterGroup.addEventListener('click', (e)=>{
+      const b = e.target?.dataset?.belt;
+      if(!b) return;
+      if(b==='all'){ activeBelts = new Set(BELTS); }
+      else if(b==='none'){ activeBelts = new Set(); }
+      else {
+        const n = Number(b);
+        if(activeBelts.has(n)) activeBelts.delete(n); else activeBelts.add(n);
+      }
+      render(buildTimeWindow());
+    });
+
+    // zoom
+    zoomSel.addEventListener('change', ()=>{
+      pxPerMin = parseFloat(zoomSel.value||'6');
+      render(buildTimeWindow());
+    });
+
+    // “Now” scrolls the scrollArea so the blue line is centered
+    nowBtn.addEventListener('click', ()=>{
+      const win = buildTimeWindow();
+      const x = minsBetween(win.start, win.now) * pxPerMin;
+      const half = scrollArea.clientWidth/2;
+      scrollArea.scrollTo({ left: Math.max(0, x - half), behavior:'smooth' });
+    });
+
+    // refresh loop
+    loadOnce().catch(console.error);
+    setInterval(loadOnce, POLL_MS);
+    setInterval(tick, 15_000); // move the “now” line slightly
+  }
+
+  init();
 })();
