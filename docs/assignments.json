@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-20T20:04:59.904Z",
-  "generated_at_local": "2025-10-20T21:04:59",
+  "generated_at_utc": "2025-10-20T20:06:20.507Z",
+  "generated_at_local": "2025-10-20T21:06:20",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -8,19 +8,19 @@
       "flight": "FR8235",
       "origin": "(PMI)",
       "origin_iata": "PMI",
-      "eta": "2025-10-20T21:24:00.000Z",
-      "status": "estimated 22:24",
+      "eta": "2025-10-20T21:22:00.000Z",
+      "status": "estimated 22:22",
       "flow": "INTERNATIONAL",
       "belt": 5,
-      "start": "2025-10-20T21:39:00.000Z",
-      "end": "2025-10-20T22:09:00.000Z",
+      "start": "2025-10-20T21:37:00.000Z",
+      "end": "2025-10-20T22:07:00.000Z",
       "reason": "density→belt5",
       "airline": "Buzz",
       "aircraft": "(SP-RZG)",
       "pax_estimate": 166,
       "scheduled_local": "22:40",
-      "eta_local": "22:24",
-      "delay_min": -16
+      "eta_local": "22:22",
+      "delay_min": -18
     },
     {
       "flight": "U22934",
