@@ -18,6 +18,7 @@
     <div class="right-controls">
       <label class="lbl">Zoom:</label>
       <select id="zoom">
+        <!-- min zoom is 8 px/min -->
         <option value="8" selected>8 px/min (default)</option>
         <option value="10">10 px/min</option>
         <option value="12">12 px/min (wide)</option>
@@ -29,12 +30,16 @@
         <span class="dot dot-10"></span> +10–19
         <span class="dot dot-20"></span> +20+
         <span class="dot dot-early"></span> Early
-        <span class="dot dot-stale"></span> &gt;60 min ago
+        <span class="dot dot-stale"></span> Completed (past)
       </div>
     </div>
   </div>
 
   <div id="viewport" class="viewport">
+    <!-- Sticky belt column -->
+    <div class="belts-col" id="beltsCol"></div>
+
+    <!-- Scrollable content -->
     <div class="scroll-outer" id="scrollOuter">
       <div class="scroll-inner" id="scrollInner">
         <canvas id="ruler" class="ruler"></canvas>
