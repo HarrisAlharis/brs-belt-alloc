@@ -42,7 +42,7 @@
     .origin-code { font-weight: 700; }
     .origin-name { color: var(--muted); font-size: 12px; }
 
-    .col.eta { width: 18ch; }
+    .col.eta { width: 20ch; }
     .time { display: inline-flex; align-items: center; gap: .35rem; }
     .time-sched { opacity: .75; }
     .time-arrow { opacity: .55; }
@@ -87,7 +87,7 @@
         <tr>
           <th>Flight</th>
           <th>Origin</th>
-          <th>Time (local)</th>
+          <th>Time (Scheduled → ETA)</th>
           <th>Status</th>
           <th>Flow</th>
           <th>Belt</th>
@@ -137,21 +137,29 @@
       function flowBadge(flow){
         return `<span class="pill pill-flow">${(flow||'').toUpperCase()}</span>`;
       }
+
+      // NEW: always honour textual r.status if present; only fall back to delay_min when status is missing
       function statusPill(r){
-        // Priority: if JSON has numeric delay_min use it; else infer from status text.
-        if (typeof r.delay_min === 'number') {
+        const raw = (r.status || '').trim();
+        if (raw) {
+          const s = raw.toLowerCase();
+          if (s.includes('delayed'))   return pill(raw, 'orange');
+          if (s.includes('estimated')) return pill(raw, 'blue');   // show “estimated …” explicitly
+          if (s.includes('on time'))   return pill(raw, 'green');
+          if (s.includes('cancel'))    return pill('cancelled', 'red');
+          if (s.includes('landed') || s.includes('arrived')) return pill(raw, 'blue');
+          return pill(raw, 'green');
+        }
+        // Fallback: numeric delay if we have nothing in status
+        if (r.delay_min !== undefined && r.delay_min !== null && typeof r.delay_min === 'number') {
           if (r.delay_min >= 20) return pill(`+${r.delay_min}`, 'red');
           if (r.delay_min >= 10) return pill(`+${r.delay_min}`, 'orange');
           if (r.delay_min <= -1) return pill(`${r.delay_min}`, 'blue');
           return pill('on time', 'green');
         }
-        const s = (r.status || '').toLowerCase();
-        if (s.includes('delayed')) return pill(s, 'orange');       // no minutes available
-        if (s.includes('estimated')) return pill(s, 'green');      // treat “estimated” as neutral/green
-        if (s.includes('cancel')) return pill('cancelled', 'red');
-        if (s.includes('landed') || s.includes('arrived')) return pill(s, 'blue');
-        return pill(s || '—', 'green');
+        return pill('—', 'green');
       }
+
       function pill(text, color){
         const cls = color==='red'?'pill-red':color==='orange'?'pill-orange':color==='blue'?'pill-blue':'pill-green';
         return `<span class="pill ${cls}">${escapeHtml(text)}</span>`;
@@ -159,9 +167,10 @@
       function escapeHtml(s){
         return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
       }
+
       function timeCell(r){
         // If scheduled_local exists, show “scheduled → ETA”. Otherwise show ETA only.
-        const etaLocal = r.eta_local || hhmm(r.eta);
+        const etaLocal   = r.eta_local || hhmm(r.eta);
         const schedLocal = r.scheduled_local || '';
         if (schedLocal) {
           return `<div class="time">
@@ -172,6 +181,7 @@
         }
         return `<div class="time"><span class="time-eta">${etaLocal}</span></div>`;
       }
+
       function renderRow(r){
         return `
           <tr>
