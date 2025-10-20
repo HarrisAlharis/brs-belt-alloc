@@ -1,4 +1,4 @@
-﻿/* Timeline renderer — scroll-aware ruler, NOW line, sticky belts, and de-duped pucks */
+﻿/* BRS timeline — crisp DPR-aware ruler, correct tick math, sticky belts, deduped pucks */
 
 (() => {
   // ---------- DOM ----------
@@ -15,117 +15,96 @@
 
   // ---------- CONFIG ----------
   const BELTS = [1,2,3,5,6,7];
-  const HISTORY_KEEP_MIN = 240; // 4 hours in browser
-  const REFRESH_MS = 90_000;    // ~90s pull
-  const RULER_STEP_MIN = 60;    // major tick spacing
-  const RULER_SUB_MIN  = 15;    // minor tick spacing
+  const HISTORY_KEEP_MIN = 240; // 4h
+  const REFRESH_MS = 90_000;
+  const RULER_MAJOR_MIN = 60;
+  const RULER_MINOR_MIN = 15;
 
   // State
   let pxPerMin = +zoomSel.value;
-  let windowStart = alignHour(new Date());       // start at the nearest hour
-  windowStart.setMinutes(windowStart.getMinutes()-60); // show 1h back initially
+  let windowStart = floorHour(new Date());
+  windowStart.setMinutes(windowStart.getMinutes() - 60); // start 1h back
   windowStart.setSeconds(0,0);
-  let windowHours = 8;                            // total virtual width hours
-  let beltFilter = new Set(BELTS);                // start showing all
+  let windowHours = 8;
+  let beltFilter = new Set(BELTS);
 
   // ---------- INIT ----------
   renderChips();
   renderBeltsColumn();
-  sizeCanvas();
-  drawRuler(); // initial
+  resizeRuler(); drawRuler();
   boot();
 
-  // ---------- Wiring ----------
+  // ---------- Events ----------
   zoomSel.addEventListener('change', () => {
     pxPerMin = +zoomSel.value;
     redrawAll();
   });
 
   nowBtn.addEventListener('click', () => {
-    // recenter to keep "now" roughly 35% from left
     const nowX = xForTime(new Date());
     const target = Math.max(0, nowX - scrollOuter.clientWidth*0.35);
     scrollOuter.scrollTo({left: target, behavior:'smooth'});
   });
 
   scrollOuter.addEventListener('scroll', () => {
-    drawRuler();   // make scale match scroll
+    drawRuler();
     placeNowLine();
   });
 
   window.addEventListener('resize', () => {
-    sizeCanvas();
+    resizeRuler();
     drawRuler();
     placeNowLine();
   });
 
-  // ---------- Main loop ----------
+  // ---------- Loop ----------
   async function boot(){
-    await loadAndRender();           // first paint
+    await loadAndRender();
     setInterval(loadAndRender, REFRESH_MS);
-    setInterval(() => { placeNowLine(); }, 15_000); // keep now line fresh
+    setInterval(placeNowLine, 15_000);
   }
 
   async function loadAndRender(){
-    const data = await fetchJSON('assignments.json');
+    const data = await getJSON('assignments.json');
     const gen = data?.generated_at_local || data?.generated_at_utc || '';
     metaEl.textContent = `Generated ${gen} • Horizon ${data?.horizon_minutes || ''} min`;
 
     const rows = Array.isArray(data?.rows) ? data.rows : [];
-    // stamp "seen" time as now for history
     const seenAt = Date.now();
 
-    // 1) Read browser history
-    const hist = readHistory();
+    // merge with 4h history and de-dup per flight|minute
+    const hist = readHist();
+    const map = new Map();
 
-    // 2) Merge: map by key flight|eta-minute -> newest row
-    const mergedMap = new Map();
     function put(r){
-      if(!r.eta) return;
-      const k = `${(r.flight||'').trim()}|${isoMinute(r.eta)}`;
-      const v = {...r, _seenAt: seenAt};
-      mergedMap.set(k, v);
+      if(!r || !r.eta) return;
+      const key = `${(r.flight||'').trim()}|${isoMinute(r.eta)}`;
+      map.set(key, {...r, _seenAt: seenAt});
     }
-    for(const k in hist){
-      const r = hist[k];
-      put(r);
-    }
-    for(const r of rows){
-      put(r);
-    }
+    for (const k in hist) put(hist[k]);
+    for (const r of rows) put(r);
 
-    // 3) Filter to last HISTORY_KEEP_MIN (by ETA) and de-dupe
     const now = Date.now();
     const kept = [];
-    for(const r of mergedMap.values()){
-      const etaMs = +new Date(r.eta);
-      const ageMin = Math.round((now - etaMs)/60000);
-      if (ageMin <= HISTORY_KEEP_MIN && ageMin > - (windowHours*60)) {
-        kept.push(r);
-      }
+    for (const r of map.values()){
+      const eta = +new Date(r.eta);
+      const ageMin = Math.round((now - eta)/60000);
+      if (ageMin <= HISTORY_KEEP_MIN && ageMin > -(windowHours*60)) kept.push(r);
     }
-    kept.sort((a,b)=> new Date(a.eta) - new Date(b.eta));
+    kept.sort((a,b)=>+new Date(a.eta) - +new Date(b.eta));
 
-    // 4) Persist back the kept items
-    const toStore = {};
-    for(const r of kept){
-      const k = `${(r.flight||'').trim()}|${isoMinute(r.eta)}`;
-      toStore[k] = r;
+    const store = {};
+    for (const r of kept){
+      store[`${(r.flight||'').trim()}|${isoMinute(r.eta)}`] = r;
     }
-    writeHistory(toStore);
+    writeHist(store);
 
-    // 5) Render rows/pucks
     renderGrid(kept);
-
-    // 6) Sync ruler & now line
-    sizeCanvas();
-    drawRuler();
-    placeNowLine();
+    resizeRuler(); drawRuler(); placeNowLine();
   }
 
   // ---------- Rendering ----------
   function renderChips(){
-    // belt chips & toggles
     const frag = document.createDocumentFragment();
     const mk = (label, val) => {
       const c = document.createElement('div');
@@ -139,23 +118,22 @@
         updateRowVisibility();
       });
       return c;
-    }
+    };
     BELTS.forEach(b => frag.appendChild(mk(b,b)));
-    // All / None
+
     const all = document.createElement('div');
-    all.className = 'chip';
-    all.textContent = 'All';
+    all.className = 'chip'; all.textContent = 'All';
     all.addEventListener('click', () => {
       beltFilter = new Set(BELTS);
-      for(const el of beltChips.children){ el.classList.add('active'); }
+      for (const el of beltChips.children) el.classList.add('active');
       updateRowVisibility();
     });
+
     const none = document.createElement('div');
-    none.className = 'chip';
-    none.textContent = 'None';
+    none.className = 'chip'; none.textContent = 'None';
     none.addEventListener('click', () => {
       beltFilter.clear();
-      for(const el of beltChips.children){ el.classList.remove('active'); }
+      for (const el of beltChips.children) el.classList.remove('active');
       updateRowVisibility();
     });
 
@@ -166,50 +144,46 @@
 
   function renderBeltsColumn(){
     beltsCol.innerHTML = '';
-    const topPad = document.createElement('div');
-    topPad.style.height = `var(--ruler-h)`;
-    beltsCol.appendChild(topPad);
-    for(const b of BELTS){
+    const pad = document.createElement('div');
+    pad.style.height = 'var(--ruler-h)';
+    beltsCol.appendChild(pad);
+    for (const b of BELTS){
       const d = document.createElement('div');
       d.className = 'belt-label';
-      d.textContent = `Belt ${b}`;
       d.dataset.belt = b;
+      d.textContent = `Belt ${b}`;
       beltsCol.appendChild(d);
     }
   }
 
   function renderGrid(items){
-    // rows container
     rowsEl.innerHTML = '';
-    // compute scroll width based on hours
-    const totalMin = windowHours * 60;
-    const width = totalMin * pxPerMin + 2000; // a bit extra room
+
+    // width large enough for horizon + margins
+    const width = windowHours*60*pxPerMin + 2000;
     scrollInner.style.width = `${width}px`;
 
-    // build rows
-    const rowMap = new Map(); // belt -> rowEl
-    for(const b of BELTS){
+    const rowMap = new Map();
+    for (const b of BELTS){
       const row = document.createElement('div');
       row.className = 'row';
       row.dataset.belt = b;
       rowsEl.appendChild(row);
-      rowMap.set(b, row);
+      rowMap.set(b,row);
     }
 
-    // place pucks (de-dup already handled in load)
-    for(const r of items){
+    for (const r of items){
       const belt = r.belt ?? '';
       if (!rowMap.has(belt)) continue;
 
-      const row = rowMap.get(belt);
       const start = new Date(r.start || r.eta);
-      const end   = new Date(r.end   || +new Date(r.eta)+45*60000);
+      const end   = new Date(r.end   || (+new Date(r.eta) + 45*60000));
 
       const x = xForTime(start);
       const w = Math.max(120, Math.round((end - start)/60000) * pxPerMin);
 
       const p = document.createElement('div');
-      p.className = 'puck ' + severityClass(r);
+      p.className = 'puck ' + sevClass(r);
       p.style.left = `${x}px`;
       p.style.width = `${w}px`;
 
@@ -225,87 +199,97 @@
         t1.textContent,
         `Time: ${t2.textContent}`,
         `Flow: ${(r.flow||'').toUpperCase()}`,
-        `Belt: ${r.belt ?? '?'}`,
+        `Belt: ${belt}`,
         `Reason: ${r.reason||''}`
       ].join('\n');
 
       p.appendChild(t1); p.appendChild(t2);
-      row.appendChild(p);
+      rowMap.get(belt).appendChild(p);
     }
 
     updateRowVisibility();
   }
 
   function updateRowVisibility(){
-    for(const row of rowsEl.children){
+    for (const row of rowsEl.children){
       const b = +row.dataset.belt;
       row.style.display = beltFilter.has(b) ? '' : 'none';
     }
-    for(const lab of beltsCol.querySelectorAll('.belt-label')){
+    for (const lab of beltsCol.querySelectorAll('.belt-label')){
       const b = +lab.dataset.belt;
       lab.style.visibility = beltFilter.has(b) ? 'visible' : 'hidden';
     }
   }
 
-  // ---------- Ruler / NOW ----------
-  function sizeCanvas(){
-    ruler.width = scrollOuter.clientWidth;
+  // ---------- Ruler (crisp & scroll-aware) ----------
+  function resizeRuler(){
+    const dpr = window.devicePixelRatio || 1;
+    const cssW = scrollOuter.clientWidth;
+    const cssH = 44;
+
+    if (ruler._w !== cssW || ruler._h !== cssH || ruler._dpr !== dpr){
+      ruler._w = cssW; ruler._h = cssH; ruler._dpr = dpr;
+      ruler.width  = Math.round(cssW * dpr);
+      ruler.height = Math.round(cssH * dpr);
+      ruler.style.width  = cssW + 'px';
+      ruler.style.height = cssH + 'px';
+    }
   }
 
   function drawRuler(){
+    const dpr = window.devicePixelRatio || 1;
     const ctx = ruler.getContext('2d');
-    const w = ruler.width, h = ruler.height;
-    ctx.clearRect(0,0,w,h);
-    ctx.font = '12px system-ui'; ctx.textBaseline = 'top';
+    const W = ruler._w || scrollOuter.clientWidth;
+    const H = ruler._h || 44;
 
-    const leftMin = scrollOuter.scrollLeft / pxPerMin; // minutes from windowStart
-    const startTime = new Date(windowStart.getTime() + leftMin*60000);
+    // reset transform to 1 CSS pixel = 1 unit
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.clearRect(0,0,W,H);
 
-    // choose first major tick on/after the view-left rounded to hour
-    const firstMajor = new Date(startTime);
-    firstMajor.setMinutes(0,0,0);
-    while(firstMajor < startTime) firstMajor.setMinutes(firstMajor.getMinutes()+RULER_STEP_MIN);
+    ctx.font = '12px system-ui';
+    ctx.textBaseline = 'top';
+    ctx.fillStyle = '#cfe0ff';
 
-    // draw ticks across visible width
-    const maxMinSpan = Math.ceil(w / pxPerMin) + RULER_STEP_MIN;
-    const viewStartMinAbs = minutesSince(windowStart, firstMajor);
+    // visible time window
+    const leftMin = scrollOuter.scrollLeft / pxPerMin;
+    const viewStart = new Date(+windowStart + leftMin*60000);
+    const viewEnd   = new Date(+viewStart + (W/pxPerMin)*60000);
 
-    // minor ticks each RULER_SUB_MIN
-    ctx.fillStyle = 'rgba(255,255,255,.6)';
-    ctx.strokeStyle = 'rgba(255,255,255,.15)';
+    // minor ticks
+    const firstMinor = new Date(viewStart);
+    const mm = firstMinor.getMinutes();
+    firstMinor.setMinutes(mm + (RULER_MINOR_MIN - (mm % RULER_MINOR_MIN)) % RULER_MINOR_MIN, 0, 0);
 
-    // draw minor
-    for(let m=viewStartMinAbs - 120; m<viewStartMinAbs + maxMinSpan + 120; m += RULER_SUB_MIN){
-      const x = Math.round(m*pxPerMin - (scrollOuter.scrollLeft % (RULER_SUB_MIN*pxPerMin)));
-      // thin line
-      ctx.beginPath(); ctx.moveTo(x+0.5, 24); ctx.lineTo(x+0.5, h); ctx.stroke();
+    ctx.strokeStyle = 'rgba(255,255,255,.12)';
+    for (let t=+firstMinor; t<=+viewEnd+RULER_MINOR_MIN*60000; t+=RULER_MINOR_MIN*60000){
+      const x = ((t - +viewStart)/60000)*pxPerMin + 0.5;
+      ctx.beginPath(); ctx.moveTo(x, H-18); ctx.lineTo(x, H); ctx.stroke();
     }
 
-    // major ticks + labels
-    for(let m=viewStartMinAbs; m<viewStartMinAbs + maxMinSpan; m += RULER_STEP_MIN){
-      const tickTime = new Date(windowStart.getTime() + m*60000);
-      const x = Math.round(m*pxPerMin - (scrollOuter.scrollLeft % (RULER_SUB_MIN*pxPerMin)));
-      ctx.fillStyle = 'rgba(255,255,255,.9)';
-      const label = hhmm(tickTime);
-      // label bg
-      const tw = ctx.measureText(label).width + 10;
-      ctx.fillStyle = 'rgba(0,0,0,.35)';
-      ctx.fillRect(x-4, 4, tw, 16);
+    // major ticks + labels (hourly)
+    const firstMajor = new Date(viewStart);
+    if (firstMajor.getMinutes() !== 0) {
+      firstMajor.setHours(firstMajor.getHours()+1,0,0,0);
+    } else {
+      firstMajor.setMinutes(0,0,0);
+    }
+
+    ctx.strokeStyle = 'rgba(255,255,255,.25)';
+    for (let t=+firstMajor; t<=+viewEnd+3600e3; t+=3600e3){
+      const x = ((t - +viewStart)/60000)*pxPerMin + 0.5;
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+      const label = hhmm(new Date(t));
       ctx.fillStyle = '#cfe0ff';
-      ctx.fillText(label, x, 6);
-      // bold grid
-      ctx.strokeStyle = 'rgba(255,255,255,.22)';
-      ctx.beginPath(); ctx.moveTo(x+0.5, 20); ctx.lineTo(x+0.5, h); ctx.stroke();
+      ctx.fillText(label, x+6, 6);
     }
   }
 
   function placeNowLine(){
-    const x = xForTime(new Date());
-    nowLine.style.left = `${x}px`;
+    nowLine.style.left = `${xForTime(new Date())}px`;
   }
 
   // ---------- Utils ----------
-  function severityClass(r){
+  function sevClass(r){
     const dm = typeof r.delay_min === 'number' ? r.delay_min : null;
     if (dm == null) return 'ok';
     if (dm >= 20) return 'd20';
@@ -314,16 +298,14 @@
     return 'ok';
   }
   function xForTime(t){
-    const ms = +t - +windowStart;
-    const min = ms/60000;
+    const min = (+t - +windowStart)/60000;
     return Math.round(min * pxPerMin);
   }
-  function alignHour(d){
+  function floorHour(d){
     const x = new Date(d);
     x.setMinutes(0,0,0);
     return x;
   }
-  function minutesSince(a,b){ return Math.round((+b - +a)/60000); }
   function hhmm(d){
     const h = String(d.getHours()).padStart(2,'0');
     const m = String(d.getMinutes()).padStart(2,'0');
@@ -335,17 +317,14 @@
   }
   function isoMinute(iso){ const d=new Date(iso); d.setSeconds(0,0); return d.toISOString().slice(0,16); }
 
-  async function fetchJSON(path){
+  async function getJSON(path){
     const res = await fetch(`${path}?v=${Date.now()}`, {cache:'no-store'});
     return res.ok ? res.json() : {};
   }
-  function readHistory(){
-    try{
-      const raw = localStorage.getItem('brs_timeline_hist');
-      return raw ? JSON.parse(raw) : {};
-    }catch{ return {}; }
+  function readHist(){
+    try{ return JSON.parse(localStorage.getItem('brs_timeline_hist')||'{}'); }catch{ return {}; }
   }
-  function writeHistory(obj){
+  function writeHist(obj){
     try{ localStorage.setItem('brs_timeline_hist', JSON.stringify(obj)); }catch{}
   }
 })();
