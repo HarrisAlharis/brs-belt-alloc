@@ -1,9 +1,3 @@
-/* Minimal targeted tweaks:
- * - Gridlines behind pucks (CSS already sets z-index)
- * - Puck subline shows Scheduled → ETA (not belt start/end)
- * - Single green for OK; amber for +10–19 (CSS)
- * - Keep layout/behaviour otherwise identical
- */
 (function(){
   const $ = s => document.querySelector(s);
   const CE = (t,c)=>{ const n=document.createElement(t); if(c) n.className=c; return n; };
@@ -20,7 +14,7 @@
   const canvasRuler = /** @type {HTMLCanvasElement} */($('#ruler'));
   const nowLine     = $('#nowLine');
 
-  const BELTS_ORDER = [1,2,3,5,6,7];
+  const BELTS_ORDER = [1,2,3,5,6,7];      // always show all belts
   const minute = 60*1000;
   const MIN_SEP = 45*minute;
 
@@ -33,7 +27,7 @@
   const BELT_PAD = cssNum('--belt-pad-y',14);
 
   let pxPerMin = parseFloat(zoomSel?.value || '6');
-  let assignments=null, flights=[], belts=BELTS_ORDER.slice(), beltFilter=new Set();
+  let assignments=null, flights=[], beltFilter=new Set();
   let timeMin=null, timeMax=null;
 
   const dFmt = d => {
@@ -41,16 +35,11 @@
     return `${String(dt.getHours()).padStart(2,'0')}:${String(dt.getMinutes()).padStart(2,'0')}`;
   };
   const xFor = d => ((+new Date(d))-(+timeMin))/60000*pxPerMin;
-
   const fetchJSON = u => fetch(u,{cache:'no-store'}).then(r=>r.json());
 
   function load(){
     return fetchJSON('assignments.json').then(data=>{
       assignments=data; flights=(data.rows||[]).slice();
-
-      const seen = new Set(flights.map(r=>r.belt).filter(b=>b!==undefined&&b!==null&&b!==''));
-      const order = BELTS_ORDER.filter(b=>seen.has(b));
-      belts = order.length ? order : BELTS_ORDER.slice();
 
       if (flights.length){
         const s = flights.map(r=>+new Date(r.start||r.eta));
@@ -120,42 +109,34 @@
     if(d<=-1) return 'early';
     return 'ok';
   }
-
-  // SCHEDULED → ETA text
-  function schedEtaText(f){
-    const sched = f.scheduled_local || '';
-    const eta   = f.eta_local || (f.eta ? dFmt(f.eta) : '');
-    if (sched && eta) return `${sched} → ${eta}`;
-    if (eta) return eta;
-    return '';
-  }
+  const schedEta = f => {
+    const s=f.scheduled_local||'', e=f.eta_local||(f.eta?dFmt(f.eta):'');
+    if(s&&e) return `${s} → ${e}`;
+    return e||s||'';
+  };
 
   function buildPuck(f){
     const p=CE('div',`puck ${delayClass(f.delay_min)}`);
     const title=CE('div','title');
     title.textContent = `${(f.flight||'').trim()} • ${(f.origin_iata||'').trim() || f.origin || ''}`.replace(/\s+/g,' ');
-    const sub=CE('div','sub'); sub.textContent = schedEtaText(f);
+    const sub=CE('div','sub'); sub.textContent = schedEta(f);
 
-    const tipLines=[
-      `${(f.flight||'').trim()} ${f.origin ? `• ${f.origin}`:''}`,
-      schedEtaText(f),
-      f.flow, f.airline, f.aircraft,
-      f.reason ? `Reason: ${f.reason}` : ''
-    ].filter(Boolean);
-    p.setAttribute('data-tip', tipLines.join('\n'));
+    const tip=[`${(f.flight||'').trim()} ${f.origin?`• ${f.origin}`:''}`, schedEta(f), f.flow, f.airline, f.aircraft, f.reason?`Reason: ${f.reason}`:'']
+      .filter(Boolean).join('\n');
+    p.setAttribute('data-tip', tip);
 
     p.appendChild(title); p.appendChild(sub);
 
     const x1=xFor(f.start), x2=xFor(f.end);
     p.style.left=`${x1}px`;
-    p.style.width=`${Math.max(180, x2-x1-4)}px`; // min 180 so title fits more often
+    p.style.width=`${Math.max(180, x2-x1-4)}px`;
     p.style.top=`${f._lane*(LANE_H+LANE_GAP)}px`;
     return p;
   }
 
   function drawRowsAndBelts(){
     rowsHost.innerHTML=''; beltsCol.innerHTML='';
-    const show = belts.filter(b=>beltFilter.size===0||beltFilter.has(b));
+    const show = BELTS_ORDER.filter(b=>beltFilter.size===0||beltFilter.has(b));   // <— always include 7
 
     const fragRows=document.createDocumentFragment();
     const fragBelts=document.createDocumentFragment();
@@ -181,7 +162,6 @@
     rowsHost.appendChild(fragRows);
     beltsCol.appendChild(fragBelts);
 
-    // width & grid
     const contentW = Math.max(xFor(timeMax)+200, scrollOuter.clientWidth);
     scrollInner.style.width = `${contentW}px`;
     drawGridlines(totalH);
@@ -239,13 +219,15 @@
     }
   }
 
-  // Events
   zoomSel?.addEventListener('change', ()=>{ pxPerMin=parseFloat(zoomSel.value||'6'); drawAll(false); });
   nowBtn?.addEventListener('click', ()=>{
     const nowX=xFor(Date.now()), viewW=scrollOuter.clientWidth;
     scrollOuter.scrollLeft=Math.max(0, nowX - viewW/2);
   });
+
+  /* keep left labels vertically synced with grid scroll */
   scrollOuter.addEventListener('scroll', ()=>{ beltsCol.scrollTop = scrollOuter.scrollTop; });
+
   window.addEventListener('resize', ()=>drawAll(false));
   setInterval(()=>updateNowLine(rowsHost.getBoundingClientRect().height||0), 30*1000);
 

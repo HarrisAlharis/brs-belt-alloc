@@ -14,7 +14,6 @@
   --puck-pad-x: 14px;
   --puck-pad-y: 10px;
 
-  /* vertical packing */
   --lane-height: 58px;
   --lane-gap: 10px;
   --belt-pad-y: 14px;
@@ -29,7 +28,6 @@ body{
   font: 14px/1.35 ui-sans-serif, system-ui, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
 }
 
-/* Top UI */
 .topbar{
   display:flex; justify-content:space-between; align-items:flex-end;
   padding:10px 12px 6px; border-bottom:1px solid var(--grid-faint);
@@ -57,33 +55,37 @@ body{
 .btn{ background:#17314d; color:var(--text); border:1px solid #2a4d72; border-radius:10px; padding:8px 12px; cursor:pointer; }
 .legend{ color:var(--text-dim); font-size:12px; display:flex; align-items:center; gap:10px; }
 .dot{ width:10px; height:10px; border-radius:50%; display:inline-block; }
-.dot-ok{ background:#1f5a30; }    /* on-time / small slip */
-.dot-10{ background:#835c2b; }    /* +10–19 */
-.dot-20{ background:#7a2a30; }    /* +20+ */
-.dot-early{ background:#2b587a; } /* early */
+.dot-ok{ background:#1f5a30; }
+.dot-10{ background:#835c2b; }
+.dot-20{ background:#7a2a30; }
+.dot-early{ background:#2b587a; }
 .dot-stale{ background:#5a6472; }
 
-/* Layout: left belts column + scrollable right */
 .viewport{
   display:grid; grid-template-columns: var(--belt-col-w) 1fr;
   height: calc(100vh - 112px);
 }
+
+/* LEFT BELT COLUMN — starts after the 44px ruler to align rows */
 .belts-col{
   border-right:1px solid var(--grid-faint);
   background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent 12px);
   position: relative;
-  overflow: hidden; /* vertical scroll syncs from right */
+  overflow: hidden;
+  padding-top: 44px;               /* <-- aligns borders with grid rows */
 }
 .belt-label{
-  height: 56px; display:flex; align-items:center; padding-left:12px;
-  color:var(--text-dim); font-weight:600; border-bottom:1px dashed var(--grid-faint);
+  height: 56px;
+  display:flex; align-items:center; padding-left:12px;
+  color:var(--text-dim); font-weight:600;
   user-select:none;
+  /* no border here; grid rows draw the divider full width visually */
 }
 
 .scroll-outer{ position:relative; overflow:auto; border-top:1px solid var(--grid-faint); }
 .scroll-inner{ position:relative; min-width:100%; }
 
-/* Ruler */
+/* RULER */
 .ruler{
   position: sticky; top:0; z-index:40;
   height:44px; width:100%;
@@ -92,16 +94,16 @@ body{
   display:block;
 }
 
-/* IMPORTANT: gridlines behind content */
+/* gridlines behind content */
 .gridline{
   position:absolute; top:44px; width:1px;
   background: var(--grid);
-  z-index:0;             /* behind rows/pucks */
+  z-index:0;
   pointer-events:none;
 }
 .gridline.minor{ background: var(--grid-minor); opacity:.6; }
 
-/* Rows/pucks above gridlines */
+/* rows/pucks above */
 .rows{ position:relative; z-index:2; }
 .row{
   position:relative; z-index:2;
@@ -109,7 +111,7 @@ body{
   padding: var(--belt-pad-y) 8px;
 }
 
-/* Now line above everything in scroll area */
+/* Now line */
 .now-line{
   position:absolute; top:44px;
   width:2px; background:rgba(72,163,255,.9);
@@ -121,7 +123,7 @@ body{
 .puck{
   position:absolute; z-index:3;
   height: var(--lane-height);
-  min-width: 180px;              /* a touch wider so full title fits more often */
+  min-width: 180px;
   border-radius: var(--puck-radius);
   padding: var(--puck-pad-y) var(--puck-pad-x);
   display:flex; align-items:center; gap:10px;
@@ -131,7 +133,7 @@ body{
 }
 .puck .title{
   font-weight:700; letter-spacing:.15px;
-  font-size:13px;                 /* slight downsize so full string fits */
+  font-size:13px;
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
   font-variant-numeric: tabular-nums;
 }
@@ -139,13 +141,13 @@ body{
   font-size:12px; color:var(--text-dim); margin-left:auto; white-space:nowrap;
 }
 
-/* Colours — single green for OK; amber for +10–19; red for +20+; blue for early */
-.puck.ok    { background:#103a2a; } /* green */
-.puck.mid   { background:#3c2a10; } /* amber to match legend */
-.puck.late  { background:#4a1818; } /* red */
-.puck.early { background:#12344a; } /* blue */
+/* colours */
+.puck.ok    { background:#103a2a; }
+.puck.mid   { background:#3c2a10; }
+.puck.late  { background:#4a1818; }
+.puck.early { background:#12344a; }
 
-/* Tooltip */
+/* tooltip */
 .puck[data-tip]:hover:after{
   content: attr(data-tip);
   position:absolute; left:50%; bottom:calc(100% + 10px); transform:translateX(-50%);
@@ -155,5 +157,4 @@ body{
   box-shadow:0 10px 20px rgba(0,0,0,.4);
 }
 
-/* Footer */
 .foot{ color:var(--text-dim); font-size:12px; padding:8px 12px; border-top:1px solid var(--grid-faint); }
