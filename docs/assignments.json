@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-20T20:16:19.167Z",
-  "generated_at_local": "2025-10-20T21:16:19",
+  "generated_at_utc": "2025-10-20T20:18:37.088Z",
+  "generated_at_local": "2025-10-20T21:18:37",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -22,7 +22,7 @@
       "eta_local": "21:56",
       "delay_min": -9,
       "ui_state": "upcoming",
-      "ui_age_min": -85
+      "ui_age_min": -82
     },
     {
       "flight": "FR8235",
@@ -42,7 +42,7 @@
       "eta_local": "22:24",
       "delay_min": -16,
       "ui_state": "upcoming",
-      "ui_age_min": -113
+      "ui_age_min": -110
     },
     {
       "flight": "U22934",
@@ -62,7 +62,7 @@
       "eta_local": "22:26",
       "delay_min": -9,
       "ui_state": "upcoming",
-      "ui_age_min": -115
+      "ui_age_min": -112
     },
     {
       "flight": "FR3160",
@@ -82,27 +82,27 @@
       "eta_local": "22:39",
       "delay_min": 9,
       "ui_state": "upcoming",
-      "ui_age_min": -128
+      "ui_age_min": -125
     },
     {
       "flight": "U22748",
       "origin": "(BCN)",
       "origin_iata": "BCN",
-      "eta": "2025-10-20T21:43:00.000Z",
-      "status": "estimated 22:43",
+      "eta": "2025-10-20T21:45:00.000Z",
+      "status": "estimated 22:45",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-20T21:58:00.000Z",
-      "end": "2025-10-20T22:28:00.000Z",
+      "start": "2025-10-20T22:00:00.000Z",
+      "end": "2025-10-20T22:30:00.000Z",
       "reason": "intl_spread",
       "airline": "easyJet",
       "aircraft": "(G-EZTD)",
       "pax_estimate": 162,
       "scheduled_local": "22:55",
-      "eta_local": "22:43",
-      "delay_min": -12,
+      "eta_local": "22:45",
+      "delay_min": -10,
       "ui_state": "upcoming",
-      "ui_age_min": -132
+      "ui_age_min": -131
     },
     {
       "flight": "U22834",
@@ -122,7 +122,7 @@
       "eta_local": "22:56",
       "delay_min": -14,
       "ui_state": "upcoming",
-      "ui_age_min": -145
+      "ui_age_min": -142
     },
     {
       "flight": "LS1814",
@@ -142,7 +142,7 @@
       "eta_local": "22:58",
       "delay_min": -12,
       "ui_state": "upcoming",
-      "ui_age_min": -147
+      "ui_age_min": -144
     },
     {
       "flight": "LS1810",
@@ -162,7 +162,7 @@
       "eta_local": "23:28",
       "delay_min": 8,
       "ui_state": "upcoming",
-      "ui_age_min": -177
+      "ui_age_min": -174
     },
     {
       "flight": "LS1818",
@@ -182,27 +182,27 @@
       "eta_local": "23:34",
       "delay_min": 14,
       "ui_state": "upcoming",
-      "ui_age_min": -183
+      "ui_age_min": -180
     },
     {
       "flight": "U22856",
       "origin": "(AYT)",
       "origin_iata": "AYT",
-      "eta": "2025-10-20T22:36:00.000Z",
-      "status": "estimated 23:36",
+      "eta": "2025-10-20T22:38:00.000Z",
+      "status": "estimated 23:38",
       "flow": "INTERNATIONAL",
       "belt": 2,
-      "start": "2025-10-20T22:51:00.000Z",
-      "end": "2025-10-20T23:21:00.000Z",
+      "start": "2025-10-20T22:53:00.000Z",
+      "end": "2025-10-20T23:23:00.000Z",
       "reason": "intl_spread",
       "airline": "easyJet",
       "aircraft": "(G-UZLD)",
       "pax_estimate": 162,
       "scheduled_local": "23:30",
-      "eta_local": "23:36",
-      "delay_min": 6,
+      "eta_local": "23:38",
+      "delay_min": 8,
       "ui_state": "upcoming",
-      "ui_age_min": -185
+      "ui_age_min": -184
     }
   ]
 }
