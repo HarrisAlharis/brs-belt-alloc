@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-20T01:58:37.214Z",
-  "generated_at_local": "2025-10-20T02:58:37",
+  "generated_at_utc": "2025-10-20T02:00:01.124Z",
+  "generated_at_local": "2025-10-20T03:00:01",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -8,21 +8,21 @@
       "flight": "BY6765",
       "origin": "(LCA)",
       "origin_iata": "LCA",
-      "eta": "2025-10-20T03:14:00.000Z",
-      "status": "estimated 04:14",
+      "eta": "2025-10-20T03:16:00.000Z",
+      "status": "estimated 04:16",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-20T03:29:00.000Z",
-      "end": "2025-10-20T03:59:00.000Z",
+      "start": "2025-10-20T03:31:00.000Z",
+      "end": "2025-10-20T04:01:00.000Z",
       "reason": "intl_spread",
       "airline": "TUI",
       "aircraft": "(G-TUMG)",
       "pax_estimate": 166,
       "scheduled_local": "04:20",
-      "eta_local": "04:14",
-      "delay_min": -6,
+      "eta_local": "04:16",
+      "delay_min": -4,
       "ui_state": "upcoming",
-      "ui_age_min": -120
+      "ui_age_min": -121
     }
   ]
 }
