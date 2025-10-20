@@ -1,3 +1,9 @@
+/* docs/timeline.js
+ * Changes you asked for:
+ * - MIN_SEP = 1 minute (lane reuse if next start ≥ lastEnd + 1 min)
+ * - Puck title shows Flight • DEST again
+ */
+
 (function(){
   const $ = s => document.querySelector(s);
   const CE = (t,c)=>{ const n=document.createElement(t); if(c) n.className=c; return n; };
@@ -14,9 +20,11 @@
   const canvasRuler = /** @type {HTMLCanvasElement} */($('#ruler'));
   const nowLine     = $('#nowLine');
 
-  const BELTS_ORDER = [1,2,3,5,6,7];      // always show all belts
+  const BELTS_ORDER = [1,2,3,5,6,7];
   const minute = 60*1000;
-  const MIN_SEP = 45*minute;
+
+  // 1 minute separation to reuse a lane
+  const MIN_SEP = 1 * minute;
 
   const cssNum = (name, fb)=>{
     const v = parseInt(getComputedStyle(document.documentElement).getPropertyValue(name),10);
@@ -53,13 +61,14 @@
         timeMax=new Date(now+90*minute);
       }
 
-      meta.textContent = `Generated ${assignments.generated_at_local} • Horizon ${assignments.horizon_minutes} min`;
+      if (meta) meta.textContent = `Generated ${assignments.generated_at_local} • Horizon ${assignments.horizon_minutes} min`;
       buildChips();
       drawAll(true);
     });
   }
 
   function buildChips(){
+    if (!beltChips) return;
     beltChips.innerHTML='';
     const f=document.createDocumentFragment();
     const mk=(label,key)=>{
@@ -117,10 +126,14 @@
 
   function buildPuck(f){
     const p=CE('div',`puck ${delayClass(f.delay_min)}`);
+
+    // Title shows: FLIGHT • DEST
+    const dest = ((f.origin_iata||'').trim() || (f.origin||'')).toString();
     const title=CE('div','title');
-    title.textContent = `${(f.flight||'').trim()} • ${(f.origin_iata||'').trim() || f.origin || ''}`.replace(/\s+/g,' ');
+    title.textContent = `${(f.flight||'').trim()} • ${dest}`.replace(/\s+/g,' ');
     const sub=CE('div','sub'); sub.textContent = schedEta(f);
 
+    // Tooltip (unchanged)
     const tip=[`${(f.flight||'').trim()} ${f.origin?`• ${f.origin}`:''}`, schedEta(f), f.flow, f.airline, f.aircraft, f.reason?`Reason: ${f.reason}`:'']
       .filter(Boolean).join('\n');
     p.setAttribute('data-tip', tip);
@@ -130,13 +143,13 @@
     const x1=xFor(f.start), x2=xFor(f.end);
     p.style.left=`${x1}px`;
     p.style.width=`${Math.max(180, x2-x1-4)}px`;
-    p.style.top=`${f._lane*(LANE_H+LANE_GAP)}px`;
+    p.style.top=`${f._lane*(cssNum('--lane-height',58)+cssNum('--lane-gap',10))}px`;
     return p;
   }
 
   function drawRowsAndBelts(){
     rowsHost.innerHTML=''; beltsCol.innerHTML='';
-    const show = BELTS_ORDER.filter(b=>beltFilter.size===0||beltFilter.has(b));   // <— always include 7
+    const show = BELTS_ORDER.filter(b=>beltFilter.size===0||beltFilter.has(b));
 
     const fragRows=document.createDocumentFragment();
     const fragBelts=document.createDocumentFragment();
@@ -225,7 +238,7 @@
     scrollOuter.scrollLeft=Math.max(0, nowX - viewW/2);
   });
 
-  /* keep left labels vertically synced with grid scroll */
+  // keep left labels vertically synced with the scroll
   scrollOuter.addEventListener('scroll', ()=>{ beltsCol.scrollTop = scrollOuter.scrollTop; });
 
   window.addEventListener('resize', ()=>drawAll(false));
