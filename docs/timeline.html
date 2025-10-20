@@ -7,21 +7,21 @@
   <link rel="stylesheet" href="timeline.css" />
 </head>
 <body>
+  <!-- Top bar -->
   <header class="topbar">
     <div class="brand">BRS — Arrivals Belt Timeline</div>
-    <div class="meta" id="meta"></div>
+    <div id="meta" class="meta"></div>
   </header>
 
+  <!-- Controls row -->
   <div class="controls">
     <div class="chiprow" id="beltChips"></div>
 
     <div class="right-controls">
       <label class="lbl">Zoom:</label>
       <select id="zoom">
-        <option value="3">3 px/min (narrow)</option>
-        <option value="4">4 px/min</option>
-        <option value="6">6 px/min</option>
         <option value="8" selected>8 px/min (default)</option>
+        <option value="10">10 px/min</option>
         <option value="12">12 px/min (wide)</option>
       </select>
       <button id="nowBtn" class="btn">Now</button>
@@ -36,11 +36,12 @@
     </div>
   </div>
 
+  <!-- Viewport -->
   <div id="viewport" class="viewport">
-    <!-- Sticky belt column -->
+    <!-- Sticky belt names -->
     <div class="belts-col" id="beltsCol"></div>
 
-    <!-- Scrollable content -->
+    <!-- Scrollable timeline -->
     <div class="scroll-outer" id="scrollOuter">
       <div class="scroll-inner" id="scrollInner">
         <canvas id="ruler" class="ruler"></canvas>
@@ -51,7 +52,9 @@
   </div>
 
   <footer class="foot">
-    <div>Source: FR24 (screen-scrape) • Auto-refresh ~90s • 4-hour local history kept in your browser.</div>
+    <div>
+      Source: FR24 (screen-scrape) • Auto-refresh ~90s • 4-hour local history kept in your browser.
+    </div>
   </footer>
 
   <script src="timeline.js"></script>
