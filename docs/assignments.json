@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-20T18:55:00.236Z",
-  "generated_at_local": "2025-10-20T19:55:00",
+  "generated_at_utc": "2025-10-20T18:56:19.885Z",
+  "generated_at_local": "2025-10-20T19:56:19",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -26,19 +26,19 @@
       "flight": "U27267",
       "origin": "(PMI)",
       "origin_iata": "PMI",
-      "eta": "2025-10-20T19:22:00.000Z",
-      "status": "estimated 20:22",
+      "eta": "2025-10-20T19:23:00.000Z",
+      "status": "estimated 20:23",
       "flow": "INTERNATIONAL",
       "belt": 2,
-      "start": "2025-10-20T19:37:00.000Z",
-      "end": "2025-10-20T20:07:00.000Z",
+      "start": "2025-10-20T19:38:00.000Z",
+      "end": "2025-10-20T20:08:00.000Z",
       "reason": "intl_spread",
       "airline": "easyJet",
       "aircraft": "(OE-LQL)",
       "pax_estimate": 162,
       "scheduled_local": "20:10",
-      "eta_local": "20:22",
-      "delay_min": 12
+      "eta_local": "20:23",
+      "delay_min": 13
     },
     {
       "flight": "FR2291",
