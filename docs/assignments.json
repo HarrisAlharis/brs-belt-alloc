@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-20T00:10:00.829Z",
-  "generated_at_local": "2025-10-20T01:10:00",
+  "generated_at_utc": "2025-10-20T00:11:19.742Z",
+  "generated_at_local": "2025-10-20T01:11:19",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -22,7 +22,7 @@
       "eta_local": "01:55",
       "delay_min": -10,
       "ui_state": "upcoming",
-      "ui_age_min": -90
+      "ui_age_min": -89
     },
     {
       "flight": "U22852",
@@ -42,7 +42,7 @@
       "eta_local": "01:57",
       "delay_min": 12,
       "ui_state": "upcoming",
-      "ui_age_min": -92
+      "ui_age_min": -91
     },
     {
       "flight": "U22950",
@@ -62,7 +62,7 @@
       "eta_local": "02:01",
       "delay_min": 41,
       "ui_state": "upcoming",
-      "ui_age_min": -96
+      "ui_age_min": -95
     },
     {
       "flight": "U22858",
@@ -82,7 +82,7 @@
       "eta_local": "02:04",
       "delay_min": 34,
       "ui_state": "upcoming",
-      "ui_age_min": -99
+      "ui_age_min": -98
     },
     {
       "flight": "LS1846",
@@ -102,7 +102,7 @@
       "eta_local": "02:55",
       "delay_min": 25,
       "ui_state": "upcoming",
-      "ui_age_min": -150
+      "ui_age_min": -149
     },
     {
       "flight": "BY6765",
@@ -122,7 +122,7 @@
       "eta_local": "04:09",
       "delay_min": -11,
       "ui_state": "upcoming",
-      "ui_age_min": -224
+      "ui_age_min": -223
     }
   ]
 }
