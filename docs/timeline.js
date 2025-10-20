@@ -42,7 +42,7 @@
       if (!r.eta) continue;
       map.set(keyOf(r), r);
     }
-    // prune older than HISTORY_HOURS
+    // prune older than HISTORY_HOURS (by end time)
     const now = new Date();
     const cutoff = addMin(now, -HISTORY_HOURS*60);
     const kept = [];
@@ -76,25 +76,27 @@
     return { cls, faded };
   }
 
-  function computeWindow(data){
+  function computeWindow(){
     const now = new Date();
     const backStart = addMin(now, -HISTORY_HOURS*60);         // past 4h
     const aheadEnd  = addMin(now,  DEFAULT_AHEAD_HOURS*60);   // next 3h
-    // Allow extra gutters so labels aren't clipped when scrolled to extremes
     return { start: addMin(backStart,-15), end: addMin(aheadEnd, 30), now };
   }
 
-  function positionX(minFromStart){ return minFromStart * pxPerMin; }
+  function xFrom(rangeStart, date){ return (date - rangeStart)/60000 * pxPerMin; }
 
   function buildGrid(range){
     $grid.innerHTML = '';
-    const mins = Math.round((range.end - range.start)/60000);
-    const start = new Date(range.start);
-    const firstHour = new Date(start); firstHour.setMinutes(0,0,0);
-    if (firstHour < start) firstHour.setHours(firstHour.getHours()+1);
+    // Canvas width
+    const minsTotal = Math.ceil((range.end - range.start)/60000);
+    $canvas.style.width = `${minsTotal * pxPerMin + 200}px`;
+
+    // Hour lines & labels
+    const firstHour = new Date(range.start); firstHour.setMinutes(0,0,0);
+    if (firstHour < range.start) firstHour.setHours(firstHour.getHours()+1);
 
     for (let t = new Date(firstHour); t <= range.end; t = addMin(t, 60)) {
-      const left = positionX((t - range.start)/60000);
+      const left = xFrom(range.start, t);
       const el = document.createElement('div');
       el.className = 'grid-hour';
       el.style.left = `${left}px`;
@@ -104,10 +106,10 @@
       el.appendChild(label);
       $grid.appendChild(el);
     }
-    const nowLeft = positionX((range.now - range.start)/60000);
+
+    // Now line
+    const nowLeft = xFrom(range.start, range.now);
     $nowLine.style.left = `${Math.max(0, nowLeft)}px`;
-    // canvas width
-    $canvas.style.width = `${positionX(mins)}px`;
   }
 
   function renderLanes(data, range){
@@ -121,6 +123,7 @@
 
     for (const belt of BELTS){
       if (filterBelt !== 'all' && Number(filterBelt) !== belt) continue;
+
       const lane = document.createElement('div');
       lane.className = 'lane';
       const label = document.createElement('div');
@@ -130,38 +133,56 @@
 
       const rows = byBelt.get(belt)||[];
       for (const r of rows){
-        // Compute time window if missing
         const eta = toDate(r.eta);
         const start = r.start ? toDate(r.start) : addMin(eta, 15);
         const end   = r.end   ? toDate(r.end)   : addMin(start, 30);
 
-        // Skip if completely outside global range
         if (end < range.start || start > range.end) continue;
 
-        const leftMin = Math.max(0, (start - range.start)/60000);
-        const widthMin = Math.max(4, (end - start)/60000);
+        const left = xFrom(range.start, start);
+        const width = Math.max(4, (end - start)/60000 * pxPerMin);
 
-        const puck = document.createElement('div');
         const { cls, faded } = classify(r);
+        const puck = document.createElement('div');
         puck.className = `puck ${cls} ${faded ? 'faded':''}`;
-        puck.style.left = `${positionX(leftMin)}px`;
-        puck.style.width = `${positionX(widthMin)/pxPerMin * pxPerMin}px`; // stable width
+        puck.style.left = `${left}px`;
+        puck.style.width = `${width}px`;
 
-        // content
-        const title = `${(r.flight||'').trim()} • ${(r.origin_iata||r.origin||'').replace(/[()]/g,'').trim()}`;
-        const sub = `${r.scheduled_local||'--:--'} → ${r.eta_local||'--:--'} • ${r.flow||''} • Reason: ${r.reason||''}`;
+        // Minimal in-puck text
+        const flightAndOrigin = `${(r.flight||'').trim()} • ${(r.origin_iata||r.origin||'').replace(/[()]/g,'').trim()}`;
+        const times = `${r.scheduled_local||'--:--'} → ${r.eta_local||'--:--'}`;
 
         puck.innerHTML = `
           <div class="col">
-            <div class="title">${escapeHtml(title)}</div>
-            <div class="sub">${escapeHtml(sub)}</div>
+            <div class="title">${escapeHtml(flightAndOrigin)}</div>
+            <div class="sub">${escapeHtml(times)}</div>
           </div>
         `;
+
+        // Full details in native tooltip (hover)
+        const details = [
+          `Flight: ${(r.flight||'').trim()}`,
+          `Origin: ${(r.origin||'').trim()} ${r.origin_iata?`(${r.origin_iata})`:''}`.trim(),
+          `Scheduled → ETA: ${r.scheduled_local||'--:--'} → ${r.eta_local||'--:--'}`,
+          `Status: ${r.status||'-'}`,
+          `Belt: ${r.belt}`,
+          `Start: ${fmtIso(r.start)}  End: ${fmtIso(r.end)}`,
+          `Flow: ${r.flow||'-'}`,
+          `Reason: ${r.reason||'-'}`
+        ].join('\n');
+        puck.setAttribute('title', details);
+
         lane.appendChild(puck);
       }
 
       $lanes.appendChild(lane);
     }
+  }
+
+  function fmtIso(iso){
+    if(!iso) return '--:--';
+    const d = new Date(iso);
+    return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
   }
 
   function escapeHtml(s){
@@ -181,7 +202,7 @@
     try{
       const liveRows = await loadAssignments();
       const merged = mergeHistory(liveRows);
-      const range = computeWindow(merged);
+      const range = computeWindow();
       buildGrid(range);
       renderLanes(merged, range);
     } catch(e){
@@ -191,8 +212,8 @@
   }
 
   function centerOnNow(){
-    const range = computeWindow([]);
-    const left = Math.max(0, positionX((range.now - range.start)/60000) - ($viewport.clientWidth*0.4));
+    const range = computeWindow();
+    const left = Math.max(0, (range.now - range.start)/60000 * pxPerMin - ($viewport.clientWidth * 0.4));
     $viewport.scrollTo({ left, behavior:'smooth' });
   }
 
@@ -215,6 +236,5 @@
 
   // ------- boot -------
   refresh().then(centerOnNow);
-  // Poll every ~90s to pick up feeder updates
   setInterval(refresh, 90*1000);
 })();

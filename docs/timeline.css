@@ -4,13 +4,14 @@
   --ink:#e7edf5;
   --muted:#9fb1c5;
   --grid:rgba(255,255,255,0.08);
+  --grid-strong:rgba(255,255,255,0.12);
   --chip:#1b2533;
   --chip-on:#243142;
+
   --ok:#143b1f;      --ok-b:#1f5a30;      --ok-t:#b7f3c8;
   --y10:#3c2a10;     --y10-b:#835c2b;     --y10-t:#ffd49a;
   --y20:#3e1316;     --y20-b:#7a2a30;     --y20-t:#ffb3b8;
   --early:#102a3c;   --early-b:#2b587a;   --early-t:#a8d8ff;
-  --faded:#556171;
 }
 
 *{ box-sizing:border-box }
@@ -26,7 +27,7 @@ html,body{ height:100%; background:var(--bg); color:var(--ink); margin:0; font:1
 .controls{
   padding:10px 12px; display:flex; flex-wrap:wrap; gap:12px;
   position:sticky; top:0; background:linear-gradient(180deg, rgba(15,23,32,.95), rgba(15,23,32,.75));
-  backdrop-filter: blur(6px); z-index:5; border-bottom:1px solid var(--grid);
+  backdrop-filter: blur(6px); z-index:20; border-bottom:1px solid var(--grid);
 }
 .controls .group{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
 .label{ color:var(--muted); font-size:12px; }
@@ -39,8 +40,7 @@ html,body{ height:100%; background:var(--bg); color:var(--ink); margin:0; font:1
 .chip--primary{ background:#203048; }
 
 #zoom{
-  background:#0f1622; color:var(--ink); border:1px solid var(--grid); border-radius:10px;
-  padding:.35rem .6rem;
+  background:#0f1622; color:var(--ink); border:1px solid var(--grid); border-radius:10px; padding:.35rem .6rem;
 }
 
 .legend{ color:var(--muted); font-size:12px; display:flex; align-items:center; gap:12px; }
@@ -52,50 +52,58 @@ html,body{ height:100%; background:var(--bg); color:var(--ink); margin:0; font:1
 .legend .faded{ background:#2a303a; border-color:#3a4150; }
 
 #viewport{
-  position:relative; height:calc(100vh - 144px);
-  overflow:auto; /* horizontal & vertical scroll */
-  background:var(--panel);
+  position:relative; height:calc(100vh - 148px);
+  overflow:auto; background:var(--panel);
 }
-#canvas{ position:relative; min-height:100%; min-width:1200px; }
 
+/* Canvas sizing: top gutter for hour labels, left gutter for belt labels */
+#canvas{
+  position:relative; min-height:100%; min-width:1200px;
+  padding-top:36px;         /* time axis */
+  padding-left:96px;        /* belt labels column */
+}
+
+/* Grid & time axis */
 #grid{ position:absolute; inset:0; pointer-events:none; }
 .grid-hour{ position:absolute; top:0; bottom:0; border-left:1px solid var(--grid); }
-.grid-hour .label{ position:absolute; top:-18px; left:-18px; font-size:12px; color:var(--muted); }
+.grid-hour .label{
+  position:absolute; top:8px; left:-18px; font-size:12px; color:var(--muted);
+  background:rgba(16,23,34,.9); padding:2px 6px; border-radius:6px; border:1px solid var(--grid);
+}
 
+/* Belt lanes */
+#lanes{ position:relative; }
+.lane{
+  position:relative; height:120px; border-bottom:1px solid var(--grid);
+}
+.lane .belt-label{
+  position:absolute; z-index:3; left:-88px; top:8px; width:80px; text-align:right;
+  color:var(--muted); font-size:12px; padding:2px 6px; border-radius:6px;
+  background:rgba(16,23,34,.9); border:1px solid var(--grid);
+}
+
+/* NOW line */
 #nowLine{
   position:absolute; top:0; bottom:0; width:2px; background:#62a1ff;
   box-shadow:0 0 0 1px rgba(98,161,255,0.25), 0 0 8px rgba(98,161,255,.55);
+  z-index:2;
 }
 
-#lanes{ position:relative; padding-left:84px; }
-.lane{
-  position:relative; height:140px; border-bottom:1px solid var(--grid);
-}
-.lane .belt-label{
-  position:absolute; left:8px; top:10px; color:var(--muted); font-size:12px;
-}
-
+/* Pucks */
 .puck{
-  position:absolute;
-  min-width:160px;
-  max-width:560px;
-  height:66px;
-  border-radius:16px;
-  padding:14px 16px;
-  border:1px solid transparent;
-  display:flex; align-items:center;
-  box-shadow:0 8px 24px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.03);
-  will-change: transform;
-  cursor:default;
+  position:absolute; min-width:160px; max-width:560px; height:60px;
+  border-radius:14px; padding:10px 14px; border:1px solid transparent;
+  display:flex; align-items:center; box-shadow:0 8px 24px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.03);
+  will-change: transform; cursor:default;
 }
 .puck .title{ font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.puck .sub{ font-size:12px; color:var(--muted); margin-top:4px; }
+.puck .sub{ font-size:12px; opacity:.9; margin-top:4px; }
 .puck .col{ display:flex; flex-direction:column; }
 
 .puck.ok{ background:var(--ok); border-color:var(--ok-b); color:var(--ok-t); }
 .puck.y10{ background:var(--y10); border-color:var(--y10-b); color:var(--y10-t); }
 .puck.y20{ background:var(--y20); border-color:var(--y20-b); color:var(--y20-t); }
 .puck.early{ background:var(--early); border-color:var(--early-b); color:var(--early-t); }
-.puck.faded{ filter:grayscale(.4); opacity:.45; color:#b7c3d4; border-color:#3a4150; }
+.puck.faded{ filter:grayscale(.45); opacity:.45; color:#b7c3d4; border-color:#3a4150; }
 
 .foot{ color:var(--muted); font-size:12px; padding:10px 12px; border-top:1px solid var(--grid); }

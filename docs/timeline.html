@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <title>BRS — Arrivals Belt Timeline</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="timeline.css?v=2">
+  <link rel="stylesheet" href="timeline.css?v=3">
 </head>
 <body>
   <header class="topbar">
@@ -45,19 +45,19 @@
 
   <main id="viewport">
     <div id="canvas">
+      <!-- time axis (top gutter) & grid -->
+      <div id="grid"></div>
       <!-- vertical NOW line -->
       <div id="nowLine"></div>
-      <!-- time grid -->
-      <div id="grid"></div>
-      <!-- lanes and pucks go here -->
+      <!-- lanes & pucks -->
       <div id="lanes"></div>
     </div>
   </main>
 
   <footer class="foot">
-    Source: FR24 (screen-scrape) • View updates automatically (poll ~90s). Local 4-hour history is kept in your browser.
+    Source: FR24 (screen-scrape) • Auto-refresh ~90s • 4-hour local history kept in your browser.
   </footer>
 
-  <script src="timeline.js?v=2"></script>
+  <script src="timeline.js?v=3"></script>
 </body>
 </html>
