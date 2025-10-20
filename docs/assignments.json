@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-20T17:30:00.187Z",
-  "generated_at_local": "2025-10-20T18:30:00",
+  "generated_at_utc": "2025-10-20T17:31:19.194Z",
+  "generated_at_local": "2025-10-20T18:31:19",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -80,19 +80,19 @@
       "flight": "U22886",
       "origin": "(GVA)",
       "origin_iata": "GVA",
-      "eta": "2025-10-20T18:40:00.000Z",
-      "status": "delayed 19:40",
+      "eta": "2025-10-20T18:44:00.000Z",
+      "status": "delayed 19:44",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-20T18:55:00.000Z",
-      "end": "2025-10-20T19:25:00.000Z",
+      "start": "2025-10-20T18:59:00.000Z",
+      "end": "2025-10-20T19:29:00.000Z",
       "reason": "intl_spread",
       "airline": "easyJet",
       "aircraft": "(G-EZUK)",
       "pax_estimate": 162,
       "scheduled_local": "19:20",
-      "eta_local": "19:40",
-      "delay_min": 20
+      "eta_local": "19:44",
+      "delay_min": 24
     },
     {
       "flight": "U27267",
