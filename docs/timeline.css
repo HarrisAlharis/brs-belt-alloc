@@ -1,119 +1,158 @@
-﻿/* docs/timeline.js
- * Works with the HTML you pasted (viewport/scrollOuter/scrollInner/canvas ruler/etc).
- * Visuals unchanged. Tweak: lane is free only if next start >= lastEnd + 45 min.
- */
+:root{
+  --bg:#0d151d;
+  --panel:#111b26;
+  --grid:#1b2a39;
+  --grid-faint:#14212f;
+  --text:#dce6f2;
+  --text-dim:#93a4b7;
+  --accent:#48a3ff;
 
-(function () {
-  // ------- helpers -------
-  const $ = (s) => document.querySelector(s);
-  const el = (tag, cls) => { const n = document.createElement(tag); if (cls) n.className = cls; return n; };
-  const minute = 60 * 1000;
-  const dFmt = (d) => { const dt = new Date(d); return `${String(dt.getHours()).padStart(2,'0')}:${String(dt.getMinutes()).padStart(2,'0')}`; };
+  --puck-radius:14px;
+  --puck-pad-x:14px;
+  --puck-pad-y:10px;
 
-  // ------- DOM (matches your HTML) -------
-  const beltChips   = $('#beltChips');
-  const zoomSel     = $('#zoom');
-  const nowBtn      = $('#nowBtn');
-  const meta        = $('#meta');
+  /* vertical packing */
+  --lane-height:58px;
+  --lane-gap:10px;
+  --belt-pad-y:18px;
+}
 
-  const viewport    = $('#viewport');
-  const scrollOuter = $('#scrollOuter');
-  const scrollInner = $('#scrollInner');
-  const rowsHost    = $('#rows');          // container for belt rows & pucks
-  const canvasRuler = /** @type {HTMLCanvasElement} */($('#ruler'));
-  const nowLine     = $('#nowLine');       // absolutely positioned vertical line
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  font-family:ui-sans-serif,system-ui,"Segoe UI",Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
+}
 
-  // ------- state -------
-  const BELTS_ORDER = [1,2,3,5,6,7];
-  let assignments = null;
-  let flights = [];
-  let pxPerMin = parseFloat(zoomSel?.value || '6'); // keep your default 6 px/min
-  let timeMin = null, timeMax = null;               // Date
-  let beltFilter = new Set();                       // empty => show all
-  const MIN_SEPARATION_MS = 45 * minute;            // <— the only behavioural tweak
+/* Top bar and controls */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 16px;
+  position:sticky;top:0;z-index:60;
+  background:linear-gradient(180deg,#0d151d,#0d151d 60%,transparent);
+  border-bottom:1px solid #12203020;
+}
+.topbar .brand{font-weight:700;letter-spacing:.2px}
+.topbar .meta{color:var(--text-dim);font-size:14px}
 
-  // style vars (read from CSS so visuals stay exactly as-is)
-  const getCssNum = (name, fallback) => {
-    const v = parseInt(getComputedStyle(document.documentElement).getPropertyValue(name), 10);
-    return Number.isFinite(v) ? v : fallback;
-  };
-  const LANE_H   = getCssNum('--lane-height', 58);
-  const LANE_GAP = getCssNum('--lane-gap', 10);
-  const BELT_PAD = getCssNum('--belt-pad-y', 18);
+.controls{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;padding:8px 12px 10px;
+  position:sticky;top:44px;z-index:55;
+  background:linear-gradient(180deg,#0d151d,#0d151d 60%,transparent);
+  border-bottom:1px solid #12203040;
+}
+.chiprow{display:flex;flex-wrap:wrap;gap:8px}
+.chip{
+  background:#162332;border:1px solid #22374d;color:var(--text);
+  border-radius:999px;padding:6px 12px;font-size:14px;cursor:pointer
+}
+.chip.on{background:#1c2a3c;border-color:#2b4b6a}
 
-  // ------- data load -------
-  const fetchJSON = (u) => fetch(u, { cache: 'no-store' }).then(r => r.json());
+.right-controls{display:flex;align-items:center;gap:10px}
+.lbl{color:var(--text-dim);font-size:14px}
+#zoom{
+  appearance:none;background:#162332;color:var(--text);border:1px solid #22374d;
+  border-radius:10px;padding:8px 12px
+}
+.btn{background:#162332;border:1px solid #22374d;color:var(--text);
+  border-radius:10px;padding:8px 12px;cursor:pointer}
+.legend{display:flex;align-items:center;gap:14px;color:var(--text-dim);font-size:14px}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.dot-ok{background:#1d5f3f}
+.dot-10{background:#6d5a13}
+.dot-20{background:#6a2020}
+.dot-early{background:#1b4864}
+.dot-stale{background:#3a3f4a}
 
-  function load() {
-    return fetchJSON('assignments.json').then(data => {
-      assignments = data;
-      flights = (data.rows || []).slice();
+/* Viewport with sticky belt labels */
+.viewport{display:grid;grid-template-columns:130px 1fr}
 
-      // time window padding
-      if (flights.length) {
-        const starts = flights.map(r => +new Date(r.start || r.eta));
-        const ends   = flights.map(r => +new Date(r.end   || r.eta));
-        const padMin = 45 * minute;
-        timeMin = new Date(Math.min(...starts) - padMin);
-        timeMax = new Date(Math.max(...ends)   + padMin);
-      } else {
-        const now = Date.now();
-        timeMin = new Date(now - 90 * minute);
-        timeMax = new Date(now + 90 * minute);
-      }
+.belts-col{
+  position:sticky;left:0;top:96px;align-self:start;z-index:10;
+  background:linear-gradient(180deg,#0d151d,#0d151d);
+  border-right:1px solid #12203040;
+  min-height:calc(100vh - 96px);
+  padding-top:0;
+}
+.belts-col .belt-name{
+  height:calc(var(--belt-pad-y)*2 + var(--lane-height));
+  display:flex;align-items:center;justify-content:flex-start;
+  padding-left:16px;color:var(--text-dim);font-weight:600;
+  border-bottom:1px dashed var(--grid-faint);
+}
 
-      if (meta) meta.textContent = `Generated ${assignments.generated_at_local} • Horizon ${assignments.horizon_minutes} min`;
+/* Scrollable content */
+.scroll-outer{
+  position:relative;overflow:auto;border-left:1px solid #12203060;
+  height:calc(100vh - 96px);
+}
+.scroll-inner{position:relative;min-width:100%}
 
-      buildBeltChips();
-      drawAll();
-    });
-  }
+/* Top hour ruler (canvas) */
+.ruler{
+  position:sticky;top:96px;left:0;right:0;z-index:40;
+  height:44px;background:var(--panel);
+  border-bottom:1px solid #1a2a3a;
+  display:block;
+}
 
-  // ------- UI: belt filter chips -------
-  function buildBeltChips() {
-    if (!beltChips) return;
-    beltChips.innerHTML = '';
-    const frag = document.createDocumentFragment();
+/* Rows grid (pucks live inside) */
+.rows{position:relative;background:linear-gradient(180deg,var(--bg),var(--bg))}
+.belt-row{
+  position:relative;padding:var(--belt-pad-y) 10px;border-bottom:1px dashed var(--grid-faint)
+}
+.belt-row .row-inner{position:relative;margin-left:0}
 
-    const mkChip = (label, key) => {
-      const b = el('button', 'chip');
-      b.textContent = label;
-      b.dataset.key = key;
-      b.addEventListener('click', () => toggleFilter(key, b));
-      frag.appendChild(b);
-    };
+/* vertical hour grid lines */
+.gridline{
+  position:absolute;top:0;bottom:0;width:1px;background:var(--grid);
+  transform:translateX(-.5px)
+}
 
-    BELTS_ORDER.forEach(n => mkChip(`Belt ${n}`, String(n)));
-    mkChip('All', 'all');
-    mkChip('None', 'none');
-    beltChips.appendChild(frag);
-    // highlight All initially
-    [...beltChips.querySelectorAll('.chip')].forEach(c => c.classList.toggle('on', c.dataset.key === 'all'));
-  }
+/* Now line */
+.now-line{
+  position:absolute;top:0;bottom:0;width:2px;
+  background:rgba(72,163,255,.85);
+  box-shadow:0 0 12px rgba(72,163,255,.6),0 0 2px rgba(72,163,255,.9)
+}
 
-  function toggleFilter(key, btn) {
-    if (key === 'all') { beltFilter.clear(); }
-    else if (key === 'none') { beltFilter = new Set(['__none__']); }
-    else {
-      const n = parseInt(key, 10);
-      if (Number.isFinite(n)) {
-        if (beltFilter.has(n)) beltFilter.delete(n); else beltFilter.add(n);
-      }
-    }
-    // chip visual
-    [...beltChips.querySelectorAll('.chip')].forEach(c => {
-      const k = c.dataset.key;
-      const on =
-        (k === 'all'  && beltFilter.size === 0) ||
-        (k === 'none' && beltFilter.has('__none__')) ||
-        (/^\d+$/.test(k) && beltFilter.has(parseInt(k,10)));
-      c.classList.toggle('on', on);
-    });
-    drawAll();
-  }
+/* Pucks */
+.puck{
+  position:absolute;height:var(--lane-height);min-width:120px;
+  border-radius:var(--puck-radius);
+  padding:var(--puck-pad-y) var(--puck-pad-x);
+  display:flex;align-items:center;gap:10px;
+  box-shadow:0 12px 24px rgba(0,0,0,.25), inset 0 0 0 1px rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.06);
+  color:#f2f5f9;cursor:default;overflow:hidden
+}
+.puck .title{font-weight:700;letter-spacing:.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.puck .sub{font-size:12px;color:var(--text-dim);margin-left:auto;white-space:nowrap}
 
-  // ------- geometry -------
-  const xForDate = (d) => ((+new Date(d)) - (+timeMin)) / 60000 * pxPerMin;
+/* delay classes (match your legend colours) */
+.puck.ok{background:#103a2a}
+.puck.mid{background:#254118}
+.puck.late{background:#4a1818}
+.puck.early{background:#12344a}
+
+/* Tooltip */
+.puck[data-tip]:hover:after{
+  content:attr(data-tip);
+  position:absolute;left:50%;bottom:calc(100% + 10px);transform:translateX(-50%);
+  white-space:pre;font-size:13px;line-height:1.35;
+  background:#0f2234;color:var(--text);
+  border:1px solid #23425f;border-radius:8px;padding:10px 12px;z-index:30;
+  max-width:420px;box-shadow:0 10px 20px rgba(0,0,0,.4)
+}
+
+/* Footer */
+.foot{padding:10px 12px;color:var(--text-dim);font-size:14px;border-top:1px solid #12203040}
+PerMin;
 
   function packLanes(items) {
     // Sort by start time
