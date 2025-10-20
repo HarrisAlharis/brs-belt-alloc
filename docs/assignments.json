@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-20T00:08:35.425Z",
-  "generated_at_local": "2025-10-20T01:08:35",
+  "generated_at_utc": "2025-10-20T00:10:00.829Z",
+  "generated_at_local": "2025-10-20T01:10:00",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -21,7 +21,8 @@
       "scheduled_local": "02:05",
       "eta_local": "01:55",
       "delay_min": -10,
-      "flight_from": "cell"
+      "ui_state": "upcoming",
+      "ui_age_min": -90
     },
     {
       "flight": "U22852",
@@ -40,26 +41,28 @@
       "scheduled_local": "01:45",
       "eta_local": "01:57",
       "delay_min": 12,
-      "flight_from": "cell"
+      "ui_state": "upcoming",
+      "ui_age_min": -92
     },
     {
       "flight": "U22950",
       "origin": "(AGA)",
       "origin_iata": "AGA",
-      "eta": "2025-10-20T01:04:00.000Z",
-      "status": "delayed 02:04",
+      "eta": "2025-10-20T01:01:00.000Z",
+      "status": "delayed 02:01",
       "flow": "INTERNATIONAL",
       "belt": 2,
-      "start": "2025-10-20T01:19:00.000Z",
-      "end": "2025-10-20T01:49:00.000Z",
+      "start": "2025-10-20T01:16:00.000Z",
+      "end": "2025-10-20T01:46:00.000Z",
       "reason": "intl_spread",
       "airline": "easyJet (NEO Livery)",
       "aircraft": "(G-UZLW)",
       "pax_estimate": 166,
       "scheduled_local": "01:20",
-      "eta_local": "02:04",
-      "delay_min": 44,
-      "flight_from": "cell"
+      "eta_local": "02:01",
+      "delay_min": 41,
+      "ui_state": "upcoming",
+      "ui_age_min": -96
     },
     {
       "flight": "U22858",
@@ -78,7 +81,8 @@
       "scheduled_local": "01:30",
       "eta_local": "02:04",
       "delay_min": 34,
-      "flight_from": "cell"
+      "ui_state": "upcoming",
+      "ui_age_min": -99
     },
     {
       "flight": "LS1846",
@@ -97,7 +101,28 @@
       "scheduled_local": "02:30",
       "eta_local": "02:55",
       "delay_min": 25,
-      "flight_from": "cell"
+      "ui_state": "upcoming",
+      "ui_age_min": -150
+    },
+    {
+      "flight": "BY6765",
+      "origin": "(LCA)",
+      "origin_iata": "LCA",
+      "eta": "2025-10-20T03:09:00.000Z",
+      "status": "estimated 04:09",
+      "flow": "INTERNATIONAL",
+      "belt": 1,
+      "start": "2025-10-20T03:24:00.000Z",
+      "end": "2025-10-20T03:54:00.000Z",
+      "reason": "intl_spread",
+      "airline": "TUI",
+      "aircraft": "(G-TUMG)",
+      "pax_estimate": 166,
+      "scheduled_local": "04:20",
+      "eta_local": "04:09",
+      "delay_min": -11,
+      "ui_state": "upcoming",
+      "ui_age_min": -224
     }
   ]
 }
