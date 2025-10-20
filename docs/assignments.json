@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-20T00:50:00.934Z",
-  "generated_at_local": "2025-10-20T01:50:00",
+  "generated_at_utc": "2025-10-20T00:51:19.128Z",
+  "generated_at_local": "2025-10-20T01:51:19",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -22,7 +22,7 @@
       "eta_local": "01:54",
       "delay_min": 9,
       "ui_state": "upcoming",
-      "ui_age_min": -49
+      "ui_age_min": -48
     },
     {
       "flight": "LS1846",
@@ -42,7 +42,7 @@
       "eta_local": "02:50",
       "delay_min": 20,
       "ui_state": "upcoming",
-      "ui_age_min": -105
+      "ui_age_min": -104
     },
     {
       "flight": "BY6765",
@@ -62,7 +62,7 @@
       "eta_local": "04:14",
       "delay_min": -6,
       "ui_state": "upcoming",
-      "ui_age_min": -189
+      "ui_age_min": -188
     }
   ]
 }
