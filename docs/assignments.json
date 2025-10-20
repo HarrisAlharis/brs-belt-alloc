@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-20T00:56:19.148Z",
-  "generated_at_local": "2025-10-20T01:56:19",
+  "generated_at_utc": "2025-10-20T00:58:35.325Z",
+  "generated_at_local": "2025-10-20T01:58:35",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -22,7 +22,7 @@
       "eta_local": "02:50",
       "delay_min": 20,
       "ui_state": "upcoming",
-      "ui_age_min": -99
+      "ui_age_min": -96
     },
     {
       "flight": "BY6765",
@@ -42,7 +42,7 @@
       "eta_local": "04:14",
       "delay_min": -6,
       "ui_state": "upcoming",
-      "ui_age_min": -183
+      "ui_age_min": -180
     }
   ]
 }
