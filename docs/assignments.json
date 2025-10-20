@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-20T18:46:20.123Z",
-  "generated_at_local": "2025-10-20T19:46:20",
+  "generated_at_utc": "2025-10-20T18:48:35.797Z",
+  "generated_at_local": "2025-10-20T19:48:35",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -26,37 +26,37 @@
       "flight": "U27267",
       "origin": "(PMI)",
       "origin_iata": "PMI",
-      "eta": "2025-10-20T19:16:00.000Z",
-      "status": "estimated 20:16",
+      "eta": "2025-10-20T19:18:00.000Z",
+      "status": "estimated 20:18",
       "flow": "INTERNATIONAL",
       "belt": 2,
-      "start": "2025-10-20T19:31:00.000Z",
-      "end": "2025-10-20T20:01:00.000Z",
+      "start": "2025-10-20T19:33:00.000Z",
+      "end": "2025-10-20T20:03:00.000Z",
       "reason": "intl_spread",
       "airline": "easyJet",
       "aircraft": "(OE-LQL)",
       "pax_estimate": 162,
       "scheduled_local": "20:10",
-      "eta_local": "20:16",
-      "delay_min": 6
+      "eta_local": "20:18",
+      "delay_min": 8
     },
     {
       "flight": "FR2291",
       "origin": "(ALC)",
       "origin_iata": "ALC",
-      "eta": "2025-10-20T20:33:00.000Z",
-      "status": "delayed 21:33",
+      "eta": "2025-10-20T20:30:00.000Z",
+      "status": "delayed 21:30",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-20T20:48:00.000Z",
-      "end": "2025-10-20T21:18:00.000Z",
+      "start": "2025-10-20T20:45:00.000Z",
+      "end": "2025-10-20T21:15:00.000Z",
       "reason": "intl_spread",
       "airline": "Ryanair",
       "aircraft": "(9H-VVE)",
       "pax_estimate": 166,
       "scheduled_local": "19:45",
-      "eta_local": "21:33",
-      "delay_min": 108
+      "eta_local": "21:30",
+      "delay_min": 105
     }
   ]
 }
