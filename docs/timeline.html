@@ -7,13 +7,11 @@
   <link rel="stylesheet" href="timeline.css" />
 </head>
 <body>
-  <!-- Top bar -->
   <header class="topbar">
     <div class="brand">BRS — Arrivals Belt Timeline</div>
-    <div id="meta" class="meta"></div>
+    <div class="meta" id="meta"></div>
   </header>
 
-  <!-- Controls row -->
   <div class="controls">
     <div class="chiprow" id="beltChips"></div>
 
@@ -36,12 +34,7 @@
     </div>
   </div>
 
-  <!-- Viewport -->
   <div id="viewport" class="viewport">
-    <!-- Sticky belt names -->
-    <div class="belts-col" id="beltsCol"></div>
-
-    <!-- Scrollable timeline -->
     <div class="scroll-outer" id="scrollOuter">
       <div class="scroll-inner" id="scrollInner">
         <canvas id="ruler" class="ruler"></canvas>
@@ -52,9 +45,7 @@
   </div>
 
   <footer class="foot">
-    <div>
-      Source: FR24 (screen-scrape) • Auto-refresh ~90s • 4-hour local history kept in your browser.
-    </div>
+    <div>Source: FR24 (screen-scrape) • Auto-refresh ~90s • 4-hour local history kept in your browser.</div>
   </footer>
 
   <script src="timeline.js"></script>
