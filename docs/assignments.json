@@ -1,9 +1,27 @@
 {
-  "generated_at_utc": "2025-10-20T18:25:00.009Z",
-  "generated_at_local": "2025-10-20T19:25:00",
+  "generated_at_utc": "2025-10-20T18:26:18.966Z",
+  "generated_at_local": "2025-10-20T19:26:18",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
+    {
+      "flight": "U2208",
+      "origin": "(GLA)",
+      "origin_iata": "GLA",
+      "eta": "2025-10-20T18:34:00.000Z",
+      "status": "estimated 19:34",
+      "flow": "DOMESTIC",
+      "belt": 7,
+      "start": "2025-10-20T18:49:00.000Z",
+      "end": "2025-10-20T19:19:00.000Z",
+      "reason": "domestic→7",
+      "airline": "easyJet",
+      "aircraft": "(G-EZTC)",
+      "pax_estimate": 162,
+      "scheduled_local": "19:30",
+      "eta_local": "19:34",
+      "delay_min": 4
+    },
     {
       "flight": "U27507",
       "origin": "(FAO)",
@@ -21,24 +39,6 @@
       "scheduled_local": "19:30",
       "eta_local": "19:34",
       "delay_min": 4
-    },
-    {
-      "flight": "U2208",
-      "origin": "(GLA)",
-      "origin_iata": "GLA",
-      "eta": "2025-10-20T18:35:00.000Z",
-      "status": "estimated 19:35",
-      "flow": "DOMESTIC",
-      "belt": 7,
-      "start": "2025-10-20T18:50:00.000Z",
-      "end": "2025-10-20T19:20:00.000Z",
-      "reason": "domestic→7",
-      "airline": "easyJet",
-      "aircraft": "(G-EZTC)",
-      "pax_estimate": 162,
-      "scheduled_local": "19:30",
-      "eta_local": "19:35",
-      "delay_min": 5
     },
     {
       "flight": "U2242",
@@ -62,19 +62,19 @@
       "flight": "U22926",
       "origin": "(AMS)",
       "origin_iata": "AMS",
-      "eta": "2025-10-20T18:48:00.000Z",
-      "status": "estimated 19:48",
+      "eta": "2025-10-20T18:46:00.000Z",
+      "status": "estimated 19:46",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-20T19:03:00.000Z",
-      "end": "2025-10-20T19:33:00.000Z",
+      "start": "2025-10-20T19:01:00.000Z",
+      "end": "2025-10-20T19:31:00.000Z",
       "reason": "intl_spread",
       "airline": "easyJet",
       "aircraft": "(G-EZTZ)",
       "pax_estimate": 162,
       "scheduled_local": "19:40",
-      "eta_local": "19:48",
-      "delay_min": 8
+      "eta_local": "19:46",
+      "delay_min": 6
     },
     {
       "flight": "U22886",
@@ -152,19 +152,19 @@
       "flight": "FR2291",
       "origin": "(ALC)",
       "origin_iata": "ALC",
-      "eta": "2025-10-20T20:33:00.000Z",
-      "status": "delayed 21:33",
+      "eta": "2025-10-20T20:28:00.000Z",
+      "status": "delayed 21:28",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-20T20:48:00.000Z",
-      "end": "2025-10-20T21:18:00.000Z",
+      "start": "2025-10-20T20:43:00.000Z",
+      "end": "2025-10-20T21:13:00.000Z",
       "reason": "intl_spread",
       "airline": "Ryanair",
       "aircraft": "(9H-VVE)",
       "pax_estimate": 166,
       "scheduled_local": "19:45",
-      "eta_local": "21:33",
-      "delay_min": 108
+      "eta_local": "21:28",
+      "delay_min": 103
     }
   ]
 }
