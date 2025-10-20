@@ -4,8 +4,7 @@
   <meta charset="utf-8" />
   <title>BRS — Arrivals Belt Timeline</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <!-- cache-bust the CSS so GH Pages can’t serve a stale file -->
-  <link rel="stylesheet" href="timeline.css?v=2" />
+  <link rel="stylesheet" href="timeline.css" />
 </head>
 <body>
   <header class="topbar">
@@ -37,11 +36,12 @@
     </div>
   </div>
 
+  <!-- Viewport: fixed left belt column, independent horizontal scroll to the right -->
   <div id="viewport" class="viewport">
-    <!-- sticky belts column -->
+    <!-- Left: belts (never scroll horizontally) -->
     <div class="belts-col" id="beltsCol"></div>
 
-    <!-- scrollable content -->
+    <!-- Right: scrollable timeline -->
     <div class="scroll-outer" id="scrollOuter">
       <div class="scroll-inner" id="scrollInner">
         <canvas id="ruler" class="ruler"></canvas>
@@ -55,7 +55,6 @@
     <div>Source: FR24 (screen-scrape) • Auto-refresh ~90s • 4-hour local history kept in your browser.</div>
   </footer>
 
-  <!-- cache-bust JS for the same reason -->
-  <script src="timeline.js?v=2"></script>
+  <script src="timeline.js"></script>
 </body>
 </html>
