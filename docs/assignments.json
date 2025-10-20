@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-20T18:08:35.433Z",
-  "generated_at_local": "2025-10-20T19:08:35",
+  "generated_at_utc": "2025-10-20T18:10:00.549Z",
+  "generated_at_local": "2025-10-20T19:10:00",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -8,19 +8,19 @@
       "flight": "U27661",
       "origin": "(LIS)",
       "origin_iata": "LIS",
-      "eta": "2025-10-20T18:12:00.000Z",
-      "status": "estimated 19:12",
+      "eta": "2025-10-20T18:14:00.000Z",
+      "status": "estimated 19:14",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-20T18:27:00.000Z",
-      "end": "2025-10-20T18:57:00.000Z",
+      "start": "2025-10-20T18:29:00.000Z",
+      "end": "2025-10-20T18:59:00.000Z",
       "reason": "intl_spread",
       "airline": "easyJet",
       "aircraft": "(OE-IUA)",
       "pax_estimate": 162,
       "scheduled_local": "19:05",
-      "eta_local": "19:12",
-      "delay_min": 7
+      "eta_local": "19:14",
+      "delay_min": 9
     },
     {
       "flight": "U27074",
