@@ -1,373 +1,398 @@
-﻿/* BRS timeline — crisp DPR-aware ruler, correct tick math, sticky belts, de-dup by flight-per-day */
+﻿/* docs/timeline.js
+ * BRS — Arrivals Belt Timeline (full drop-in file)
+ * - Reads docs/assignments.json
+ * - Builds an interactive timeline with horizontal scroll + sticky header/left rail
+ * - Packs overlapping flights into vertical lanes per belt
+ * - NEW: collision padding (1 minute) so adjacent/overlapping pucks do not overlap
+ */
 
 (() => {
-  // ---------- DOM ----------
-  const metaEl = document.getElementById('meta');
-  const beltsCol = document.getElementById('beltsCol');
-  const rowsEl = document.getElementById('rows');
-  const ruler = document.getElementById('ruler');
-  const scrollOuter = document.getElementById('scrollOuter');
-  const scrollInner = document.getElementById('scrollInner');
-  const nowLine = document.getElementById('nowLine');
-  const zoomSel = document.getElementById('zoom');
-  const nowBtn = document.getElementById('nowBtn');
-  const beltChips = document.getElementById('beltChips');
+  // ---------- Config ----------
+  const JSON_URL = "assignments.json";
+  const HISTORY_KEEP_HOURS = 4;      // keep last 4h locally (already used on page)
+  const NOW_LINE_TICK_MS = 20 * 1000;
+  const REFRESH_MS = 90 * 1000;
 
-  // ---------- CONFIG ----------
-  const BELTS = [1,2,3,5,6,7];
-  const HISTORY_KEEP_MIN = 240; // 4h
-  const REFRESH_MS = 90_000;
+  // Zoom options in px per minute
+  const ZOOMS = [
+    { label: "3 px/min (narrow)", ppm: 3 },
+    { label: "6 px/min (default)", ppm: 6 },
+    { label: "9 px/min (wide)",    ppm: 9 },
+    { label: "12 px/min (extra)",  ppm: 12 },
+  ];
+  let currentZoom = ZOOMS[1]; // default
 
-  // State
-  let pxPerMin = +zoomSel.value;
-  let windowStart = floorHour(new Date());
-  windowStart.setMinutes(windowStart.getMinutes() - 60); // start 1h back
-  windowStart.setSeconds(0,0);
-  let windowHours = 8;
-  let beltFilter = new Set(BELTS);
+  // ---------- Elements ----------
+  const elHeader   = document.getElementById("tl-header");   // time scale (sticky)
+  const elLeft     = document.getElementById("tl-left");     // belts (sticky)
+  const elBody     = document.getElementById("tl-body");     // scrollable body
+  const elScroller = document.getElementById("tl-scrollbar");// custom horizontal scrollbar
+  const elZoomSel  = document.getElementById("zoom-select"); // <select> for zoom
+  const elNowBtn   = document.getElementById("btn-now");     // “Now” button
+  const elGenInfo  = document.getElementById("gen-info");    // small generated label
 
-  // ---------- INIT ----------
-  renderChips();
-  renderBeltsColumn();
-  resizeRuler(); drawRuler();
-  boot();
-
-  // ---------- Events ----------
-  zoomSel.addEventListener('change', () => {
-    pxPerMin = +zoomSel.value;
-    redrawAll();
-  });
-
-  nowBtn.addEventListener('click', () => {
-    const nowX = xForTime(new Date());
-    const target = Math.max(0, nowX - scrollOuter.clientWidth*0.35);
-    scrollOuter.scrollTo({left: target, behavior:'smooth'});
-  });
-
-  scrollOuter.addEventListener('scroll', () => {
-    drawRuler();
-    placeNowLine();
-  });
-
-  window.addEventListener('resize', () => {
-    resizeRuler();
-    drawRuler();
-    placeNowLine();
-  });
-
-  // ---------- Loop ----------
-  async function boot(){
-    await loadAndRender();
-    setInterval(loadAndRender, REFRESH_MS);
-    setInterval(placeNowLine, 15_000);
+  // Guards for missing DOM (in case the HTML wasn’t updated yet)
+  if (!elHeader || !elLeft || !elBody) {
+    console.warn("[timeline] Missing required DOM nodes. Make sure timeline.html is up to date.");
+    return;
   }
 
-  async function loadAndRender(){
-    const data = await getJSON('assignments.json');
-    const gen = data?.generated_at_local || data?.generated_at_utc || '';
-    metaEl.textContent = `Generated ${gen} • Horizon ${data?.horizon_minutes || ''} min`;
+  // Populate zoom select
+  if (elZoomSel) {
+    elZoomSel.innerHTML = ZOOMS.map((z, i) =>
+      `<option value="${i}" ${z === currentZoom ? "selected" : ""}>${z.label}</option>`
+    ).join("");
+    elZoomSel.addEventListener("change", () => {
+      const idx = parseInt(elZoomSel.value, 10);
+      currentZoom = ZOOMS[idx] || currentZoom;
+      rebuild();
+    });
+  }
 
-    const rows = Array.isArray(data?.rows) ? data.rows : [];
-    const seenAt = Date.now();
+  // ---------- Time helpers ----------
+  const toMs = d => (d instanceof Date ? d.getTime() : +new Date(d));
+  const fmtHHmm = d => {
+    const dt = (d instanceof Date) ? d : new Date(d);
+    return dt.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  };
 
-    // merge with 4h history and de-dup per FLIGHT|DAY (keep newest)
-    const hist = readHist();
-    const merged = new Map();
+  // ---------- State ----------
+  let rows = [];              // normalized rows from JSON (with start/end as Date)
+  let belts = [];             // discovered belts + “Belt 1..7”
+  let timeWindow = { start: null, end: null };  // min/max for rendering
+  let nowLineEl = null;
 
-    function primaryKey(r){
-      const d = new Date(r.eta || r.start);
-      return `${(r.flight||'').trim()}|${isoDay(d)}`;
+  // Local history cache to keep last 4h for context (avoid losing older pucks until they age out)
+  const CACHE_KEY = "brs_tl_cache_v2";
+
+  function loadCache() {
+    try {
+      const raw = localStorage.getItem(CACHE_KEY);
+      if (!raw) return [];
+      const arr = JSON.parse(raw);
+      const cutoff = Date.now() - HISTORY_KEEP_HOURS * 3600 * 1000;
+      return arr.filter(x => toMs(x.end) >= cutoff);
+    } catch (e) {
+      return [];
     }
-    function secondaryKey(r){
-      // If an airline actually reuses the same flight number twice in one day (rare),
-      // add a second discriminator: nearest start "quarter-hour" bucket.
-      const d = new Date(r.start || r.eta);
-      const q = Math.floor(d.getHours()*60/15 + d.getMinutes()/15);
-      return `${(r.flight||'').trim()}|${isoDay(d)}|Q${q}`;
-    }
+  }
+  function saveCache(list) {
+    try {
+      localStorage.setItem(CACHE_KEY, JSON.stringify(list));
+    } catch (e) {}
+  }
 
-    function put(r, when){
-      if(!r) return;
-      // prefer primary key; if collision with different real flights (very rare), fallback to secondary
-      const k1 = primaryKey(r);
-      const prev = merged.get(k1);
-      if (!prev || (prev._seenAt||0) < when){
-        merged.set(k1, {...r, _seenAt: when, _k: k1});
-        return;
-      }
-      // If the existing and incoming are truly far apart (>2h in ETA), treat as distinct by secondary key.
-      const etaNew = +new Date(r.eta || r.start || 0);
-      const etaOld = +new Date(prev.eta || prev.start || 0);
-      if (Math.abs(etaNew - etaOld) > 120*60000){
-        const k2 = secondaryKey(r);
-        const prev2 = merged.get(k2);
-        if (!prev2 || (prev2._seenAt||0) < when){
-          merged.set(k2, {...r, _seenAt: when, _k: k2});
+  // Merge new rows into cache by (flight, start-min)
+  function mergeHistory(newRows) {
+    const cache = loadCache();
+    const key = r => `${(r.flight || "").trim()}|${new Date(r.start).toISOString().slice(0,16)}`;
+    const seen = new Map(cache.map(r => [key(r), r]));
+    for (const r of newRows) seen.set(key(r), r);
+    const out = [...seen.values()];
+    saveCache(out);
+    return out;
+  }
+
+  // ---------- Data fetch & normalization ----------
+  async function fetchJSON() {
+    const res = await fetch(JSON_URL, { cache: "no-store" });
+    if (!res.ok) throw new Error(`Failed fetch ${JSON_URL}: ${res.status}`);
+    return res.json();
+  }
+
+  function normalize(json) {
+    const list = (json.rows || []).map(r => ({
+      flight: r.flight || "",
+      belt: r.belt || "",
+      flow: r.flow || "",
+      origin: r.origin_iata || r.origin || "",
+      start: r.start ? new Date(r.start) : new Date(toMs(r.eta) + 15 * 60000), // fallback
+      end:   r.end   ? new Date(r.end)   : new Date(toMs(r.eta) + 45 * 60000),
+      delay: typeof r.delay_min === "number" ? r.delay_min : null,
+      status: r.status || "",
+      eta: r.eta ? new Date(r.eta) : null,
+      scheduled_local: r.scheduled_local || "",
+      eta_local: r.eta_local || "",
+      reason: r.reason || "",
+      airline: r.airline || "",
+      aircraft: r.aircraft || "",
+      ui_state: r.ui_state || "",
+    }))
+      // render only rows with a valid belt number 1,2,3,5,6,7
+      .filter(r => String(r.belt).match(/^[1-7]$/));
+
+    return { list, meta: json };
+  }
+
+  function discoverBelts(list) {
+    // Always show 1,2,3,5,6,7 (in order)
+    const fixed = [1,2,3,5,6,7];
+    const present = Array.from(new Set(list.map(r => +r.belt))).sort((a,b)=>a-b);
+    const out = fixed.filter(b => present.includes(b));
+    // also keep missing ones to preserve rows (if none present, still show all)
+    for (const b of fixed) if (!out.includes(b)) out.push(b);
+    return out;
+  }
+
+  // ---------- Layout calculations ----------
+  function computeWindow(list) {
+    if (!list.length) {
+      const now = Date.now();
+      return {
+        start: new Date(now - 60*60000),
+        end:   new Date(now + 120*60000)
+      };
+    }
+    const minStart = Math.min(...list.map(r => +r.start));
+    const maxEnd   = Math.max(...list.map(r => +r.end));
+    const padMin = 45; // pad around
+    return {
+      start: new Date(minStart - padMin * 60000),
+      end:   new Date(maxEnd + padMin * 60000)
+    };
+  }
+
+  // map time->x using current zoom and window
+  function timeToX(ms) {
+    const ppm = currentZoom.ppm;
+    return (ms - toMs(timeWindow.start)) / 60000 * ppm;
+  }
+
+  // ---------- Lane packing (per belt) ----------
+  // NEW: 1-minute collision padding so pucks never overlap visually.
+  function packLanes(flightsForBelt){
+    const items = flightsForBelt
+      .slice()
+      .sort((a,b)=>+a.start - +b.start);
+
+    const lanes = []; // store lastEndMs per lane
+    const bufferMs = 1 * 60 * 1000; // 1 minute
+
+    for (const f of items){
+      const start = +f.start;
+      const end   = +f.end;
+      let placed = -1;
+
+      for (let i=0; i<lanes.length; i++){
+        const lastEnd = lanes[i];
+        if (start >= lastEnd + bufferMs){
+          placed = i; break;
         }
+      }
+
+      if (placed === -1){
+        lanes.push(end);
+        f._lane = lanes.length - 1;
       } else {
-        // Same flight same day minor ETA drift → keep the newest
-        if ((prev._seenAt||0) < when){
-          merged.set(k1, {...r, _seenAt: when, _k: k1});
-        }
+        lanes[placed] = end;
+        f._lane = placed;
       }
     }
 
-    // bring forward history
-    for (const key of Object.keys(hist)){
-      const r = hist[key];
-      put(r, r._seenAt || (Date.now() - 91_000)); // ensure older than fresh pull
-    }
-    // apply latest feed
-    for (const r of rows) put(r, seenAt);
-
-    // prune: outside 4h (from ETA)
-    const now = Date.now();
-    const kept = [];
-    for (const r of merged.values()){
-      const eta = +new Date(r.eta || r.start || 0);
-      const ageMin = Math.round((now - eta)/60000);
-      if (ageMin <= HISTORY_KEEP_MIN && ageMin > -(windowHours*60)) kept.push(r);
-    }
-    kept.sort((a,b)=>+new Date(a.eta || a.start) - +new Date(b.eta || b.start));
-
-    // save reduced history
-    const store = {};
-    for (const r of kept){
-      const key = r._k || primaryKey(r);
-      store[key] = r;
-    }
-    writeHist(store);
-
-    renderGrid(kept);
-    resizeRuler(); drawRuler(); placeNowLine();
+    return { lanesCount: Math.max(1, lanes.length), items };
   }
 
   // ---------- Rendering ----------
-  function renderChips(){
-    const frag = document.createDocumentFragment();
-    const mk = (label, val) => {
-      const c = document.createElement('div');
-      c.className = 'chip active';
-      c.textContent = `Belt ${label}`;
-      c.dataset.val = val;
-      c.addEventListener('click', () => {
-        if (beltFilter.has(val) && beltFilter.size>1) beltFilter.delete(val);
-        else beltFilter.add(val);
-        c.classList.toggle('active', beltFilter.has(val));
-        updateRowVisibility();
-      });
-      return c;
-    };
-    BELTS.forEach(b => frag.appendChild(mk(b,b)));
+  function clear(el){ while (el.firstChild) el.removeChild(el.firstChild); }
 
-    const all = document.createElement('div');
-    all.className = 'chip'; all.textContent = 'All';
-    all.addEventListener('click', () => {
-      beltFilter = new Set(BELTS);
-      for (const el of beltChips.children) el.classList.add('active');
-      updateRowVisibility();
+  function renderHeader() {
+    clear(elHeader);
+    const wrap = document.createElement("div");
+    wrap.className = "tl-header-scale";
+
+    const totalMin = Math.max(30, Math.ceil((toMs(timeWindow.end) - toMs(timeWindow.start)) / 60000));
+    // major every 60 min, minor every 15 min
+    for (let m = 0; m <= totalMin; m += 15) {
+      const t = new Date(toMs(timeWindow.start) + m * 60000);
+      const x = Math.round(timeToX(toMs(t)));
+
+      const tick = document.createElement("div");
+      tick.className = "tick";
+      tick.style.left = x + "px";
+      if (t.getMinutes() === 0) {
+        tick.classList.add("major");
+        const lab = document.createElement("div");
+        lab.className = "tick-label";
+        lab.textContent = fmtHHmm(t);
+        tick.appendChild(lab);
+      }
+      wrap.appendChild(tick);
+    }
+
+    elHeader.appendChild(wrap);
+  }
+
+  function renderLeft() {
+    clear(elLeft);
+    for (const b of belts) {
+      const row = document.createElement("div");
+      row.className = "belt-row";
+      row.textContent = `Belt ${b}`;
+      elLeft.appendChild(row);
+    }
+  }
+
+  function laneHeight(lanesCount) {
+    // Compact when many lanes
+    if (lanesCount >= 4) return 90;
+    if (lanesCount === 3) return 110;
+    return 130;
+  }
+
+  function renderBody() {
+    clear(elBody);
+
+    // group by belt
+    const byBelt = new Map();
+    for (const r of rows) {
+      if (!byBelt.has(r.belt)) byBelt.set(r.belt, []);
+      byBelt.get(r.belt).push(r);
+    }
+
+    const headerW = Math.ceil(timeToX(toMs(timeWindow.end)));
+    elHeader.style.width = headerW + "px";
+
+    for (const b of belts) {
+      const beltRow = document.createElement("div");
+      beltRow.className = "tl-row";
+      beltRow.style.width = headerW + "px";
+
+      const flights = byBelt.get(b) || [];
+      const packed = packLanes(flights);
+      const h = laneHeight(packed.lanesCount);
+      beltRow.style.setProperty("--row-height", `${h}px`);
+
+      for (const f of packed.items) {
+        const x  = Math.round(timeToX(+f.start));
+        const xe = Math.round(timeToX(+f.end));
+        const w  = Math.max(36, xe - x); // min width
+
+        const y = f._lane * (h / Math.max(1, packed.lanesCount));
+
+        const puck = document.createElement("div");
+        puck.className = "puck";
+        puck.style.left = x + "px";
+        puck.style.top  = y + "px";
+        puck.style.width = w + "px";
+
+        // color by delay
+        let cls = "onTime";
+        if (typeof f.delay === "number") {
+          if (f.delay >= 20) cls = "late20";
+          else if (f.delay >= 10) cls = "late10";
+        }
+        puck.classList.add(cls);
+
+        // label (short)
+        const title = document.createElement("div");
+        title.className = "puck-title";
+        const code = (f.flight || "").trim();
+        const o = (f.origin || "").trim();
+        title.textContent = (code ? `${code}` : "•") + (o ? ` • ${o}` : "");
+        puck.appendChild(title);
+
+        const times = document.createElement("div");
+        times.className = "puck-times";
+        times.textContent = `${fmtHHmm(f.start)} → ${fmtHHmm(f.end)}`;
+        puck.appendChild(times);
+
+        // tooltip (on hover)
+        const tip = document.createElement("div");
+        tip.className = "puck-tip";
+        tip.innerHTML = `
+          <div><strong>${code || "N/A"}</strong> • ${f.origin || ""}</div>
+          <div>${fmtHHmm(f.start)} → ${fmtHHmm(f.end)}</div>
+          <div>${(f.flow || "").toUpperCase()}</div>
+          ${f.reason ? `<div>Reason: ${f.reason}</div>` : ""}
+          ${f.status ? `<div>Status: ${f.status}</div>` : ""}
+        `;
+        puck.appendChild(tip);
+
+        beltRow.appendChild(puck);
+      }
+
+      elBody.appendChild(beltRow);
+    }
+
+    renderNowLine(); // create/update now line
+    syncScrollbars();
+  }
+
+  // ---------- Now line ----------
+  function renderNowLine() {
+    const nowX = timeToX(Date.now());
+    if (!nowLineEl) {
+      nowLineEl = document.createElement("div");
+      nowLineEl.className = "now-line";
+      elBody.appendChild(nowLineEl);
+    }
+    nowLineEl.style.left = Math.round(nowX) + "px";
+    nowLineEl.style.height = elBody.scrollHeight + "px";
+  }
+  setInterval(() => renderNowLine(), NOW_LINE_TICK_MS);
+
+  // ---------- Scroll sync ----------
+  // We keep header & left rail sticky by CSS. Here we sync the custom scrollbar.
+  function syncScrollbars() {
+    // set custom range
+    const maxX = Math.max(0, elHeader.scrollWidth - elBody.clientWidth);
+    if (elScroller) {
+      elScroller.max = maxX;
+      elScroller.value = elBody.scrollLeft;
+    }
+  }
+  if (elScroller) {
+    elScroller.addEventListener("input", () => {
+      elBody.scrollLeft = Number(elScroller.value);
+      elHeader.scrollLeft = elBody.scrollLeft; // keep marks aligned
     });
+  }
+  elBody.addEventListener("scroll", () => {
+    elHeader.scrollLeft = elBody.scrollLeft;
+    syncScrollbars();
+  });
 
-    const none = document.createElement('div');
-    none.className = 'chip'; none.textContent = 'None';
-    none.addEventListener('click', () => {
-      beltFilter.clear();
-      for (const el of beltChips.children) el.classList.remove('active');
-      updateRowVisibility();
+  if (elNowBtn) {
+    elNowBtn.addEventListener("click", () => {
+      const nowX = timeToX(Date.now());
+      const center = nowX - elBody.clientWidth / 2;
+      elBody.scrollTo({ left: Math.max(0, center), behavior: "smooth" });
     });
-
-    frag.appendChild(all); frag.appendChild(none);
-    beltChips.innerHTML = '';
-    beltChips.appendChild(frag);
   }
 
-  function renderBeltsColumn(){
-    beltsCol.innerHTML = '';
-    const pad = document.createElement('div');
-    pad.style.height = 'var(--ruler-h)';
-    beltsCol.appendChild(pad);
-    for (const b of BELTS){
-      const d = document.createElement('div');
-      d.className = 'belt-label';
-      d.dataset.belt = b;
-      d.textContent = `Belt ${b}`;
-      beltsCol.appendChild(d);
+  // ---------- Build ----------
+  async function rebuild() {
+    // Merge history (keeps last 4h in browser)
+    const merged = mergeHistory(rows);
+    rows = merged;
+
+    belts = discoverBelts(rows);
+    timeWindow = computeWindow(rows);
+
+    renderHeader();
+    renderLeft();
+    renderBody();
+  }
+
+  async function loadAndRender() {
+    try {
+      const json = await fetchJSON();
+      if (elGenInfo) {
+        const t = json.generated_at_local || json.generated_at_utc || "";
+        const hz = json.horizon_minutes ? ` • Horizon ${json.horizon_minutes} min` : "";
+        elGenInfo.textContent = `Generated ${t}${hz}`;
+      }
+      const { list } = normalize(json);
+      rows = list;
+      await rebuild();
+    } catch (e) {
+      console.error("[timeline] load error", e);
     }
   }
 
-  function renderGrid(items){
-    rowsEl.innerHTML = '';
+  // Auto-refresh
+  setInterval(loadAndRender, REFRESH_MS);
 
-    const width = windowHours*60*pxPerMin + 2000;
-    scrollInner.style.width = `${width}px`;
-
-    const rowMap = new Map();
-    for (const b of BELTS){
-      const row = document.createElement('div');
-      row.className = 'row';
-      row.dataset.belt = b;
-      rowsEl.appendChild(row);
-      rowMap.set(b,row);
-    }
-
-    for (const r of items){
-      const belt = r.belt ?? '';
-      if (!rowMap.has(belt)) continue;
-
-      const start = new Date(r.start || r.eta);
-      const end   = new Date(r.end   || (+new Date(r.eta) + 45*60000));
-
-      const x = xForTime(start);
-      const w = Math.max(120, Math.round((end - start)/60000) * pxPerMin);
-
-      const p = document.createElement('div');
-      p.className = 'puck ' + sevClass(r);
-      p.style.left = `${x}px`;
-      p.style.width = `${w}px`;
-
-      const t1 = document.createElement('div');
-      t1.className = 't1';
-      t1.textContent = `${(r.flight||'').trim()} • ${(r.origin_iata||r.origin||'').replace(/[()]/g,'').trim()}`;
-
-      const t2 = document.createElement('div');
-      t2.className = 't2';
-      t2.textContent = `${hhmmLocal(r.start||r.eta)} → ${hhmmLocal(r.end||(+new Date(r.eta)+45*60000))}`;
-
-      p.title = [
-        t1.textContent,
-        `Time: ${t2.textContent}`,
-        `Flow: ${(r.flow||'').toUpperCase()}`,
-        `Belt: ${belt}`,
-        `Reason: ${r.reason||''}`
-      ].join('\n');
-
-      p.appendChild(t1); p.appendChild(t2);
-      rowMap.get(belt).appendChild(p);
-    }
-
-    updateRowVisibility();
-  }
-
-  function updateRowVisibility(){
-    for (const row of rowsEl.children){
-      const b = +row.dataset.belt;
-      row.style.display = beltFilter.has(b) ? '' : 'none';
-    }
-    for (const lab of beltsCol.querySelectorAll('.belt-label')){
-      const b = +lab.dataset.belt;
-      lab.style.visibility = beltFilter.has(b) ? 'visible' : 'hidden';
-    }
-  }
-
-  // ---------- Ruler (crisp & scroll-aware) ----------
-  function resizeRuler(){
-    const dpr = window.devicePixelRatio || 1;
-    const cssW = scrollOuter.clientWidth;
-    const cssH = 44;
-
-    if (ruler._w !== cssW || ruler._h !== cssH || ruler._dpr !== dpr){
-      ruler._w = cssW; ruler._h = cssH; ruler._dpr = dpr;
-      ruler.width  = Math.round(cssW * dpr);
-      ruler.height = Math.round(cssH * dpr);
-      ruler.style.width  = cssW + 'px';
-      ruler.style.height = cssH + 'px';
-    }
-  }
-
-  function drawRuler(){
-    const dpr = window.devicePixelRatio || 1;
-    const ctx = ruler.getContext('2d');
-    const W = ruler._w || scrollOuter.clientWidth;
-    const H = ruler._h || 44;
-
-    ctx.setTransform(dpr,0,0,dpr,0,0);
-    ctx.clearRect(0,0,W,H);
-
-    ctx.font = '12px system-ui';
-    ctx.textBaseline = 'top';
-
-    // visible time window
-    const leftMin = scrollOuter.scrollLeft / pxPerMin;
-    const viewStart = new Date(+windowStart + leftMin*60000);
-    const viewEnd   = new Date(+viewStart + (W/pxPerMin)*60000);
-
-    // minor ticks (15 min)
-    const firstMinor = new Date(viewStart);
-    const mm = firstMinor.getMinutes();
-    firstMinor.setMinutes(mm + (15 - (mm % 15)) % 15, 0, 0);
-
-    ctx.strokeStyle = 'rgba(255,255,255,.12)';
-    for (let t=+firstMinor; t<=+viewEnd+15*60000; t+=15*60000){
-      const x = ((t - +viewStart)/60000)*pxPerMin + 0.5;
-      ctx.beginPath(); ctx.moveTo(x, H-18); ctx.lineTo(x, H); ctx.stroke();
-    }
-
-    // major ticks (hourly) + labels
-    const firstMajor = new Date(viewStart);
-    if (firstMajor.getMinutes() !== 0) {
-      firstMajor.setHours(firstMajor.getHours()+1,0,0,0);
-    } else {
-      firstMajor.setMinutes(0,0,0);
-    }
-
-    ctx.strokeStyle = 'rgba(255,255,255,.25)';
-    ctx.fillStyle = '#cfe0ff';
-    for (let t=+firstMajor; t<=+viewEnd+3600e3; t+=3600e3){
-      const x = ((t - +viewStart)/60000)*pxPerMin + 0.5;
-      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
-      const label = hhmm(new Date(t));
-      ctx.fillText(label, x+6, 6);
-    }
-  }
-
-  function placeNowLine(){
-    nowLine.style.left = `${xForTime(new Date())}px`;
-  }
-
-  // ---------- Utils ----------
-  function sevClass(r){
-    const dm = typeof r.delay_min === 'number' ? r.delay_min : null;
-    if (dm == null) return 'ok';
-    if (dm >= 20) return 'd20';
-    if (dm >= 10) return 'd10';
-    if (dm <= -1) return 'early';
-    return 'ok';
-  }
-  function xForTime(t){
-    const min = (+t - +windowStart)/60000;
-    return Math.round(min * pxPerMin);
-  }
-  function floorHour(d){
-    const x = new Date(d);
-    x.setMinutes(0,0,0);
-    return x;
-  }
-  function pad(n){ return String(n).padStart(2,'0'); }
-  function hhmm(d){ return `${pad(d.getHours())}:${pad(d.getMinutes())}`; }
-  function hhmmLocal(isoOrDate){
-    const d = (isoOrDate instanceof Date) ? isoOrDate : new Date(isoOrDate);
-    return hhmm(d);
-  }
-  function isoDay(d){
-    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-  }
-
-  async function getJSON(path){
-    const res = await fetch(`${path}?v=${Date.now()}`, {cache:'no-store'});
-    return res.ok ? res.json() : {};
-  }
-  function readHist(){
-    try{ return JSON.parse(localStorage.getItem('brs_timeline_hist')||'{}'); }catch{ return {}; }
-  }
-  function writeHist(obj){
-    try{ localStorage.setItem('brs_timeline_hist', JSON.stringify(obj)); }catch{}
-  }
-
-  // tiny helper to redraw after zoom changes
-  function redrawAll(){
-    // re-render positions only (keep current items)
-    const hist = Object.values(readHist());
-    renderGrid(hist);
-    resizeRuler(); drawRuler(); placeNowLine();
-  }
+  // First load
+  loadAndRender();
 })();
