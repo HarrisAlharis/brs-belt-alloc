@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-20T14:15:00.459Z",
-  "generated_at_local": "2025-10-20T15:15:00",
+  "generated_at_utc": "2025-10-20T14:16:19.416Z",
+  "generated_at_local": "2025-10-20T15:16:19",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -296,19 +296,19 @@
       "flight": "FR4122",
       "origin": "(AGP)",
       "origin_iata": "AGP",
-      "eta": "2025-10-20T16:36:00.000Z",
-      "status": "estimated 17:36",
+      "eta": "2025-10-20T16:34:00.000Z",
+      "status": "estimated 17:34",
       "flow": "INTERNATIONAL",
       "belt": 2,
-      "start": "2025-10-20T16:51:00.000Z",
-      "end": "2025-10-20T17:21:00.000Z",
+      "start": "2025-10-20T16:49:00.000Z",
+      "end": "2025-10-20T17:19:00.000Z",
       "reason": "intl_spread",
       "airline": "Ryanair",
       "aircraft": "(9H-QCP)",
       "pax_estimate": 166,
       "scheduled_local": "17:45",
-      "eta_local": "17:36",
-      "delay_min": -9
+      "eta_local": "17:34",
+      "delay_min": -11
     },
     {
       "flight": "LS1888",
