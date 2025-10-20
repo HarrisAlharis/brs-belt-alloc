@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-20T00:51:19.128Z",
-  "generated_at_local": "2025-10-20T01:51:19",
+  "generated_at_utc": "2025-10-20T00:53:36.613Z",
+  "generated_at_local": "2025-10-20T01:53:36",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -8,39 +8,39 @@
       "flight": "U22852",
       "origin": "(DLM)",
       "origin_iata": "DLM",
-      "eta": "2025-10-20T00:54:00.000Z",
-      "status": "estimated 01:54",
+      "eta": "2025-10-20T00:56:00.000Z",
+      "status": "estimated 01:56",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-20T01:09:00.000Z",
-      "end": "2025-10-20T01:39:00.000Z",
+      "start": "2025-10-20T01:11:00.000Z",
+      "end": "2025-10-20T01:41:00.000Z",
       "reason": "intl_spread",
       "airline": "easyJet",
       "aircraft": "(G-UZHP)",
       "pax_estimate": 162,
       "scheduled_local": "01:45",
-      "eta_local": "01:54",
-      "delay_min": 9,
+      "eta_local": "01:56",
+      "delay_min": 11,
       "ui_state": "upcoming",
-      "ui_age_min": -48
+      "ui_age_min": -47
     },
     {
       "flight": "LS1846",
       "origin": "(AYT)",
       "origin_iata": "AYT",
-      "eta": "2025-10-20T01:50:00.000Z",
-      "status": "delayed 02:50",
+      "eta": "2025-10-20T01:53:00.000Z",
+      "status": "delayed 02:53",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-20T02:05:00.000Z",
-      "end": "2025-10-20T02:35:00.000Z",
+      "start": "2025-10-20T02:08:00.000Z",
+      "end": "2025-10-20T02:38:00.000Z",
       "reason": "intl_spread",
       "airline": "Jet2",
       "aircraft": "(G-JZHK)",
       "pax_estimate": 171,
       "scheduled_local": "02:30",
-      "eta_local": "02:50",
-      "delay_min": 20,
+      "eta_local": "02:53",
+      "delay_min": 23,
       "ui_state": "upcoming",
       "ui_age_min": -104
     },
@@ -62,7 +62,7 @@
       "eta_local": "04:14",
       "delay_min": -6,
       "ui_state": "upcoming",
-      "ui_age_min": -188
+      "ui_age_min": -185
     }
   ]
 }
