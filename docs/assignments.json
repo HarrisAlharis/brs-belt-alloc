@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-20T18:40:00.302Z",
-  "generated_at_local": "2025-10-20T19:40:00",
+  "generated_at_utc": "2025-10-20T18:41:19.640Z",
+  "generated_at_local": "2025-10-20T19:41:19",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -41,40 +41,22 @@
       "delay_min": 11
     },
     {
-      "flight": "",
-      "origin": "(ABZ)",
-      "origin_iata": "ABZ",
-      "eta": "2025-10-20T19:14:00.000Z",
-      "status": "delayed 20:14",
-      "flow": "DOMESTIC",
-      "belt": 7,
-      "start": "2025-10-20T19:29:00.000Z",
-      "end": "2025-10-20T19:59:00.000Z",
-      "reason": "domestic→7",
-      "airline": "Loganair",
-      "aircraft": "(G-LMTC)",
-      "pax_estimate": 166,
-      "scheduled_local": "19:25",
-      "eta_local": "20:14",
-      "delay_min": 49
-    },
-    {
       "flight": "U27267",
       "origin": "(PMI)",
       "origin_iata": "PMI",
-      "eta": "2025-10-20T19:14:00.000Z",
-      "status": "estimated 20:14",
+      "eta": "2025-10-20T19:16:00.000Z",
+      "status": "estimated 20:16",
       "flow": "INTERNATIONAL",
       "belt": 2,
-      "start": "2025-10-20T19:29:00.000Z",
-      "end": "2025-10-20T19:59:00.000Z",
+      "start": "2025-10-20T19:31:00.000Z",
+      "end": "2025-10-20T20:01:00.000Z",
       "reason": "intl_spread",
       "airline": "easyJet",
       "aircraft": "(OE-LQL)",
       "pax_estimate": 162,
       "scheduled_local": "20:10",
-      "eta_local": "20:14",
-      "delay_min": 4
+      "eta_local": "20:16",
+      "delay_min": 6
     },
     {
       "flight": "FR2291",
