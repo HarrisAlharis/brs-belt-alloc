@@ -20,8 +20,8 @@
       <select id="zoom">
         <option value="3">3 px/min (narrow)</option>
         <option value="4">4 px/min</option>
-        <option value="6" selected>6 px/min (default)</option>
-        <option value="8">8 px/min</option>
+        <option value="6">6 px/min</option>
+        <option value="8" selected>8 px/min (default)</option>
         <option value="12">12 px/min (wide)</option>
       </select>
       <button id="nowBtn" class="btn">Now</button>
@@ -36,12 +36,11 @@
     </div>
   </div>
 
-  <!-- Viewport: fixed left belt column, independent horizontal scroll to the right -->
   <div id="viewport" class="viewport">
-    <!-- Left: belts (never scroll horizontally) -->
+    <!-- Sticky belt column -->
     <div class="belts-col" id="beltsCol"></div>
 
-    <!-- Right: scrollable timeline -->
+    <!-- Scrollable content -->
     <div class="scroll-outer" id="scrollOuter">
       <div class="scroll-inner" id="scrollInner">
         <canvas id="ruler" class="ruler"></canvas>
