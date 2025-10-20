@@ -1,4 +1,4 @@
-﻿/* BRS timeline — crisp DPR-aware ruler, correct tick math, sticky belts, deduped pucks */
+﻿/* BRS timeline — crisp DPR-aware ruler, correct tick math, sticky belts, de-dup by flight-per-day */
 
 (() => {
   // ---------- DOM ----------
@@ -17,8 +17,6 @@
   const BELTS = [1,2,3,5,6,7];
   const HISTORY_KEEP_MIN = 240; // 4h
   const REFRESH_MS = 90_000;
-  const RULER_MAJOR_MIN = 60;
-  const RULER_MINOR_MIN = 15;
 
   // State
   let pxPerMin = +zoomSel.value;
@@ -72,30 +70,71 @@
     const rows = Array.isArray(data?.rows) ? data.rows : [];
     const seenAt = Date.now();
 
-    // merge with 4h history and de-dup per flight|minute
+    // merge with 4h history and de-dup per FLIGHT|DAY (keep newest)
     const hist = readHist();
-    const map = new Map();
+    const merged = new Map();
 
-    function put(r){
-      if(!r || !r.eta) return;
-      const key = `${(r.flight||'').trim()}|${isoMinute(r.eta)}`;
-      map.set(key, {...r, _seenAt: seenAt});
+    function primaryKey(r){
+      const d = new Date(r.eta || r.start);
+      return `${(r.flight||'').trim()}|${isoDay(d)}`;
     }
-    for (const k in hist) put(hist[k]);
-    for (const r of rows) put(r);
+    function secondaryKey(r){
+      // If an airline actually reuses the same flight number twice in one day (rare),
+      // add a second discriminator: nearest start "quarter-hour" bucket.
+      const d = new Date(r.start || r.eta);
+      const q = Math.floor(d.getHours()*60/15 + d.getMinutes()/15);
+      return `${(r.flight||'').trim()}|${isoDay(d)}|Q${q}`;
+    }
 
+    function put(r, when){
+      if(!r) return;
+      // prefer primary key; if collision with different real flights (very rare), fallback to secondary
+      const k1 = primaryKey(r);
+      const prev = merged.get(k1);
+      if (!prev || (prev._seenAt||0) < when){
+        merged.set(k1, {...r, _seenAt: when, _k: k1});
+        return;
+      }
+      // If the existing and incoming are truly far apart (>2h in ETA), treat as distinct by secondary key.
+      const etaNew = +new Date(r.eta || r.start || 0);
+      const etaOld = +new Date(prev.eta || prev.start || 0);
+      if (Math.abs(etaNew - etaOld) > 120*60000){
+        const k2 = secondaryKey(r);
+        const prev2 = merged.get(k2);
+        if (!prev2 || (prev2._seenAt||0) < when){
+          merged.set(k2, {...r, _seenAt: when, _k: k2});
+        }
+      } else {
+        // Same flight same day minor ETA drift → keep the newest
+        if ((prev._seenAt||0) < when){
+          merged.set(k1, {...r, _seenAt: when, _k: k1});
+        }
+      }
+    }
+
+    // bring forward history
+    for (const key of Object.keys(hist)){
+      const r = hist[key];
+      put(r, r._seenAt || (Date.now() - 91_000)); // ensure older than fresh pull
+    }
+    // apply latest feed
+    for (const r of rows) put(r, seenAt);
+
+    // prune: outside 4h (from ETA)
     const now = Date.now();
     const kept = [];
-    for (const r of map.values()){
-      const eta = +new Date(r.eta);
+    for (const r of merged.values()){
+      const eta = +new Date(r.eta || r.start || 0);
       const ageMin = Math.round((now - eta)/60000);
       if (ageMin <= HISTORY_KEEP_MIN && ageMin > -(windowHours*60)) kept.push(r);
     }
-    kept.sort((a,b)=>+new Date(a.eta) - +new Date(b.eta));
+    kept.sort((a,b)=>+new Date(a.eta || a.start) - +new Date(b.eta || b.start));
 
+    // save reduced history
     const store = {};
     for (const r of kept){
-      store[`${(r.flight||'').trim()}|${isoMinute(r.eta)}`] = r;
+      const key = r._k || primaryKey(r);
+      store[key] = r;
     }
     writeHist(store);
 
@@ -159,7 +198,6 @@
   function renderGrid(items){
     rowsEl.innerHTML = '';
 
-    // width large enough for horizon + margins
     const width = windowHours*60*pxPerMin + 2000;
     scrollInner.style.width = `${width}px`;
 
@@ -242,31 +280,29 @@
     const W = ruler._w || scrollOuter.clientWidth;
     const H = ruler._h || 44;
 
-    // reset transform to 1 CSS pixel = 1 unit
     ctx.setTransform(dpr,0,0,dpr,0,0);
     ctx.clearRect(0,0,W,H);
 
     ctx.font = '12px system-ui';
     ctx.textBaseline = 'top';
-    ctx.fillStyle = '#cfe0ff';
 
     // visible time window
     const leftMin = scrollOuter.scrollLeft / pxPerMin;
     const viewStart = new Date(+windowStart + leftMin*60000);
     const viewEnd   = new Date(+viewStart + (W/pxPerMin)*60000);
 
-    // minor ticks
+    // minor ticks (15 min)
     const firstMinor = new Date(viewStart);
     const mm = firstMinor.getMinutes();
-    firstMinor.setMinutes(mm + (RULER_MINOR_MIN - (mm % RULER_MINOR_MIN)) % RULER_MINOR_MIN, 0, 0);
+    firstMinor.setMinutes(mm + (15 - (mm % 15)) % 15, 0, 0);
 
     ctx.strokeStyle = 'rgba(255,255,255,.12)';
-    for (let t=+firstMinor; t<=+viewEnd+RULER_MINOR_MIN*60000; t+=RULER_MINOR_MIN*60000){
+    for (let t=+firstMinor; t<=+viewEnd+15*60000; t+=15*60000){
       const x = ((t - +viewStart)/60000)*pxPerMin + 0.5;
       ctx.beginPath(); ctx.moveTo(x, H-18); ctx.lineTo(x, H); ctx.stroke();
     }
 
-    // major ticks + labels (hourly)
+    // major ticks (hourly) + labels
     const firstMajor = new Date(viewStart);
     if (firstMajor.getMinutes() !== 0) {
       firstMajor.setHours(firstMajor.getHours()+1,0,0,0);
@@ -275,11 +311,11 @@
     }
 
     ctx.strokeStyle = 'rgba(255,255,255,.25)';
+    ctx.fillStyle = '#cfe0ff';
     for (let t=+firstMajor; t<=+viewEnd+3600e3; t+=3600e3){
       const x = ((t - +viewStart)/60000)*pxPerMin + 0.5;
       ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
       const label = hhmm(new Date(t));
-      ctx.fillStyle = '#cfe0ff';
       ctx.fillText(label, x+6, 6);
     }
   }
@@ -306,16 +342,15 @@
     x.setMinutes(0,0,0);
     return x;
   }
-  function hhmm(d){
-    const h = String(d.getHours()).padStart(2,'0');
-    const m = String(d.getMinutes()).padStart(2,'0');
-    return `${h}:${m}`;
-  }
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function hhmm(d){ return `${pad(d.getHours())}:${pad(d.getMinutes())}`; }
   function hhmmLocal(isoOrDate){
     const d = (isoOrDate instanceof Date) ? isoOrDate : new Date(isoOrDate);
     return hhmm(d);
   }
-  function isoMinute(iso){ const d=new Date(iso); d.setSeconds(0,0); return d.toISOString().slice(0,16); }
+  function isoDay(d){
+    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  }
 
   async function getJSON(path){
     const res = await fetch(`${path}?v=${Date.now()}`, {cache:'no-store'});
@@ -326,5 +361,13 @@
   }
   function writeHist(obj){
     try{ localStorage.setItem('brs_timeline_hist', JSON.stringify(obj)); }catch{}
+  }
+
+  // tiny helper to redraw after zoom changes
+  function redrawAll(){
+    // re-render positions only (keep current items)
+    const hist = Object.values(readHist());
+    renderGrid(hist);
+    resizeRuler(); drawRuler(); placeNowLine();
   }
 })();
