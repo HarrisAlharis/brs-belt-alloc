@@ -2,59 +2,50 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>BRS — Arrivals Belt Timeline</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="stylesheet" href="timeline.css?v=20251020140053" />
+  <title>BRS — Arrivals Belt Timeline</title>
+  <link rel="stylesheet" href="timeline.css" />
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand">BRS — Arrivals Belt Timeline</div>
-    <div class="meta" id="meta"></div>
-  </header>
-
-  <div class="controls">
-    <div class="chiprow" id="beltChips"></div>
-
-    <div class="right-controls">
-      <label class="lbl">Zoom:</label>
-      <select id="zoom">
-        <option value="3">3 px/min (narrow)</option>
-        <option value="4">4 px/min</option>
-        <option value="6" selected>6 px/min (default)</option>
-        <option value="8">8 px/min</option>
-        <option value="12">12 px/min (wide)</option>
-      </select>
-      <button id="nowBtn" class="btn">Now</button>
-
-      <div class="legend">
-        <span class="dot dot-ok"></span> On time / small slip
-        <span class="dot dot-10"></span> +10–19
-        <span class="dot dot-20"></span> +20+
-        <span class="dot dot-early"></span> Early
-        <span class="dot dot-stale"></span> &gt;60 min ago
+  <div id="app">
+    <header class="topbar">
+      <div class="brand">BRS — Arrivals Belt Timeline</div>
+      <div class="controls">
+        <label>Zoom:
+          <select id="zoomSelect">
+            <option value="3">3 px/min (narrow)</option>
+            <option value="6" selected>6 px/min (default)</option>
+            <option value="9">9 px/min (wide)</option>
+          </select>
+        </label>
+        <button id="nowBtn">Now</button>
+        <span class="legend">
+          <span class="dot dot-on"></span> On time / small slip
+          <span class="dot dot-10"></span> +10–19
+          <span class="dot dot-20"></span> +20+
+          <span class="dot dot-early"></span> Early
+          <span class="dot dot-old"></span> &gt;60 min ago
+        </span>
       </div>
-    </div>
-  </div>
+      <div id="generated"></div>
+    </header>
 
-  <div id="viewport" class="viewport">
-    <!-- Sticky belt column -->
-    <div class="belts-col" id="beltsCol"></div>
+    <div id="errorBanner" class="error hidden"></div>
 
-    <!-- Scrollable content -->
-    <div class="scroll-outer" id="scrollOuter">
-      <div class="scroll-inner" id="scrollInner">
-        <canvas id="ruler" class="ruler"></canvas>
-        <div id="rows" class="rows"></div>
+    <div id="gantt" class="gantt">
+      <div id="yAxis" class="y-axis"></div>
+      <div class="gantt-scroll">
+        <div id="xAxis" class="x-axis"></div>
         <div id="nowLine" class="now-line"></div>
+        <div id="rows" class="rows"></div>
       </div>
     </div>
+
+    <footer class="footer">
+      Source: FR24 (screen-scrape) • Auto-refresh ~90s • 4-hour local history kept in your browser.
+    </footer>
   </div>
 
-  <footer class="foot">
-    <div>Source: FR24 (screen-scrape) • Auto-refresh ~90s • 4-hour local history kept in your browser.</div>
-  </footer>
-
-  <script src="timeline.js?v=20251020140053"></script>
+  <script src="timeline.js"></script>
 </body>
 </html>
-
