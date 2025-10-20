@@ -1,4 +1,4 @@
-﻿/* docs/timeline.js — horizontally scrollable timeline */
+﻿/* docs/timeline.js — horizontally scrollable timeline (fixed off-window items + reliable centerNow) */
 
 (() => {
   // ---------- CONFIG ----------
@@ -24,12 +24,11 @@
 
   // ---------- STATE ----------
   let pxPerMin = Number(pxSelect?.value || DEFAULT_PX_PER_MIN);
-  let activeBelts = new Set(ALL_BELTS);  // filtered belts
+  let activeBelts = new Set(ALL_BELTS);
 
-  // data
   let rows = [];
   let generatedAt = '';
-  // window
+
   let t0, t1, totalMin, widthPx;
 
   // ---------- UTILS ----------
@@ -69,16 +68,13 @@
     canvas.style.width = `${widthPx}px`;
   }
 
-  function clearCanvas(){
-    canvas.innerHTML = '';
-  }
+  function clearCanvas(){ canvas.innerHTML = ''; }
 
   function renderGrid(){
     const grid = document.createDocumentFragment();
 
     for (let m=0; m<= totalMin; m += GRID_TICK_MIN){
       const x = minToX(m);
-
       const t = document.createElement('div');
       t.className = 'tick';
       t.style.left = `${x}px`;
@@ -93,7 +89,6 @@
         grid.appendChild(lbl);
       }
     }
-
     canvas.appendChild(grid);
   }
 
@@ -125,8 +120,8 @@
   function yForBelt(belt, rowH, belts){
     const idx = belts.indexOf(Number(belt));
     if (idx < 0) return null;
-    return 60 + idx*rowH - 8; // center puck vertically in the band
-    }
+    return 60 + idx*rowH - 8;
+  }
 
   function renderNowLine(){
     const nowX = xForDate(new Date());
@@ -135,6 +130,11 @@
     line.dataset.role = 'now-line';
     line.style.left = `${nowX}px`;
     canvas.appendChild(line);
+  }
+
+  // NEW: helper – skip items completely off the window
+  function isOffWindow(start, end){
+    return (end <= t0) || (start >= t1);
   }
 
   function renderPucks(rowH, belts){
@@ -146,12 +146,21 @@
 
       const start = parseISO(r.start);
       const end   = parseISO(r.end);
+      if (!start || !end) return;
+
+      // Skip flights fully outside [t0, t1]
+      if (isOffWindow(start, end)) return;
+
       const y = yForBelt(r.belt, rowH, belts);
       if (y == null) return;
 
-      const left  = clamp(xForDate(start), 0, widthPx);
-      const right = clamp(xForDate(end),   0, widthPx);
-      const width = Math.max(34, right - left);
+      // Compute left/right; clip to window, but don't clamp to 0 in a way
+      // that would create "dots" at the extreme edges.
+      const leftRaw  = xForDate(start);
+      const rightRaw = xForDate(end);
+      const left  = Math.max(0, Math.min(widthPx, leftRaw));
+      const right = Math.max(0, Math.min(widthPx, rightRaw));
+      const width = Math.max(90, right - left); // enforce more comfortable min width
 
       const p = document.createElement('div');
       p.className = `puck ${colorClassForDelay(r.delay_min)}`;
@@ -159,7 +168,7 @@
       p.style.top  = `${y}px`;
       p.style.width = `${width}px`;
 
-      // fade old history (> 60 min behind belt start time)
+      // Fade older-than-60min slots
       const minsBehind = minutesBetween(start, now);
       if (minsBehind > HISTORY_FADE_MIN){
         p.style.opacity = '.35';
@@ -172,6 +181,7 @@
 
       p.title = [
         `Scheduled → ETA: ${(r.scheduled_local || '—')} → ${(r.eta_local || '—')}`,
+        `Delay: ${typeof r.delay_min==='number' ? r.delay_min+' min' : '—'}`,
         `Status: ${r.status || '—'}`,
         `Flow: ${r.flow || '—'}`,
         `Belt: ${r.belt}`,
@@ -191,6 +201,9 @@
     const { rowH, belts } = renderBelts();
     renderPucks(rowH, belts);
     renderNowLine();
+
+    // Make sure we center on "Now" after layout is done
+    requestAnimationFrame(() => centerNow(false));
   }
 
   // ---------- INTERACTION ----------
@@ -236,7 +249,6 @@
   pxSelect?.addEventListener('change', async () => {
     pxPerMin = Number(pxSelect.value || DEFAULT_PX_PER_MIN);
     await renderAll();
-    centerNow(false);
   });
 
   // Now button
@@ -276,7 +288,7 @@
     line.style.left = `${xForDate(new Date())}px`;
   }, 60_000);
 
-  // Refresh data every minute without jank
+  // Refresh data every minute
   setInterval(renderAll, 60_000);
 
   // Re-layout on resize
@@ -288,7 +300,6 @@
   (async function init(){
     syncBeltChips();
     await renderAll();
-    centerNow(false);
   })();
 
 })();

@@ -1,5 +1,5 @@
 /* ---------- Theme ---------- */
-:root{
+:root {
   --bg: #0f1720;
   --panel: #10161f;
   --ink: #e7edf5;
@@ -14,7 +14,7 @@
 
 * { box-sizing: border-box; }
 html, body { height: 100%; }
-body{
+body {
   margin: 0;
   color: var(--ink);
   background: var(--bg);
@@ -22,7 +22,7 @@ body{
 }
 
 /* ---------- Header / Toolbar ---------- */
-.hdr{
+.hdr {
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 16px;
@@ -30,28 +30,40 @@ body{
   padding: 14px 16px 10px;
   border-bottom: 1px solid var(--grid);
 }
-.hdr h1{ margin: 0; font-size: 18px; }
-.muted{ color: var(--muted); }
-.small{ font-size: 12px; }
+.hdr h1 { margin: 0; font-size: 18px; }
+.muted { color: var(--muted); }
+.small { font-size: 12px; }
 
-.hdr-right{ display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; justify-content: flex-end; }
+.hdr-right {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  align-items: center;
+  justify-content: flex-end;
+}
 
-.toolbar-group{ display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-.lbl{ color: var(--muted); font-size: 12px; margin-right: 2px; }
+.toolbar-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.lbl { color: var(--muted); font-size: 12px; margin-right: 2px; }
 
-.chip{
+.chip {
   background: var(--chip);
   border: 1px solid var(--chip-border);
   color: var(--ink);
   padding: 6px 10px;
   border-radius: 999px;
   cursor: pointer;
+  transition: 0.2s ease background;
 }
-.chip:hover{ filter: brightness(1.1); }
-.chip.active{ background: var(--chip-active); border-color: #3b537c; }
-.chip-primary{ background: #19304d; border-color: #345a8d; }
+.chip:hover { filter: brightness(1.1); }
+.chip.active { background: var(--chip-active); border-color: #3b537c; }
+.chip-primary { background: #19304d; border-color: #345a8d; }
 
-.sel{
+.sel {
   appearance: none;
   background: var(--chip);
   border: 1px solid var(--chip-border);
@@ -60,7 +72,7 @@ body{
   border-radius: 8px;
 }
 
-.btn{
+.btn {
   background: var(--btn);
   border: 1px solid var(--btn-border);
   color: var(--ink);
@@ -68,23 +80,28 @@ body{
   border-radius: 8px;
   cursor: pointer;
 }
-.btn:hover{ filter: brightness(1.1); }
+.btn:hover { filter: brightness(1.1); }
 
-/* Legend pills */
-.pill{
-  display: inline-flex; align-items:center; gap:.35rem;
-  padding: 4px 8px; border-radius: 999px; border: 1px solid rgba(255,255,255,.14);
-  font-size: 12px; white-space: nowrap;
+/* ---------- Legend Pills ---------- */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.14);
+  font-size: 12px;
+  white-space: nowrap;
 }
-.pill-green{ background:#113b23; color:#b9f2c9; border-color:#1f5a30; }
-.pill-amber{ background:#3c2a10; color:#ffd39a; border-color:#7a5a2b; }
-.pill-red{ background:#3e1316; color:#ffb3b8; border-color:#7a2a30; }
-.pill-blue{ background:#102a3c; color:#a8d8ff; border-color:#2b587a; }
+.pill-green { background: #113b23; color: #b9f2c9; border-color: #1f5a30; }
+.pill-amber { background: #3c2a10; color: #ffd39a; border-color: #7a5a2b; }
+.pill-red { background: #3e1316; color: #ffb3b8; border-color: #7a2a30; }
+.pill-blue { background: #102a3c; color: #a8d8ff; border-color: #2b587a; }
 
-/* ---------- Timeline ---------- */
-#tl-scroller{
+/* ---------- Timeline Layout ---------- */
+#tl-scroller {
   position: relative;
-  height: calc(100vh - 160px); /* adjust if header/footer heights change */
+  height: calc(100vh - 160px); /* adjust if header/footer change */
   overflow-x: auto;
   overflow-y: hidden;
   background: var(--panel);
@@ -92,55 +109,59 @@ body{
   border-bottom: 1px solid var(--grid);
   scroll-behavior: smooth;
 }
-#tl-scroller.grabbing{ cursor: grabbing; }
+#tl-scroller.grabbing { cursor: grabbing; }
 
-#tl-canvas{
+#tl-canvas {
   position: relative;
   min-height: 560px;
-  /* width is set by JS */
   will-change: width, transform;
 }
 
-/* Grid ticks & labels */
-.tick{
+/* ---------- Grid Ticks ---------- */
+.tick {
   position: absolute;
-  top: 0; bottom: 0; width: 1px;
+  top: 0; bottom: 0;
+  width: 1px;
   background: rgba(255,255,255,.05);
 }
-.tick-label{
+.tick-label {
   position: absolute;
   top: 8px; left: 6px;
-  font-size: 12px; color: var(--muted);
+  font-size: 12px;
+  color: var(--muted);
 }
 
-/* Belt row stripe & label */
-.belt-stripe{
+/* ---------- Belt Rows ---------- */
+.belt-stripe {
   position: absolute;
   left: 0; right: 0;
   background: rgba(255,255,255,.03);
   border-top: 1px dashed rgba(255,255,255,.04);
   border-bottom: 1px dashed rgba(0,0,0,.2);
 }
-.belt-name{
+.belt-name {
   position: absolute;
   left: 8px;
-  font-size: 12px; color: var(--muted);
+  font-size: 12px;
+  color: var(--muted);
 }
 
-/* Now line */
-.tl-now-line{
+/* ---------- Now Line ---------- */
+.tl-now-line {
   position: absolute;
-  top: 0; bottom: 0; width: 2px;
+  top: 0; bottom: 0;
+  width: 2px;
   background: #4ea1ff;
   box-shadow: 0 0 0 1px rgba(78,161,255,.35);
   opacity: .9;
   pointer-events: none;
 }
 
-/* Pucks */
-.puck{
+/* ---------- Pucks ---------- */
+.puck {
   position: absolute;
-  display: inline-flex; align-items: center;
+  display: inline-flex;
+  align-items: center;
   padding: 10px 14px;
   border: 1px solid rgba(255,255,255,.14);
   border-radius: 14px;
@@ -148,14 +169,27 @@ body{
   color: #fff;
   box-shadow: 0 2px 10px rgba(0,0,0,.25);
   user-select: none;
-  font-size: 14px;               /* keep font size constant across zoom */
+  font-size: 14px;
   line-height: 1.2;
   white-space: nowrap;
+  transition: all 0.2s ease-out;
+  min-width: 90px;           /* ✅ added tweak: prevents "dot" effect */
 }
-.puck-early{  background: rgba(20,50,90,.85); }
-.puck-ontime{ background: rgba(16,60,34,.85); }
-.puck-amber{  background: rgba(110,70,10,.85); }
-.puck-red{    background: rgba(120,20,20,.85); }
+.puck:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
 
-/* Footer */
-.ftr{ padding: 10px 16px; }
+/* Colour Variants */
+.puck-early  { background: rgba(20,50,90,.85); }
+.puck-ontime { background: rgba(16,60,34,.85); }
+.puck-amber  { background: rgba(110,70,10,.85); }
+.puck-red    { background: rgba(120,20,20,.85); }
+
+/* ---------- Footer ---------- */
+.ftr {
+  padding: 10px 16px;
+  color: var(--muted);
+  font-size: 12px;
+  border-top: 1px solid var(--grid);
+}
