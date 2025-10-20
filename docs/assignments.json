@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-20T12:45:00.030Z",
-  "generated_at_local": "2025-10-20T13:45:00",
+  "generated_at_utc": "2025-10-20T12:46:20.219Z",
+  "generated_at_local": "2025-10-20T13:46:20",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -170,19 +170,19 @@
       "flight": "U22938",
       "origin": "(KRK)",
       "origin_iata": "KRK",
-      "eta": "2025-10-20T14:51:00.000Z",
-      "status": "estimated 15:51",
+      "eta": "2025-10-20T14:53:00.000Z",
+      "status": "estimated 15:53",
       "flow": "INTERNATIONAL",
       "belt": 5,
-      "start": "2025-10-20T15:06:00.000Z",
-      "end": "2025-10-20T15:36:00.000Z",
+      "start": "2025-10-20T15:08:00.000Z",
+      "end": "2025-10-20T15:38:00.000Z",
       "reason": "density→belt5",
       "airline": "easyJet",
       "aircraft": "(G-EZTC)",
       "pax_estimate": 162,
       "scheduled_local": "15:55",
-      "eta_local": "15:51",
-      "delay_min": -4
+      "eta_local": "15:53",
+      "delay_min": -2
     },
     {
       "flight": "U22802",
