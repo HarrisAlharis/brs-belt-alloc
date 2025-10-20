@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-20T19:41:20.869Z",
-  "generated_at_local": "2025-10-20T20:41:20",
+  "generated_at_utc": "2025-10-20T19:43:36.125Z",
+  "generated_at_local": "2025-10-20T20:43:36",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -62,19 +62,19 @@
       "flight": "U22834",
       "origin": "(FCO)",
       "origin_iata": "FCO",
-      "eta": "2025-10-20T21:54:00.000Z",
-      "status": "estimated 22:54",
+      "eta": "2025-10-20T21:52:00.000Z",
+      "status": "estimated 22:52",
       "flow": "INTERNATIONAL",
       "belt": 2,
-      "start": "2025-10-20T22:09:00.000Z",
-      "end": "2025-10-20T22:39:00.000Z",
+      "start": "2025-10-20T22:07:00.000Z",
+      "end": "2025-10-20T22:37:00.000Z",
       "reason": "intl_spread",
       "airline": "easyJet",
       "aircraft": "(G-UZHJ)",
       "pax_estimate": 162,
       "scheduled_local": "23:10",
-      "eta_local": "22:54",
-      "delay_min": -16
+      "eta_local": "22:52",
+      "delay_min": -18
     },
     {
       "flight": "LS1814",
