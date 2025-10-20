@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-20T17:43:35.773Z",
-  "generated_at_local": "2025-10-20T18:43:35",
+  "generated_at_utc": "2025-10-20T17:45:01.294Z",
+  "generated_at_local": "2025-10-20T18:45:01",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -77,22 +77,40 @@
       "delay_min": 3
     },
     {
+      "flight": "",
+      "origin": "(ABZ)",
+      "origin_iata": "ABZ",
+      "eta": "2025-10-20T18:46:00.000Z",
+      "status": "delayed 19:46",
+      "flow": "DOMESTIC",
+      "belt": 7,
+      "start": "2025-10-20T19:01:00.000Z",
+      "end": "2025-10-20T19:31:00.000Z",
+      "reason": "domestic→7",
+      "airline": "Loganair",
+      "aircraft": "(G-LMTC)",
+      "pax_estimate": 166,
+      "scheduled_local": "19:25",
+      "eta_local": "19:46",
+      "delay_min": 21
+    },
+    {
       "flight": "U22886",
       "origin": "(GVA)",
       "origin_iata": "GVA",
-      "eta": "2025-10-20T18:50:00.000Z",
-      "status": "delayed 19:50",
+      "eta": "2025-10-20T18:52:00.000Z",
+      "status": "delayed 19:52",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-20T19:05:00.000Z",
-      "end": "2025-10-20T19:35:00.000Z",
+      "start": "2025-10-20T19:07:00.000Z",
+      "end": "2025-10-20T19:37:00.000Z",
       "reason": "intl_spread",
       "airline": "easyJet",
       "aircraft": "(G-EZUK)",
       "pax_estimate": 162,
       "scheduled_local": "19:20",
-      "eta_local": "19:50",
-      "delay_min": 30
+      "eta_local": "19:52",
+      "delay_min": 32
     },
     {
       "flight": "U27267",
