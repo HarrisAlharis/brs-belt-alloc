@@ -1,27 +1,9 @@
 {
-  "generated_at_utc": "2025-10-20T19:00:01.087Z",
-  "generated_at_local": "2025-10-20T20:00:01",
+  "generated_at_utc": "2025-10-20T19:01:19.887Z",
+  "generated_at_local": "2025-10-20T20:01:19",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
-    {
-      "flight": "",
-      "origin": "(ORK)",
-      "origin_iata": "ORK",
-      "eta": "2025-10-20T19:01:00.000Z",
-      "status": "estimated 20:01",
-      "flow": "INTERNATIONAL",
-      "belt": 1,
-      "start": "2025-10-20T19:16:00.000Z",
-      "end": "2025-10-20T19:46:00.000Z",
-      "reason": "intl_spread",
-      "airline": "Aer Lingus Regional",
-      "aircraft": "(EI-FAT)",
-      "pax_estimate": 166,
-      "scheduled_local": "19:50",
-      "eta_local": "20:01",
-      "delay_min": 11
-    },
     {
       "flight": "U27267",
       "origin": "(PMI)",
@@ -29,7 +11,7 @@
       "eta": "2025-10-20T19:24:00.000Z",
       "status": "estimated 20:24",
       "flow": "INTERNATIONAL",
-      "belt": 2,
+      "belt": 1,
       "start": "2025-10-20T19:39:00.000Z",
       "end": "2025-10-20T20:09:00.000Z",
       "reason": "intl_spread",
@@ -39,24 +21,6 @@
       "scheduled_local": "20:10",
       "eta_local": "20:24",
       "delay_min": 14
-    },
-    {
-      "flight": "FR2291",
-      "origin": "(ALC)",
-      "origin_iata": "ALC",
-      "eta": "2025-10-20T20:35:00.000Z",
-      "status": "delayed 21:35",
-      "flow": "INTERNATIONAL",
-      "belt": 1,
-      "start": "2025-10-20T20:50:00.000Z",
-      "end": "2025-10-20T21:20:00.000Z",
-      "reason": "intl_spread",
-      "airline": "Ryanair",
-      "aircraft": "(9H-VVE)",
-      "pax_estimate": 166,
-      "scheduled_local": "19:45",
-      "eta_local": "21:35",
-      "delay_min": 110
     },
     {
       "flight": "LS1814",
