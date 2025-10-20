@@ -1,181 +1,245 @@
-﻿(async function(){
-  const DESIRED_BELT_ORDER = [1,2,3,5,6,7];
-  const ROW_H = 76, TOP = 36, LEFT = 84, RIGHT = 24;
+﻿(async function () {
+  const svg = d3.select("#chart");
+  const tooltip = d3.select("#tooltip");
+  const BELTS = [1, 2, 3, 5, 6, 7];
 
+  // ---------- fetch ----------
   const res = await fetch(`assignments.json?v=${Date.now()}`);
   const data = await res.json();
-  const allRows = Array.isArray(data.rows) ? data.rows : [];
-  const itemsAll = allRows.filter(r => r.belt && r.start && r.end);
+  const rows = (data.history && Array.isArray(data.history) ? data.history : data.rows) || [];
 
-  document.getElementById("meta").textContent =
-    `Generated ${data.generated_at_local || data.generated_at_utc || ""} • Horizon ${data.horizon_minutes||""} min`;
+  // normalize & sort
+  const parsed = rows
+    .filter(r => r.start && r.end && r.belt)
+    .map(r => ({
+      ...r,
+      startD: new Date(r.start),
+      endD: new Date(r.end),
+      etaD: r.eta ? new Date(r.eta) : null
+    }))
+    .sort((a, b) => a.startD - b.startD);
 
-  const beltChipsEl = document.getElementById("beltChips");
-  const zoomEl = document.getElementById("zoom");
-  const backEl = document.getElementById("back");
-  const aheadEl = document.getElementById("ahead");
-  const jumpNowBtn = document.getElementById("jumpNow");
+  d3.select("#meta").text(
+    `Generated ${data.generated_at_local || data.generated_at_utc || ""} • ${parsed.length} allocations`
+  );
 
-  const beltsPresent = [...new Set(itemsAll.map(r => Number(r.belt)))].sort((a,b)=>DESIRED_BELT_ORDER.indexOf(a)-DESIRED_BELT_ORDER.indexOf(b));
-  const belts = DESIRED_BELT_ORDER.filter(b => beltsPresent.includes(b));
-  const selectedBelts = new Set(belts);
+  // ---------- UI: belt filter chips ----------
+  const chipWrap = d3.select("#belt-filter");
+  const chipData = [{ label: "All", id: "all" }, ...BELTS.map(b => ({ label: `Belt ${b}`, id: `b${b}` }))];
+  let activeBelts = new Set(BELTS);
 
-  function renderBeltChips(){
-    beltChipsEl.innerHTML = "";
-    belts.forEach(b=>{
-      const span = document.createElement("span");
-      span.className = "chip active";
-      span.textContent = `Belt ${b}`;
-      span.dataset.belt = String(b);
-      span.onclick = ()=>{
-        if (selectedBelts.has(b)) { selectedBelts.delete(b); span.classList.remove("active"); }
-        else { selectedBelts.add(b); span.classList.add("active"); }
-        draw();
-      };
-      beltChipsEl.appendChild(span);
+  chipWrap.selectAll(".chip").data(chipData).join("div")
+    .attr("class", d => "chip" + (d.id === "all" ? " active" : ""))
+    .text(d => d.label)
+    .on("click", (ev, d) => {
+      chipWrap.selectAll(".chip").classed("active", false);
+      if (d.id === "all") {
+        activeBelts = new Set(BELTS);
+        chipWrap.selectAll(".chip").filter(c => c.id === "all").classed("active", true);
+      } else {
+        const beltNum = +d.label.replace(/\D/g, "");
+        const toggledOn = !activeBelts.has(beltNum);
+        if (toggledOn) activeBelts.add(beltNum); else activeBelts.delete(beltNum);
+        chipWrap.selectAll(".chip").filter(c => c.id === d.id).classed("active", toggledOn);
+      }
+      render();
     });
+
+  // ---------- sizing ----------
+  const margin = { top: 30, right: 30, bottom: 30, left: 90 };
+  function size() {
+    const { width, height } = svg.node().getBoundingClientRect();
+    return { width, height, innerW: width - margin.left - margin.right, innerH: height - margin.top - margin.bottom };
   }
-  renderBeltChips();
-  document.getElementById("allBelts").onclick = ()=>{ selectedBelts.clear(); belts.forEach(b=>selectedBelts.add(b)); [...beltChipsEl.children].forEach(c=>c.classList.add("active")); draw(); };
-  document.getElementById("noBelts").onclick  = ()=>{ selectedBelts.clear(); [...beltChipsEl.children].forEach(c=>c.classList.remove("active")); draw(); };
-  jumpNowBtn.onclick = ()=>{ draw(true); };
 
-  const host = document.getElementById("host");
-  const svg  = document.getElementById("svg");
-  const NS   = "http://www.w3.org/2000/svg";
-  const g = (tag, attrs={}) => { const el = document.createElementNS(NS, tag); for (const [k,v] of Object.entries(attrs)) el.setAttribute(k, v); return el; };
+  // ---------- scales & state ----------
+  const y = d3.scaleBand().domain(BELTS).paddingInner(0.18).paddingOuter(0.25);
+  let minutesPerPixel = +document.getElementById("zoomPreset").value; // px per minute
+  let x;              // time scale
+  let xDomain;        // current time window
+  const nowBtn = document.getElementById("now");
+  const backSel = document.getElementById("back");
+  const aheadSel = document.getElementById("ahead");
+  const zoomPresetSel = document.getElementById("zoomPreset");
 
-  const tip = document.getElementById("tooltip");
-  const showTip = (e, html)=>{ tip.innerHTML=html; tip.style.display="block"; positionTip(e); };
-  const hideTip = ()=> tip.style.display="none";
-  const positionTip = (e)=>{
-    const r = host.getBoundingClientRect();
-    const x = e.clientX - r.left + 12;
-    const y = e.clientY - r.top + 12;
-    tip.style.left = x + "px"; tip.style.top = y + "px";
-  };
-
-  const hhmm = (iso)=>{
-    if(!iso) return "";
-    const d=new Date(iso); const p=n=>String(n).padStart(2,"0");
-    return `${p(d.getHours())}:${p(d.getMinutes())}`;
-  };
-  const colorFor = (delay)=>{
-    if (typeof delay !== "number") return "#143b1f";
-    if (delay >= 20) return "#3e1316";
-    if (delay >= 10) return "#3c2a10";
-    if (delay < 0)   return "#102a3c";
-    return "#143b1f";
-  };
-
-  function computeBounds(items, backMin, aheadMin){
+  function setWindowToNow() {
     const now = new Date();
-    const t0 = new Date(now.getTime() - backMin*60000);
-    const lastEnd = new Date(Math.max(...items.map(r => new Date(r.end).getTime()), now.getTime()+aheadMin*60000));
-    return { now, t0, t1: lastEnd };
+    const backMin = +backSel.value;
+    const aheadMin = +aheadSel.value;
+    xDomain = [d3.timeMinute.offset(now, -backMin), d3.timeMinute.offset(now, +aheadMin)];
   }
+  setWindowToNow();
 
-  function draw(cacheBustNow=false){
-    const backMin  = Number(backEl.value || 15);
-    const aheadMin = Number(aheadEl.value || 180);
-    const pxPerMin = Number(zoomEl.value || 6);
+  zoomPresetSel.onchange = () => { minutesPerPixel = +zoomPresetSel.value; render(true); };
+  backSel.onchange = () => { setWindowToNow(); render(true); };
+  aheadSel.onchange = () => { setWindowToNow(); render(true); };
+  nowBtn.onclick = () => { setWindowToNow(); render(true); };
 
-    const sel = itemsAll.filter(r => selectedBelts.has(Number(r.belt)));
-    const { now, t0, t1 } = computeBounds(sel.length ? sel : itemsAll, backMin, aheadMin);
-    const totalMin = Math.max(1, (t1 - t0)/60000);
-    const width = Math.max(LEFT + RIGHT + totalMin * pxPerMin, 900);
-    const beltCount = (selectedBelts.size || DESIRED_BELT_ORDER.filter(b=>[...new Set(itemsAll.map(x=>x.belt))].includes(b)).length);
-    const height = TOP + beltCount * ROW_H + 24;
+  // ---------- layers ----------
+  const root = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+  const gridG = root.append("g");
+  const axisG = root.append("g").attr("class", "axis");
+  const rowBandG = root.append("g");
+  const puckG = root.append("g");
+  const nowG = root.append("g");
 
-    svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
-    svg.setAttribute("height", height);
+  // ---------- zoom/pan (re-layout, not bitmap scale) ----------
+  const zoom = d3.zoom()
+    .filter(ev => !ev.ctrlKey)
+    .on("zoom", (ev) => {
+      const msPerPx = 60000 / minutesPerPixel;
+      const { innerW } = size();
+      const visibleMs = innerW * msPerPx;
+      const span = xDomain[1] - xDomain[0];
 
-    while (svg.firstChild) svg.removeChild(svg.firstChild);
+      // pan
+      const dxMs = -ev.transform.x * msPerPx;
+      const base0 = +xDomain[0] + dxMs;
 
-    const xOf = (d)=> LEFT + ((new Date(d) - t0)/60000) * pxPerMin;
-    const beltsInData = [...new Set(itemsAll.map(r => Number(r.belt)))];
-    const visibleBelts = (selectedBelts.size ? DESIRED_BELT_ORDER.filter(b=>selectedBelts.has(b)) : []);
-    const beltList = (visibleBelts.length ? visibleBelts : DESIRED_BELT_ORDER.filter(b => beltsInData.includes(b)));
+      // zoom (Shift+wheel)
+      const k = (ev.sourceEvent && ev.sourceEvent.shiftKey) ? ev.transform.k : 1;
 
-    const rowY = (belt)=> {
-      const idx = beltList.indexOf(Number(belt));
-      return TOP + idx * ROW_H;
-    };
+      const center = new Date((base0 + visibleMs / 2));
+      const newSpan = span / k;
+      xDomain = [new Date(center - newSpan / 2), new Date(center + newSpan / 2)];
 
-    svg.appendChild(g("rect",{x:0,y:0,width:width,height:height,fill:"#121a25",stroke:"#233041"}));
-
-    beltList.forEach((b,i)=>{
-      const y = TOP + i*ROW_H;
-      svg.appendChild(g("rect",{x:0,y, width:width, height:ROW_H, fill: i%2? "rgba(255,255,255,0.02)" : "rgba(255,255,255,0.04)"}));
-      svg.appendChild(g("text",{x:LEFT-10,y:y+ROW_H/2+5, fill:"#9fb1c5","text-anchor":"end","font-size":"13"}))
-         .appendChild(document.createTextNode(`Belt ${b}`));
+      svg.call(zoom.transform, d3.zoomIdentity);
+      render();
     });
 
-    const tickEvery = 15;
-    const firstTick = new Date(t0); firstTick.setMinutes(Math.ceil(t0.getMinutes()/tickEvery)*tickEvery,0,0);
-    for(let t=firstTick; t<=t1; t=new Date(t.getTime()+tickEvery*60000)){
-      const x = xOf(t);
-      svg.appendChild(g("line",{x1:x,y1:TOP-24,x2:x,y2:height-8, stroke:"rgba(255,255,255,0.08)"}));
-      const label = `${String(t.getHours()).padStart(2,"0")}:${String(t.getMinutes()).padStart(2,"0")}`;
-      svg.appendChild(g("text",{x, y: TOP-8, fill:"#9fb1c5","font-size":"12", "text-anchor":"middle"}))
-         .appendChild(document.createTextNode(label));
+  svg.call(zoom);
+
+  // ---------- helpers ----------
+  const fmt = d3.timeFormat("%H:%M");
+  function puckColor(r) {
+    const d = typeof r.delay_min === "number" ? r.delay_min : null;
+    if (d == null) return "green";
+    if (d >= 20) return "red";
+    if (d >= 10) return "amber";
+    if (d <= -1) return "blue";
+    return "green";
+  }
+  function withinWindow(r) {
+    return r.endD >= xDomain[0] && r.startD <= xDomain[1];
+  }
+  function clampLabel(r, pixelWidth) {
+    const primary = `${(r.flight || "").trim()} • ${(r.origin_iata || "").toUpperCase()}`;
+    if (pixelWidth >= 140) return primary;
+    if (pixelWidth >= 95) return (r.flight || "").trim();
+    return "";
+  }
+
+  // ---------- render ----------
+  function render(recalcScale = false) {
+    const { innerW, innerH } = size();
+
+    y.range([0, innerH]);
+    if (recalcScale || !x) x = d3.scaleTime().range([0, innerW]).domain(xDomain);
+    else x.range([0, innerW]).domain(xDomain);
+
+    // bands
+    rowBandG.selectAll("rect.rowBand").data(BELTS, d => d).join(
+      enter => enter.append("rect")
+        .attr("class", "rowBand")
+        .attr("x", 0).attr("height", y.bandwidth())
+        .attr("width", innerW)
+        .attr("y", d => y(d)),
+      update => update
+        .attr("width", innerW)
+        .attr("y", d => y(d))
+    );
+
+    // axis + grid
+    const axis = d3.axisTop(x).ticks(innerW < 900 ? d3.timeMinute.every(15) : d3.timeMinute.every(10)).tickFormat(fmt);
+    axisG.attr("transform", "translate(0,-6)").call(axis);
+
+    const ticks = x.ticks(d3.timeMinute.every(5));
+    gridG.selectAll("line.gridline").data(ticks, d => d).join(
+      enter => enter.append("line").attr("class", "gridline")
+        .attr("y1", 0).attr("y2", innerH)
+        .attr("x1", d => x(d)).attr("x2", d => x(d)),
+      update => update
+        .attr("y2", innerH)
+        .attr("x1", d => x(d)).attr("x2", d => x(d))
+    );
+
+    // belt labels
+    const rootSel = root.selectAll("text.yLbl").data(BELTS, d => d);
+    rootSel.join(
+      enter => enter.append("text").attr("class", "yLbl")
+        .attr("x", -12).attr("text-anchor", "end").attr("fill", "#cbd5e1")
+        .attr("y", d => y(d) + y.bandwidth() / 2 + 4)
+        .text(d => `Belt ${d}`),
+      update => update.attr("y", d => y(d) + y.bandwidth() / 2 + 4)
+    );
+
+    // data -> visible + filter
+    const visible = parsed.filter(withinWindow).filter(r => activeBelts.has(+r.belt));
+
+    // pucks
+    const nodes = puckG.selectAll("g.p").data(visible, d => `${d.flight}|${d.start}|${d.belt}`);
+    const nodesEnter = nodes.enter().append("g").attr("class", "p");
+    nodesEnter.append("rect").attr("class", "puck");
+    nodesEnter.append("text").attr("class", "puckLabel");
+    nodesEnter.append("text").attr("class", "puckSub");
+
+    nodes.merge(nodesEnter).each(function (d) {
+      const g = d3.select(this);
+
+      const x0 = x(d.startD);
+      const x1 = x(d.endD);
+      const w = Math.max(28, x1 - x0);
+      const y0 = y(+d.belt) + 4;
+      const h = Math.max(28, y.bandwidth() - 8);
+
+      const endedAgoMin = (Date.now() - d.endD.getTime()) / 60000;
+      const dim = endedAgoMin > 60;
+
+      g.select("rect.puck")
+        .attr("x", x0).attr("y", y0).attr("width", w).attr("height", h)
+        .attr("class", `puck ${puckColor(d)} ${dim ? "dim" : ""}`);
+
+      const lbl = clampLabel(d, w - 16);
+      g.select("text.puckLabel")
+        .attr("x", x0 + 12).attr("y", y0 + 18)
+        .text(lbl);
+
+      const sub = (d.scheduled_local && d.eta_local)
+        ? `${d.scheduled_local} → ${d.eta_local} • ${d.flow}`
+        : `${d.flow || ""}`;
+      g.select("text.puckSub")
+        .attr("x", x0 + 12).attr("y", y0 + h - 10)
+        .text(sub);
+
+      g.on("mouseenter", (ev) => {
+        const html = `
+          <b>${d.flight || "—"} • ${(d.origin_iata || "").toUpperCase()} ${d.origin || ""}</b><br/>
+          Time: ${d.scheduled_local || "?"} → <b>${d.eta_local || "?"}</b>
+          ${typeof d.delay_min === "number" ? ` (${d.delay_min>=0?"+":""}${d.delay_min} min)` : ""}<br/>
+          Flow: ${d.flow || "—"} • Belt: <b>${d.belt}</b><br/>
+          Start–End: ${fmt(d.startD)} – ${fmt(d.endD)}<br/>
+          Reason: ${d.reason || "—"}
+        `;
+        tooltip.html(html).style("display","block");
+      }).on("mousemove", (ev) => {
+        tooltip.style("left", (ev.clientX + 14) + "px").style("top", (ev.clientY + 14) + "px");
+      }).on("mouseleave", () => {
+        tooltip.style("display","none");
+      });
+    });
+
+    nodes.exit().remove();
+
+    // NOW line
+    const now = new Date();
+    const nx = x(now);
+    nowG.selectAll("*").remove();
+    if (nx >= 0 && nx <= innerW) {
+      nowG.append("line").attr("class", "nowLine").attr("x1", nx).attr("x2", nx).attr("y1", 0).attr("y2", innerH);
+      nowG.append("line").attr("class", "nowTick").attr("x1", nx - 8).attr("x2", nx + 8).attr("y1", 18).attr("y2", 18);
     }
-
-    const xNow = xOf(cacheBustNow ? new Date() : now);
-    svg.appendChild(g("line",{x1:xNow,y1:TOP-24,x2:xNow,y2:height-8, stroke:"#5ab0ff","stroke-width":"1.5"}));
-
-    (sel.length ? sel : itemsAll).forEach(r=>{
-      if (!beltList.includes(Number(r.belt))) return;
-      const y  = rowY(r.belt) + 10;
-      const x0 = xOf(r.start);
-      const x1 = xOf(r.end);
-      const w  = Math.max(10, x1-x0);
-      const h  = ROW_H - 20;
-
-      const fill = colorFor(r.delay_min);
-      const rect = g("rect",{x:x0,y:y,width:w,height:h, rx:10, ry:10, fill, stroke:"rgba(255,255,255,0.18)"});
-      svg.appendChild(rect);
-
-      const label = `${(r.flight||"").toUpperCase()} • ${(r.origin_iata||"").toUpperCase()}`;
-      const text = g("text",{x:x0+8,y:y+22, fill:"#e7edf5","font-size":"12","font-weight":"700"});
-      text.appendChild(document.createTextNode(label));
-      svg.appendChild(text);
-
-      const sched = r.scheduled_local || "";
-      const eta   = r.eta_local || hhmm(r.eta);
-      const delay = (typeof r.delay_min==="number") ? (r.delay_min>0?`+${r.delay_min} min`:`${r.delay_min} min`) : "—";
-      const html = `
-        <div class="title">${(r.flight||"").toUpperCase()} • ${(r.origin||"")}</div>
-        <div class="muted">Scheduled → ETA: <b>${sched||"—"}</b> → <b>${eta||"—"}</b> (${delay})</div>
-        <div>Flow: <b>${(r.flow||"").toUpperCase()}</b> &nbsp; Belt: <b>${r.belt||"?"}</b></div>
-        <div>Start–End: <b>${hhmm(r.start)}</b>–<b>${hhmm(r.end)}</b></div>
-        <div class="muted">Reason: ${r.reason||"—"}</div>
-      `;
-      const hit = g("rect",{x:x0,y:y,width:w,height:h, fill:"transparent"});
-      hit.addEventListener("mousemove", (e)=>{ showTip(e, html); });
-      hit.addEventListener("mouseleave", hideTip);
-      svg.appendChild(hit);
-    });
-
-    const vline = g("line",{x1:0,y1:TOP-24,x2:0,y2:height-8, stroke:"rgba(255,255,255,0.22)", "stroke-dasharray":"3,3", visibility:"hidden"});
-    const ts = g("text",{x:0,y:TOP-28, fill:"#9fb1c5","font-size":"12","text-anchor":"middle"});
-    svg.appendChild(vline); svg.appendChild(ts);
-
-    host.onmousemove = (e)=>{
-      const r = host.getBoundingClientRect();
-      const x = Math.min(Math.max(e.clientX - r.left, LEFT), width-RIGHT);
-      vline.setAttribute("x1", x); vline.setAttribute("x2", x);
-      vline.setAttribute("visibility","visible");
-      const minutesFromStart = (x - LEFT) / pxPerMin;
-      const t = new Date(t0.getTime() + minutesFromStart*60000);
-      const label = `${String(t.getHours()).padStart(2,"0")}:${String(t.getMinutes()).padStart(2,"0")}`;
-      ts.setAttribute("x", x); ts.textContent = label;
-    };
-    host.onmouseleave = ()=>{ vline.setAttribute("visibility","hidden"); ts.textContent=""; };
   }
 
-  draw();
-  zoomEl.onchange = draw;
-  backEl.onchange = draw;
-  aheadEl.onchange = draw;
+  render(true);
+  window.addEventListener("resize", () => render(true));
 })();
