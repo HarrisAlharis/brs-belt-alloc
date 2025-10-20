@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-20T01:34:59.925Z",
-  "generated_at_local": "2025-10-20T02:34:59",
+  "generated_at_utc": "2025-10-20T01:36:20.658Z",
+  "generated_at_local": "2025-10-20T02:36:20",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -8,21 +8,21 @@
       "flight": "LS1846",
       "origin": "(AYT)",
       "origin_iata": "AYT",
-      "eta": "2025-10-20T02:00:00.000Z",
-      "status": "delayed 03:00",
+      "eta": "2025-10-20T01:59:00.000Z",
+      "status": "delayed 02:59",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-20T02:15:00.000Z",
-      "end": "2025-10-20T02:45:00.000Z",
+      "start": "2025-10-20T02:14:00.000Z",
+      "end": "2025-10-20T02:44:00.000Z",
       "reason": "intl_spread",
       "airline": "Jet2",
       "aircraft": "(G-JZHK)",
       "pax_estimate": 171,
       "scheduled_local": "02:30",
-      "eta_local": "03:00",
-      "delay_min": 30,
+      "eta_local": "02:59",
+      "delay_min": 29,
       "ui_state": "upcoming",
-      "ui_age_min": -70
+      "ui_age_min": -68
     },
     {
       "flight": "BY6765",
@@ -42,7 +42,7 @@
       "eta_local": "04:14",
       "delay_min": -6,
       "ui_state": "upcoming",
-      "ui_age_min": -144
+      "ui_age_min": -143
     }
   ]
 }
