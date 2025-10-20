@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-20T20:19:59.898Z",
-  "generated_at_local": "2025-10-20T21:19:59",
+  "generated_at_utc": "2025-10-20T20:21:19.858Z",
+  "generated_at_local": "2025-10-20T21:21:19",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -8,21 +8,21 @@
       "flight": "",
       "origin": "(AMS)",
       "origin_iata": "AMS",
-      "eta": "2025-10-20T20:56:00.000Z",
-      "status": "estimated 21:56",
+      "eta": "2025-10-20T20:58:00.000Z",
+      "status": "estimated 21:58",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-20T21:11:00.000Z",
-      "end": "2025-10-20T21:41:00.000Z",
+      "start": "2025-10-20T21:13:00.000Z",
+      "end": "2025-10-20T21:43:00.000Z",
       "reason": "intl_spread",
       "airline": "KLM",
       "aircraft": "(PH-EXL)",
       "pax_estimate": 166,
       "scheduled_local": "22:05",
-      "eta_local": "21:56",
-      "delay_min": -9,
+      "eta_local": "21:58",
+      "delay_min": -7,
       "ui_state": "upcoming",
-      "ui_age_min": -81
+      "ui_age_min": -82
     },
     {
       "flight": "U22934",
@@ -42,7 +42,7 @@
       "eta_local": "22:26",
       "delay_min": -9,
       "ui_state": "upcoming",
-      "ui_age_min": -111
+      "ui_age_min": -110
     },
     {
       "flight": "FR8235",
@@ -62,7 +62,7 @@
       "eta_local": "22:26",
       "delay_min": -14,
       "ui_state": "upcoming",
-      "ui_age_min": -111
+      "ui_age_min": -110
     },
     {
       "flight": "FR3160",
@@ -82,47 +82,47 @@
       "eta_local": "22:39",
       "delay_min": 9,
       "ui_state": "upcoming",
-      "ui_age_min": -124
+      "ui_age_min": -123
     },
     {
       "flight": "U22748",
       "origin": "(BCN)",
       "origin_iata": "BCN",
-      "eta": "2025-10-20T21:47:00.000Z",
-      "status": "estimated 22:47",
+      "eta": "2025-10-20T21:45:00.000Z",
+      "status": "estimated 22:45",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-20T22:02:00.000Z",
-      "end": "2025-10-20T22:32:00.000Z",
+      "start": "2025-10-20T22:00:00.000Z",
+      "end": "2025-10-20T22:30:00.000Z",
       "reason": "intl_spread",
       "airline": "easyJet",
       "aircraft": "(G-EZTD)",
       "pax_estimate": 162,
       "scheduled_local": "22:55",
-      "eta_local": "22:47",
-      "delay_min": -8,
+      "eta_local": "22:45",
+      "delay_min": -10,
       "ui_state": "upcoming",
-      "ui_age_min": -132
+      "ui_age_min": -129
     },
     {
       "flight": "U22834",
       "origin": "(FCO)",
       "origin_iata": "FCO",
-      "eta": "2025-10-20T21:56:00.000Z",
-      "status": "estimated 22:56",
+      "eta": "2025-10-20T21:52:00.000Z",
+      "status": "estimated 22:52",
       "flow": "INTERNATIONAL",
       "belt": 6,
-      "start": "2025-10-20T22:11:00.000Z",
-      "end": "2025-10-20T22:41:00.000Z",
+      "start": "2025-10-20T22:07:00.000Z",
+      "end": "2025-10-20T22:37:00.000Z",
       "reason": "last_resort→6",
       "airline": "easyJet",
       "aircraft": "(G-UZHJ)",
       "pax_estimate": 162,
       "scheduled_local": "23:10",
-      "eta_local": "22:56",
-      "delay_min": -14,
+      "eta_local": "22:52",
+      "delay_min": -18,
       "ui_state": "upcoming",
-      "ui_age_min": -141
+      "ui_age_min": -136
     },
     {
       "flight": "LS1814",
@@ -142,7 +142,7 @@
       "eta_local": "22:58",
       "delay_min": -12,
       "ui_state": "upcoming",
-      "ui_age_min": -143
+      "ui_age_min": -142
     },
     {
       "flight": "LS1810",
@@ -162,7 +162,7 @@
       "eta_local": "23:28",
       "delay_min": 8,
       "ui_state": "upcoming",
-      "ui_age_min": -173
+      "ui_age_min": -172
     },
     {
       "flight": "LS1818",
@@ -182,7 +182,7 @@
       "eta_local": "23:36",
       "delay_min": 16,
       "ui_state": "upcoming",
-      "ui_age_min": -181
+      "ui_age_min": -180
     },
     {
       "flight": "U22856",
@@ -202,7 +202,7 @@
       "eta_local": "23:38",
       "delay_min": 8,
       "ui_state": "upcoming",
-      "ui_age_min": -183
+      "ui_age_min": -182
     }
   ]
 }
