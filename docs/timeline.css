@@ -1,195 +1,60 @@
-/* ---------- Theme ---------- */
-:root {
-  --bg: #0f1720;
-  --panel: #10161f;
-  --ink: #e7edf5;
-  --muted: #a6b4c6;
-  --grid: rgba(255,255,255,.06);
-  --chip: #151c27;
-  --chip-border: rgba(255,255,255,.12);
-  --chip-active: #20304a;
-  --btn: #1b2a40;
-  --btn-border: rgba(255,255,255,.18);
+:root{
+  --bg:#0f1720; --panel:#10161f; --ink:#e7edf5; --muted:#a6b4c6;
+  --grid:rgba(255,255,255,.06); --chip:#151c27; --chip-border:rgba(255,255,255,.12);
+  --chip-active:#20304a; --btn:#1b2a40; --btn-border:rgba(255,255,255,.18);
 }
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:14px/1.5 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji");}
 
-* { box-sizing: border-box; }
-html, body { height: 100%; }
-body {
-  margin: 0;
-  color: var(--ink);
-  background: var(--bg);
-  font: 14px/1.5 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-}
+.hdr{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;
+  padding:14px 16px 10px;border-bottom:1px solid var(--grid)}
+.hdr h1{margin:0;font-size:18px}
+.small{font-size:12px}.muted{color:var(--muted)}
+.hdr-right{display:flex;gap:12px 18px;flex-wrap:wrap;align-items:center;justify-content:flex-end}
+.toolbar-group{display:inline-flex;gap:6px;flex-wrap:wrap;align-items:center}
+.lbl{color:var(--muted);font-size:12px;margin-right:2px}
 
-/* ---------- Header / Toolbar ---------- */
-.hdr {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 16px;
-  align-items: center;
-  padding: 14px 16px 10px;
-  border-bottom: 1px solid var(--grid);
-}
-.hdr h1 { margin: 0; font-size: 18px; }
-.muted { color: var(--muted); }
-.small { font-size: 12px; }
+.chip{background:var(--chip);border:1px solid var(--chip-border);color:var(--ink);
+  padding:6px 10px;border-radius:999px;cursor:pointer;transition:background .2s}
+.chip:hover{filter:brightness(1.1)} .chip.active{background:var(--chip-active);border-color:#3b537c}
+.chip-primary{background:#19304d;border-color:#345a8d}
+.sel{appearance:none;background:var(--chip);border:1px solid var(--chip-border);
+  color:var(--ink);padding:6px 28px 6px 10px;border-radius:8px}
+.btn{background:var(--btn);border:1px solid var(--btn-border);color:var(--ink);
+  padding:6px 10px;border-radius:8px;cursor:pointer}
+.btn:hover{filter:brightness(1.08)}
 
-.hdr-right {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px 16px;
-  align-items: center;
-  justify-content: flex-end;
-}
+.pill{display:inline-flex;align-items:center;gap:.35rem;padding:4px 8px;border-radius:999px;
+  border:1px solid rgba(255,255,255,.14);font-size:12px;white-space:nowrap}
+.pill-green{background:#113b23;color:#b9f2c9;border-color:#1f5a30}
+.pill-amber{background:#3c2a10;color:#ffd39a;border-color:#7a5a2b}
+.pill-red{background:#3e1316;color:#ffb3b8;border-color:#7a2a30}
+.pill-blue{background:#102a3c;color:#a8d8ff;border-color:#2b587a}
 
-.toolbar-group {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-.lbl { color: var(--muted); font-size: 12px; margin-right: 2px; }
+#tl-scroller{position:relative;height:calc(100vh - 160px);overflow-x:auto;overflow-y:hidden;
+  background:var(--panel);border-top:1px solid var(--grid);border-bottom:1px solid var(--grid);
+  scroll-behavior:smooth}
+#tl-scroller.grabbing{cursor:grabbing}
+#tl-canvas{position:relative;min-height:520px}
 
-.chip {
-  background: var(--chip);
-  border: 1px solid var(--chip-border);
-  color: var(--ink);
-  padding: 6px 10px;
-  border-radius: 999px;
-  cursor: pointer;
-  transition: 0.2s ease background;
-}
-.chip:hover { filter: brightness(1.1); }
-.chip.active { background: var(--chip-active); border-color: #3b537c; }
-.chip-primary { background: #19304d; border-color: #345a8d; }
+.tick{position:absolute;top:0;bottom:0;width:1px;background:rgba(255,255,255,.05)}
+.tick-label{position:absolute;top:6px;left:6px;font-size:12px;color:var(--muted)}
 
-.sel {
-  appearance: none;
-  background: var(--chip);
-  border: 1px solid var(--chip-border);
-  color: var(--ink);
-  padding: 6px 28px 6px 10px;
-  border-radius: 8px;
-}
+.belt-stripe{position:absolute;left:0;right:0;background:rgba(255,255,255,.03);
+  border-top:1px dashed rgba(255,255,255,.04);border-bottom:1px dashed rgba(0,0,0,.2)}
+.belt-name{position:absolute;left:8px;font-size:12px;color:var(--muted)}
 
-.btn {
-  background: var(--btn);
-  border: 1px solid var(--btn-border);
-  color: var(--ink);
-  padding: 6px 10px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-.btn:hover { filter: brightness(1.1); }
+.tl-now-line{position:absolute;top:0;bottom:0;width:2px;background:#4ea1ff;
+  box-shadow:0 0 0 1px rgba(78,161,255,.35);opacity:.9;pointer-events:none}
 
-/* ---------- Legend Pills ---------- */
-.pill {
-  display: inline-flex;
-  align-items: center;
-  gap: .35rem;
-  padding: 4px 8px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,.14);
-  font-size: 12px;
-  white-space: nowrap;
-}
-.pill-green { background: #113b23; color: #b9f2c9; border-color: #1f5a30; }
-.pill-amber { background: #3c2a10; color: #ffd39a; border-color: #7a5a2b; }
-.pill-red { background: #3e1316; color: #ffb3b8; border-color: #7a2a30; }
-.pill-blue { background: #102a3c; color: #a8d8ff; border-color: #2b587a; }
+.puck{position:absolute;display:inline-flex;align-items:center;padding:10px 14px;
+  border:1px solid rgba(255,255,255,.14);border-radius:14px;background:rgba(25,60,90,.85);
+  color:#fff;box-shadow:0 2px 10px rgba(0,0,0,.25);user-select:none;font-size:14px;line-height:1.2;
+  white-space:nowrap;transition:all .18s ease-out;min-width:90px}
+.puck:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.puck-early{background:rgba(20,50,90,.85)} .puck-ontime{background:rgba(16,60,34,.85)}
+.puck-amber{background:rgba(110,70,10,.85)} .puck-red{background:rgba(120,20,20,.85)}
 
-/* ---------- Timeline Layout ---------- */
-#tl-scroller {
-  position: relative;
-  height: calc(100vh - 160px); /* adjust if header/footer change */
-  overflow-x: auto;
-  overflow-y: hidden;
-  background: var(--panel);
-  border-top: 1px solid var(--grid);
-  border-bottom: 1px solid var(--grid);
-  scroll-behavior: smooth;
-}
-#tl-scroller.grabbing { cursor: grabbing; }
-
-#tl-canvas {
-  position: relative;
-  min-height: 560px;
-  will-change: width, transform;
-}
-
-/* ---------- Grid Ticks ---------- */
-.tick {
-  position: absolute;
-  top: 0; bottom: 0;
-  width: 1px;
-  background: rgba(255,255,255,.05);
-}
-.tick-label {
-  position: absolute;
-  top: 8px; left: 6px;
-  font-size: 12px;
-  color: var(--muted);
-}
-
-/* ---------- Belt Rows ---------- */
-.belt-stripe {
-  position: absolute;
-  left: 0; right: 0;
-  background: rgba(255,255,255,.03);
-  border-top: 1px dashed rgba(255,255,255,.04);
-  border-bottom: 1px dashed rgba(0,0,0,.2);
-}
-.belt-name {
-  position: absolute;
-  left: 8px;
-  font-size: 12px;
-  color: var(--muted);
-}
-
-/* ---------- Now Line ---------- */
-.tl-now-line {
-  position: absolute;
-  top: 0; bottom: 0;
-  width: 2px;
-  background: #4ea1ff;
-  box-shadow: 0 0 0 1px rgba(78,161,255,.35);
-  opacity: .9;
-  pointer-events: none;
-}
-
-/* ---------- Pucks ---------- */
-.puck {
-  position: absolute;
-  display: inline-flex;
-  align-items: center;
-  padding: 10px 14px;
-  border: 1px solid rgba(255,255,255,.14);
-  border-radius: 14px;
-  background: rgba(25,60,90,.85);
-  color: #fff;
-  box-shadow: 0 2px 10px rgba(0,0,0,.25);
-  user-select: none;
-  font-size: 14px;
-  line-height: 1.2;
-  white-space: nowrap;
-  transition: all 0.2s ease-out;
-  min-width: 90px;           /* ✅ added tweak: prevents "dot" effect */
-}
-.puck:hover {
-  filter: brightness(1.1);
-  transform: translateY(-1px);
-}
-
-/* Colour Variants */
-.puck-early  { background: rgba(20,50,90,.85); }
-.puck-ontime { background: rgba(16,60,34,.85); }
-.puck-amber  { background: rgba(110,70,10,.85); }
-.puck-red    { background: rgba(120,20,20,.85); }
-
-/* ---------- Footer ---------- */
-.ftr {
-  padding: 10px 16px;
-  color: var(--muted);
-  font-size: 12px;
-  border-top: 1px solid var(--grid);
-}
+.ftr{padding:10px 16px;color:var(--muted);font-size:12px;border-top:1px solid var(--grid)}

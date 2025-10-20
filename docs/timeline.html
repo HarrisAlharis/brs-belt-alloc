@@ -2,19 +2,18 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>BRS — Arrivals Belt Timeline</title>
-  <link rel="stylesheet" href="timeline.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="timeline.css">
 </head>
 <body>
   <header class="hdr">
-    <div class="hdr-left">
+    <div>
       <h1>BRS — Arrivals Belt Timeline</h1>
-      <div id="page-meta" class="muted small"></div>
+      <div class="small muted" id="meta">Loading…</div>
     </div>
 
     <div class="hdr-right">
-      <!-- Belt filter -->
       <div class="toolbar-group">
         <span class="lbl">Belt filter:</span>
         <button class="chip" data-belt="1">Belt 1</button>
@@ -23,24 +22,21 @@
         <button class="chip" data-belt="5">Belt 5</button>
         <button class="chip" data-belt="6">Belt 6</button>
         <button class="chip" data-belt="7">Belt 7</button>
-        <button class="chip chip-primary" data-filter="all">All</button>
-        <button class="chip" data-filter="none">None</button>
+        <button class="chip chip-primary" id="filter-all">All</button>
+        <button class="chip" id="filter-none">None</button>
       </div>
 
-      <!-- Zoom & Now -->
       <div class="toolbar-group">
         <span class="lbl">Zoom:</span>
-        <select data-role="px-per-min" class="sel">
+        <select id="zoom" class="sel">
           <option value="3">3 px/min (narrow)</option>
           <option value="6" selected>6 px/min (default)</option>
-          <option value="10">10 px/min (wide)</option>
+          <option value="9">9 px/min (wide)</option>
         </select>
-
-        <button class="btn" data-action="jump-now">Now</button>
+        <button class="btn" id="btn-now">Now</button>
       </div>
 
-      <!-- Legend -->
-      <div class="toolbar-group legend">
+      <div class="toolbar-group">
         <span class="pill pill-green">On time / small slip</span>
         <span class="pill pill-amber">+10–19</span>
         <span class="pill pill-red">+20+</span>
@@ -49,13 +45,14 @@
     </div>
   </header>
 
-  <!-- SCROLL CONTAINER -->
   <main id="tl-scroller">
     <div id="tl-canvas"></div>
   </main>
 
-  <footer class="ftr small muted">
-    Source: FR24 (screen-scrape) • View updates automatically when JSON changes.
+  <footer class="ftr">
+    <span>Source: FR24 (screen-scrape)</span>
+    <span> • </span>
+    <span>View updates automatically when JSON changes.</span>
   </footer>
 
   <script src="timeline.js"></script>

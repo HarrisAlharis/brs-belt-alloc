@@ -1,305 +1,275 @@
-﻿/* docs/timeline.js — horizontally scrollable timeline (fixed off-window items + reliable centerNow) */
+﻿/* BRS Timeline — robust, shows all flights, auto-centers on NOW, tolerant of missing fields */
 
-(() => {
-  // ---------- CONFIG ----------
-  const DEFAULT_PX_PER_MIN = 6;
-  const BACK_HOURS  = 5;  // history
-  const AHEAD_HOURS = 6;  // future
-  const GRID_TICK_MIN   = 15;
-  const GRID_LABEL_MIN  = 30;
-  const HISTORY_FADE_MIN = 60; // >60 min behind start → fade
+(function(){
+  const SCROLLER = document.getElementById('tl-scroller');
+  const CANVAS   = document.getElementById('tl-canvas');
+  const META     = document.getElementById('meta');
+  const BTN_NOW  = document.getElementById('btn-now');
+  const ZOOM_SEL = document.getElementById('zoom');
 
-  const ALL_BELTS = [1,2,3,5,6,7];
+  // Layout constants
+  let PX_PER_MIN = Number(ZOOM_SEL.value);       // user-controlled
+  const BELT_ROWS = [1,2,3,5,6,7];               // fixed row order to display
+  const ROW_H = 120;                             // row height
+  const TOP_PAD = 28;                            // pad above first row
+  const LEFT_PAD = 80;                           // space for belt labels
+  const HOURS_BACK = 5;                          // show past 5h
+  const HOURS_FWD  = 8;                          // and next 8h
+  const START_DELAY_MIN = 15;                    // default if start absent
+  const DWELL_MIN       = 30;
 
-  // ---------- ELEMENTS ----------
-  const scroller = document.getElementById('tl-scroller');
-  const canvas   = document.getElementById('tl-canvas');
-  const meta     = document.getElementById('page-meta');
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function hhmm(d){ return `${pad(d.getHours())}:${pad(d.getMinutes())}`; }
+  function parseISO(s){ const d = new Date(s); return isNaN(d) ? null : d; }
+  function addMin(d,m){ return new Date(d.getTime()+m*60000); }
 
-  const btnNow   = document.querySelector('[data-action="jump-now"]');
-  const pxSelect = document.querySelector('[data-role="px-per-min"]');
-  const beltButtons = Array.from(document.querySelectorAll('.chip[data-belt]'));
-  const chipAll  = document.querySelector('.chip[data-filter="all"]');
-  const chipNone = document.querySelector('.chip[data-filter="none"]');
+  function beltY(belt){
+    const idx = Math.max(0, BELT_ROWS.indexOf(Number(belt)));
+    return TOP_PAD + idx*ROW_H;
+  }
 
-  // ---------- STATE ----------
-  let pxPerMin = Number(pxSelect?.value || DEFAULT_PX_PER_MIN);
-  let activeBelts = new Set(ALL_BELTS);
-
-  let rows = [];
-  let generatedAt = '';
-
-  let t0, t1, totalMin, widthPx;
-
-  // ---------- UTILS ----------
-  const pad = n => String(n).padStart(2,'0');
-  const hhmm = d => `${pad(d.getHours())}:${pad(d.getMinutes())}`;
-  const minutesBetween = (a,b) => Math.round((b - a)/60000);
-  const parseISO = s => (s ? new Date(s) : null);
-  const clamp = (x, min, max) => Math.max(min, Math.min(max, x));
-
-  const minToX = m => m * pxPerMin;
-  const xForDate = dt => minToX(minutesBetween(t0, dt));
-
-  function colorClassForDelay(min){
-    if (typeof min !== 'number') return 'puck-ontime';
-    if (min >= 20) return 'puck-red';
-    if (min >= 10) return 'puck-amber';
-    if (min <= -1) return 'puck-early';
+  function reasonColor(r){
+    // Color by delay_min buckets if present; otherwise by status text
+    if (typeof r.delay_min === 'number'){
+      if (r.delay_min >= 20) return 'puck-red';
+      if (r.delay_min >= 10) return 'puck-amber';
+      if (r.delay_min <= -1) return 'puck-blue';
+      return 'puck-ontime';
+    }
+    const s = (r.status||'').toLowerCase();
+    if (s.includes('delayed')) return 'puck-amber';
+    if (s.includes('estimated')) return 'puck-ontime';
+    if (s.includes('early')) return 'puck-blue';
     return 'puck-ontime';
   }
 
-  // ---------- DATA ----------
-  async function loadData(){
-    const res = await fetch(`assignments.json?v=${Date.now()}`);
-    const data = await res.json();
-    rows = Array.isArray(data.rows) ? data.rows : [];
-    generatedAt = data.generated_at_local || data.generated_at_utc || '';
-    if (meta) meta.textContent = `Generated ${generatedAt} • Horizon ${data.horizon_minutes || ''} min`;
-  }
-
-  // ---------- RENDER ----------
-  function buildWindow(){
+  function buildWindow(rows){
+    // Determine canvas time range: now - back … now + fwd, but
+    // also include min/max from data to avoid clipping if all data is far away.
     const now = new Date();
-    t0 = new Date(now.getTime() - BACK_HOURS*60*1000);
-    t1 = new Date(now.getTime() + AHEAD_HOURS*60*1000);
-    totalMin = minutesBetween(t0, t1);
-    widthPx = totalMin * pxPerMin;
-    canvas.style.width = `${widthPx}px`;
-  }
+    let minT = addMin(now, -HOURS_BACK*60);
+    let maxT = addMin(now,  HOURS_FWD*60);
 
-  function clearCanvas(){ canvas.innerHTML = ''; }
-
-  function renderGrid(){
-    const grid = document.createDocumentFragment();
-
-    for (let m=0; m<= totalMin; m += GRID_TICK_MIN){
-      const x = minToX(m);
-      const t = document.createElement('div');
-      t.className = 'tick';
-      t.style.left = `${x}px`;
-      grid.appendChild(t);
-
-      if (m % GRID_LABEL_MIN === 0){
-        const d = new Date(t0.getTime() + m*60000);
-        const lbl = document.createElement('div');
-        lbl.className = 'tick-label';
-        lbl.style.left = `${x}px`;
-        lbl.textContent = hhmm(d);
-        grid.appendChild(lbl);
-      }
+    for (const r of rows){
+      const start = parseISO(r.start) || addMin(parseISO(r.eta)||now, START_DELAY_MIN);
+      const end   = parseISO(r.end)   || addMin(start, DWELL_MIN);
+      if (start && start < minT) minT = start;
+      if (end   && end   > maxT) maxT = end;
     }
-    canvas.appendChild(grid);
+    return {minT, maxT, now};
   }
 
-  function activeBeltArray(){ return ALL_BELTS.filter(b => activeBelts.has(b)); }
+  function setCanvasSize(minT, maxT){
+    const mins = Math.ceil((maxT - minT)/60000);
+    const w = LEFT_PAD + Math.max(1200, mins * PX_PER_MIN) + 200;
+    const h = TOP_PAD + BELT_ROWS.length*ROW_H + 60;
+    CANVAS.style.width  = `${w}px`;
+    CANVAS.style.height = `${h}px`;
+    return {w,h, mins};
+  }
 
-  function renderBelts(){
-    const belts = activeBeltArray();
-    const rowH = Math.max(90, Math.floor((scroller.clientHeight - 30) / Math.max(1, belts.length)));
+  function clearCanvas(){ CANVAS.innerHTML = ''; }
 
-    belts.forEach((belt, i) => {
-      const yTop = 60 + i*rowH;
+  function addTick(x, label){
+    const line = document.createElement('div');
+    line.className = 'tick';
+    line.style.left = `${x}px`;
+    CANVAS.appendChild(line);
 
+    const lb = document.createElement('div');
+    lb.className = 'tick-label';
+    lb.textContent = label;
+    lb.style.left = `${x+4}px`;
+    CANVAS.appendChild(lb);
+  }
+
+  function renderGrid(minT, maxT){
+    // Belt stripes + labels
+    for (let i=0;i<BELT_ROWS.length;i++){
+      const y = TOP_PAD + i*ROW_H;
       const stripe = document.createElement('div');
       stripe.className = 'belt-stripe';
-      stripe.style.top = `${yTop-22}px`;
-      stripe.style.height = `${rowH-14}px`;
-      canvas.appendChild(stripe);
+      stripe.style.top = `${y}px`;
+      stripe.style.height = `${ROW_H}px`;
+      CANVAS.appendChild(stripe);
 
       const name = document.createElement('div');
       name.className = 'belt-name';
-      name.style.top = `${yTop-38}px`;
-      name.textContent = `Belt ${belt}`;
-      canvas.appendChild(name);
-    });
+      name.textContent = `Belt ${BELT_ROWS[i]}`;
+      name.style.top = `${y+6}px`;
+      name.style.left = '8px';
+      CANVAS.appendChild(name);
+    }
 
-    return { rowH, belts };
+    // Minute ticks every 15 min
+    const totalMin = Math.ceil((maxT - minT)/60000);
+    for (let m=0; m<=totalMin; m+=15){
+      const x = LEFT_PAD + m*PX_PER_MIN;
+      const t = addMin(minT, m);
+      const label = (m % 60 === 0) ? `${pad(t.getHours())}:${pad(t.getMinutes())}` : '';
+      addTick(x, label);
+    }
   }
 
-  function yForBelt(belt, rowH, belts){
-    const idx = belts.indexOf(Number(belt));
-    if (idx < 0) return null;
-    return 60 + idx*rowH - 8;
+  function renderNow(minT, now){
+    const x = LEFT_PAD + Math.max(0, (now - minT)/60000) * PX_PER_MIN;
+    const nl = document.createElement('div');
+    nl.className = 'tl-now-line';
+    nl.style.left = `${x}px`;
+    CANVAS.appendChild(nl);
+    return x;
   }
 
-  function renderNowLine(){
-    const nowX = xForDate(new Date());
-    const line = document.createElement('div');
-    line.className = 'tl-now-line';
-    line.dataset.role = 'now-line';
-    line.style.left = `${nowX}px`;
-    canvas.appendChild(line);
+  function textFor(r){
+    const f = (r.flight && r.flight.trim()) ? r.flight.trim() : '—';
+    const origin = (r.origin_iata || (r.origin||'')).replace(/[()]/g,'').trim();
+    return `${f} • ${origin || ''}`.trim();
   }
 
-  // NEW: helper – skip items completely off the window
-  function isOffWindow(start, end){
-    return (end <= t0) || (start >= t1);
+  function ensureComputedTimes(r){
+    const eta = parseISO(r.eta) || null;
+    const start = parseISO(r.start) || (eta ? addMin(eta, START_DELAY_MIN) : null);
+    const end   = parseISO(r.end)   || (start ? addMin(start, DWELL_MIN) : null);
+    return {eta, start, end};
   }
 
-  function renderPucks(rowH, belts){
-    const now = new Date();
+  function renderPucks(rows, minT){
+    for (const r of rows){
+      if (!r.belt) continue;
+      const { start, end } = ensureComputedTimes(r);
+      if (!start || !end) continue;
 
-    rows.forEach(r => {
-      if (!r.start || !r.end || !r.belt) return;
-      if (!activeBelts.has(Number(r.belt))) return;
+      const x1 = LEFT_PAD + ((start - minT)/60000) * PX_PER_MIN;
+      const x2 = LEFT_PAD + ((end   - minT)/60000) * PX_PER_MIN;
+      const y  = beltY(r.belt) + 26;
 
-      const start = parseISO(r.start);
-      const end   = parseISO(r.end);
-      if (!start || !end) return;
-
-      // Skip flights fully outside [t0, t1]
-      if (isOffWindow(start, end)) return;
-
-      const y = yForBelt(r.belt, rowH, belts);
-      if (y == null) return;
-
-      // Compute left/right; clip to window, but don't clamp to 0 in a way
-      // that would create "dots" at the extreme edges.
-      const leftRaw  = xForDate(start);
-      const rightRaw = xForDate(end);
-      const left  = Math.max(0, Math.min(widthPx, leftRaw));
-      const right = Math.max(0, Math.min(widthPx, rightRaw));
-      const width = Math.max(90, right - left); // enforce more comfortable min width
-
-      const p = document.createElement('div');
-      p.className = `puck ${colorClassForDelay(r.delay_min)}`;
-      p.style.left = `${left}px`;
-      p.style.top  = `${y}px`;
-      p.style.width = `${width}px`;
-
-      // Fade older-than-60min slots
-      const minsBehind = minutesBetween(start, now);
-      if (minsBehind > HISTORY_FADE_MIN){
-        p.style.opacity = '.35';
-        p.style.filter  = 'grayscale(60%)';
-      }
-
-      const origin = (r.origin_iata || '').replace(/[()]/g,'');
-      const code   = r.flight || '—';
-      p.textContent = `${code} • ${origin}`;
-
-      p.title = [
-        `Scheduled → ETA: ${(r.scheduled_local || '—')} → ${(r.eta_local || '—')}`,
-        `Delay: ${typeof r.delay_min==='number' ? r.delay_min+' min' : '—'}`,
+      const el = document.createElement('div');
+      el.className = `puck ${reasonColor(r)}`;
+      el.style.left = `${Math.max(LEFT_PAD, x1)}px`;
+      el.style.top  = `${y}px`;
+      el.style.width = `${Math.max(90, (x2-x1))}px`;
+      el.title = [
+        `Flight: ${r.flight || '—'}`,
+        `Origin: ${r.origin_iata || r.origin || '—'}`,
+        `ETA: ${r.eta_local || (r.eta ? hhmm(new Date(r.eta)) : '—')}`,
+        `Start: ${start ? hhmm(start):'—'} • End: ${end ? hhmm(end):'—'}`,
+        `Belt: ${r.belt} • Flow: ${r.flow || '—'}`,
         `Status: ${r.status || '—'}`,
-        `Flow: ${r.flow || '—'}`,
-        `Belt: ${r.belt}`,
-        `Start–End: ${hhmm(parseISO(r.start))} – ${hhmm(parseISO(r.end))}`,
         `Reason: ${r.reason || '—'}`
       ].join('\n');
 
-      canvas.appendChild(p);
-    });
+      el.textContent = textFor(r);
+      CANVAS.appendChild(el);
+    }
   }
 
-  async function renderAll(){
-    await loadData();
+  function updateMeta(data){
+    META.textContent = `Generated ${data.generated_at_local || data.generated_at_utc || ''} • Horizon ${data.horizon_minutes || ''} min`;
+  }
+
+  function scrollToX(x){
+    const viewW = SCROLLER.clientWidth;
+    const target = Math.max(0, x - viewW*0.33);
+    SCROLLER.scrollTo({left: target, behavior: 'smooth'});
+  }
+
+  function applyFilters(){
+    const active = [...document.querySelectorAll('.chip[data-belt].active')]
+                   .map(b => Number(b.dataset.belt));
+    const pucks = CANVAS.querySelectorAll('.puck');
+    if (active.length === 0){
+      pucks.forEach(p => p.style.display = 'none');
+    } else {
+      pucks.forEach(p => {
+        // read belt from title
+        const m = p.title.match(/Belt:\s(\d+)/);
+        const belt = m ? Number(m[1]) : null;
+        p.style.display = (!belt || active.includes(belt)) ? '' : 'none';
+      });
+    }
+  }
+
+  async function init(){
+    // Fetch JSON (cache-bust)
+    const res = await fetch(`assignments.json?v=${Date.now()}`);
+    const data = await res.json();
+    updateMeta(data);
+
+    const rows = Array.isArray(data.rows) ? data.rows : [];
+
+    // Build time window and canvas
+    const {minT, maxT, now} = buildWindow(rows);
     clearCanvas();
-    buildWindow();
-    renderGrid();
-    const { rowH, belts } = renderBelts();
-    renderPucks(rowH, belts);
-    renderNowLine();
+    setCanvasSize(minT, maxT);
+    renderGrid(minT, maxT);
+    const nowX = renderNow(minT, now);
+    renderPucks(rows, minT);
+    scrollToX(nowX);
 
-    // Make sure we center on "Now" after layout is done
-    requestAnimationFrame(() => centerNow(false));
-  }
-
-  // ---------- INTERACTION ----------
-  function centerNow(animated=true){
-    const nowX = xForDate(new Date());
-    const center = nowX - scroller.clientWidth/2;
-    if (!animated) scroller.style.scrollBehavior = 'auto';
-    scroller.scrollLeft = clamp(center, 0, Math.max(0, widthPx - scroller.clientWidth));
-    if (!animated) setTimeout(() => scroller.style.scrollBehavior = 'smooth', 0);
-  }
-
-  // Wheel horizontal scroll (Shift = faster)
-  scroller.addEventListener('wheel', (e) => {
-    e.preventDefault();
-    const delta = (e.deltaY || e.deltaX) * (e.shiftKey ? 2 : 1);
-    scroller.scrollLeft += delta;
-  }, { passive:false });
-
-  // Grab-to-pan
-  let drag = { active:false, startX:0, startLeft:0 };
-  scroller.addEventListener('mousedown', (e) => {
-    drag = { active:true, startX:e.clientX, startLeft: scroller.scrollLeft };
-    scroller.classList.add('grabbing');
-  });
-  window.addEventListener('mousemove', (e) => {
-    if (!drag.active) return;
-    const dx = e.clientX - drag.startX;
-    scroller.scrollLeft = drag.startLeft - dx;
-  });
-  window.addEventListener('mouseup', () => {
-    drag.active = false;
-    scroller.classList.remove('grabbing');
-  });
-
-  // Keyboard navigation
-  window.addEventListener('keydown', (e) => {
-    const small = 120, big = scroller.clientWidth * 0.6;
-    if (e.key === 'ArrowLeft')  scroller.scrollLeft -= (e.shiftKey ? big : small);
-    if (e.key === 'ArrowRight') scroller.scrollLeft += (e.shiftKey ? big : small);
-  });
-
-  // Zoom control
-  pxSelect?.addEventListener('change', async () => {
-    pxPerMin = Number(pxSelect.value || DEFAULT_PX_PER_MIN);
-    await renderAll();
-  });
-
-  // Now button
-  btnNow?.addEventListener('click', () => centerNow(true));
-
-  // Belt filters
-  function syncBeltChips(){
-    beltButtons.forEach(b => {
-      const val = Number(b.dataset.belt);
-      b.classList.toggle('active', activeBelts.has(val));
+    // Belt filter buttons
+    document.querySelectorAll('.chip[data-belt]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        btn.classList.toggle('active');
+        applyFilters();
+      });
     });
-    chipAll?.classList.toggle('active', activeBelts.size === ALL_BELTS.length);
-    chipNone?.classList.toggle('active', activeBelts.size === 0);
-  }
-  beltButtons.forEach(btn => {
-    btn.addEventListener('click', async () => {
-      const val = Number(btn.dataset.belt);
-      if (activeBelts.has(val)) activeBelts.delete(val);
-      else activeBelts.add(val);
-      syncBeltChips();
-      await renderAll();
+    document.getElementById('filter-all').addEventListener('click', ()=>{
+      document.querySelectorAll('.chip[data-belt]').forEach(b=>b.classList.add('active'));
+      applyFilters();
     });
+    document.getElementById('filter-none').addEventListener('click', ()=>{
+      document.querySelectorAll('.chip[data-belt]').forEach(b=>b.classList.remove('active'));
+      applyFilters();
+    });
+
+    // Zoom
+    ZOOM_SEL.addEventListener('change', ()=>{
+      PX_PER_MIN = Number(ZOOM_SEL.value);
+      // re-draw with same data
+      clearCanvas();
+      setCanvasSize(minT, maxT);
+      renderGrid(minT, maxT);
+      const nx = renderNow(minT, new Date());
+      renderPucks(rows, minT);
+      applyFilters();
+      scrollToX(nx);
+    });
+
+    // “Now” button
+    BTN_NOW.addEventListener('click', ()=>{
+      const nx = LEFT_PAD + Math.max(0, (new Date() - minT)/60000) * PX_PER_MIN;
+      scrollToX(nx);
+    });
+
+    // Drag to pan
+    let dragging = false, startX=0, startScroll=0;
+    SCROLLER.addEventListener('mousedown', e=>{
+      dragging = true; startX = e.clientX; startScroll = SCROLLER.scrollLeft;
+      SCROLLER.classList.add('grabbing');
+    });
+    window.addEventListener('mousemove', e=>{
+      if (!dragging) return;
+      const dx = e.clientX - startX;
+      SCROLLER.scrollLeft = startScroll - dx;
+    });
+    window.addEventListener('mouseup', ()=>{
+      dragging = false; SCROLLER.classList.remove('grabbing');
+    });
+
+    // Auto-refresh when JSON changes (lightweight poll)
+    setInterval(async ()=>{
+      try{
+        const r2 = await fetch(`assignments.json?v=${Date.now()}`);
+        const d2 = await r2.json();
+        if ((d2.generated_at_utc||'') !== (data.generated_at_utc||'')){
+          location.reload();
+        }
+      }catch(e){}
+    }, 60000);
+  }
+
+  init().catch(err=>{
+    META.textContent = `Error: ${err?.message||err}`;
+    console.error(err);
   });
-  chipAll?.addEventListener('click', async () => {
-    activeBelts = new Set(ALL_BELTS);
-    syncBeltChips(); await renderAll();
-  });
-  chipNone?.addEventListener('click', async () => {
-    activeBelts = new Set();
-    syncBeltChips(); await renderAll();
-  });
-
-  // Keep “Now” line accurate
-  setInterval(() => {
-    const line = canvas.querySelector('[data-role="now-line"]');
-    if (!line) return;
-    line.style.left = `${xForDate(new Date())}px`;
-  }, 60_000);
-
-  // Refresh data every minute
-  setInterval(renderAll, 60_000);
-
-  // Re-layout on resize
-  window.addEventListener('resize', async () => {
-    await renderAll();
-  });
-
-  // ---------- INIT ----------
-  (async function init(){
-    syncBeltChips();
-    await renderAll();
-  })();
-
 })();
