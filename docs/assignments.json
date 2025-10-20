@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-20T02:20:00.849Z",
-  "generated_at_local": "2025-10-20T03:20:00",
+  "generated_at_utc": "2025-10-20T02:21:19.196Z",
+  "generated_at_local": "2025-10-20T03:21:19",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -22,7 +22,7 @@
       "eta_local": "04:20",
       "delay_min": 0,
       "ui_state": "upcoming",
-      "ui_age_min": -105
+      "ui_age_min": -104
     }
   ]
 }
