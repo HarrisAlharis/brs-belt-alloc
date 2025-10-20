@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-20T17:38:34.969Z",
-  "generated_at_local": "2025-10-20T18:38:34",
+  "generated_at_utc": "2025-10-20T17:39:59.982Z",
+  "generated_at_local": "2025-10-20T18:39:59",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -8,19 +8,19 @@
       "flight": "LS1826",
       "origin": "(FNC)",
       "origin_iata": "FNC",
-      "eta": "2025-10-20T17:51:00.000Z",
-      "status": "estimated 18:51",
+      "eta": "2025-10-20T17:50:00.000Z",
+      "status": "estimated 18:50",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-20T18:06:00.000Z",
-      "end": "2025-10-20T18:36:00.000Z",
+      "start": "2025-10-20T18:05:00.000Z",
+      "end": "2025-10-20T18:35:00.000Z",
       "reason": "intl_spread",
       "airline": "Jet2",
       "aircraft": "(G-JZHK)",
       "pax_estimate": 176,
       "scheduled_local": "18:55",
-      "eta_local": "18:51",
-      "delay_min": -4
+      "eta_local": "18:50",
+      "delay_min": -5
     },
     {
       "flight": "U27661",
@@ -98,19 +98,19 @@
       "flight": "U27267",
       "origin": "(PMI)",
       "origin_iata": "PMI",
-      "eta": "2025-10-20T19:09:00.000Z",
-      "status": "estimated 20:09",
+      "eta": "2025-10-20T19:12:00.000Z",
+      "status": "estimated 20:12",
       "flow": "INTERNATIONAL",
-      "belt": 5,
-      "start": "2025-10-20T19:24:00.000Z",
-      "end": "2025-10-20T19:54:00.000Z",
-      "reason": "fallback→belt5",
+      "belt": 2,
+      "start": "2025-10-20T19:27:00.000Z",
+      "end": "2025-10-20T19:57:00.000Z",
+      "reason": "intl_spread",
       "airline": "easyJet",
       "aircraft": "(OE-LQL)",
       "pax_estimate": 162,
       "scheduled_local": "20:10",
-      "eta_local": "20:09",
-      "delay_min": -1
+      "eta_local": "20:12",
+      "delay_min": 2
     }
   ]
 }
