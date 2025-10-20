@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-20T18:48:35.797Z",
-  "generated_at_local": "2025-10-20T19:48:35",
+  "generated_at_utc": "2025-10-20T18:50:00.712Z",
+  "generated_at_local": "2025-10-20T19:50:00",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -44,19 +44,19 @@
       "flight": "FR2291",
       "origin": "(ALC)",
       "origin_iata": "ALC",
-      "eta": "2025-10-20T20:30:00.000Z",
-      "status": "delayed 21:30",
+      "eta": "2025-10-20T20:33:00.000Z",
+      "status": "delayed 21:33",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-20T20:45:00.000Z",
-      "end": "2025-10-20T21:15:00.000Z",
+      "start": "2025-10-20T20:48:00.000Z",
+      "end": "2025-10-20T21:18:00.000Z",
       "reason": "intl_spread",
       "airline": "Ryanair",
       "aircraft": "(9H-VVE)",
       "pax_estimate": 166,
       "scheduled_local": "19:45",
-      "eta_local": "21:30",
-      "delay_min": 105
+      "eta_local": "21:33",
+      "delay_min": 108
     }
   ]
 }
