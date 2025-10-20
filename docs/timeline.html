@@ -4,57 +4,60 @@
   <meta charset="utf-8" />
   <title>BRS — Arrivals Belt Timeline</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="timeline.css">
+  <link rel="stylesheet" href="timeline.css?v=2">
 </head>
 <body>
-  <header class="hdr">
-    <div>
-      <h1>BRS — Arrivals Belt Timeline</h1>
-      <div class="small muted" id="meta">Loading…</div>
-    </div>
-
-    <div class="hdr-right">
-      <div class="toolbar-group">
-        <span class="lbl">Belt filter:</span>
-        <button class="chip" data-belt="1">Belt 1</button>
-        <button class="chip" data-belt="2">Belt 2</button>
-        <button class="chip" data-belt="3">Belt 3</button>
-        <button class="chip" data-belt="5">Belt 5</button>
-        <button class="chip" data-belt="6">Belt 6</button>
-        <button class="chip" data-belt="7">Belt 7</button>
-        <button class="chip chip-primary" id="filter-all">All</button>
-        <button class="chip" id="filter-none">None</button>
-      </div>
-
-      <div class="toolbar-group">
-        <span class="lbl">Zoom:</span>
-        <select id="zoom" class="sel">
-          <option value="3">3 px/min (narrow)</option>
-          <option value="6" selected>6 px/min (default)</option>
-          <option value="9">9 px/min (wide)</option>
-        </select>
-        <button class="btn" id="btn-now">Now</button>
-      </div>
-
-      <div class="toolbar-group">
-        <span class="pill pill-green">On time / small slip</span>
-        <span class="pill pill-amber">+10–19</span>
-        <span class="pill pill-red">+20+</span>
-        <span class="pill pill-blue">Early</span>
-      </div>
-    </div>
+  <header class="topbar">
+    <div class="title">BRS — Arrivals Belt Timeline</div>
+    <div class="meta" id="meta">Loading…</div>
   </header>
 
-  <main id="tl-scroller">
-    <div id="tl-canvas"></div>
+  <nav class="controls">
+    <div class="group">
+      <span class="label">Belt filter:</span>
+      <button data-belt="1" class="chip">Belt 1</button>
+      <button data-belt="2" class="chip">Belt 2</button>
+      <button data-belt="3" class="chip">Belt 3</button>
+      <button data-belt="5" class="chip">Belt 5</button>
+      <button data-belt="6" class="chip">Belt 6</button>
+      <button data-belt="7" class="chip">Belt 7</button>
+      <button data-belt="all" class="chip chip--primary">All</button>
+      <button data-belt="none" class="chip">None</button>
+    </div>
+
+    <div class="group">
+      <span class="label">Zoom:</span>
+      <select id="zoom">
+        <option value="3">3 px/min (narrow)</option>
+        <option value="6" selected>6 px/min (default)</option>
+        <option value="10">10 px/min (wide)</option>
+      </select>
+      <button id="nowBtn" class="chip chip--primary">Now</button>
+      <span class="legend">
+        <span class="legend-pill ok"></span> On time / small slip
+        <span class="legend-pill y10"></span> +10–19
+        <span class="legend-pill y20"></span> +20+
+        <span class="legend-pill early"></span> Early
+        <span class="legend-pill faded"></span> >60 min ago
+      </span>
+    </div>
+  </nav>
+
+  <main id="viewport">
+    <div id="canvas">
+      <!-- vertical NOW line -->
+      <div id="nowLine"></div>
+      <!-- time grid -->
+      <div id="grid"></div>
+      <!-- lanes and pucks go here -->
+      <div id="lanes"></div>
+    </div>
   </main>
 
-  <footer class="ftr">
-    <span>Source: FR24 (screen-scrape)</span>
-    <span> • </span>
-    <span>View updates automatically when JSON changes.</span>
+  <footer class="foot">
+    Source: FR24 (screen-scrape) • View updates automatically (poll ~90s). Local 4-hour history is kept in your browser.
   </footer>
 
-  <script src="timeline.js"></script>
+  <script src="timeline.js?v=2"></script>
 </body>
 </html>

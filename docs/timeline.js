@@ -1,275 +1,220 @@
-﻿/* BRS Timeline — robust, shows all flights, auto-centers on NOW, tolerant of missing fields */
+﻿(() => {
+  // ------- CONFIG -------
+  const HISTORY_HOURS = 4;                 // keep 4h of past flights
+  const FADE_AFTER_MIN = 60;               // fade after 60 min in the past
+  const DEFAULT_AHEAD_HOURS = 3;           // render forward window
+  const BELTS = [1,2,3,5,6,7];             // lanes to show
+  const LS_KEY = 'brs_timeline_history_v1';
 
-(function(){
-  const SCROLLER = document.getElementById('tl-scroller');
-  const CANVAS   = document.getElementById('tl-canvas');
-  const META     = document.getElementById('meta');
-  const BTN_NOW  = document.getElementById('btn-now');
-  const ZOOM_SEL = document.getElementById('zoom');
+  // ------- DOM -------
+  const $meta = document.getElementById('meta');
+  const $zoom = document.getElementById('zoom');
+  const $nowBtn = document.getElementById('nowBtn');
+  const $viewport = document.getElementById('viewport');
+  const $canvas = document.getElementById('canvas');
+  const $grid = document.getElementById('grid');
+  const $lanes = document.getElementById('lanes');
+  const $nowLine = document.getElementById('nowLine');
 
-  // Layout constants
-  let PX_PER_MIN = Number(ZOOM_SEL.value);       // user-controlled
-  const BELT_ROWS = [1,2,3,5,6,7];               // fixed row order to display
-  const ROW_H = 120;                             // row height
-  const TOP_PAD = 28;                            // pad above first row
-  const LEFT_PAD = 80;                           // space for belt labels
-  const HOURS_BACK = 5;                          // show past 5h
-  const HOURS_FWD  = 8;                          // and next 8h
-  const START_DELAY_MIN = 15;                    // default if start absent
-  const DWELL_MIN       = 30;
+  // state
+  let pxPerMin = parseFloat($zoom.value);
+  let filterBelt = 'all';
 
-  function pad(n){ return String(n).padStart(2,'0'); }
-  function hhmm(d){ return `${pad(d.getHours())}:${pad(d.getMinutes())}`; }
-  function parseISO(s){ const d = new Date(s); return isNaN(d) ? null : d; }
-  function addMin(d,m){ return new Date(d.getTime()+m*60000); }
+  // ------- utils -------
+  const pad = n => String(n).padStart(2,'0');
+  const hhmm = d => `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  const toDate = iso => new Date(iso);
+  const addMin = (d, m) => new Date(d.getTime() + m*60000);
 
-  function beltY(belt){
-    const idx = Math.max(0, BELT_ROWS.indexOf(Number(belt)));
-    return TOP_PAD + idx*ROW_H;
+  function keyOf(r){
+    return `${(r.flight||'').trim()}|${(r.eta||'').slice(0,16)}`;
   }
-
-  function reasonColor(r){
-    // Color by delay_min buckets if present; otherwise by status text
-    if (typeof r.delay_min === 'number'){
-      if (r.delay_min >= 20) return 'puck-red';
-      if (r.delay_min >= 10) return 'puck-amber';
-      if (r.delay_min <= -1) return 'puck-blue';
-      return 'puck-ontime';
+  function loadCache(){
+    try { return JSON.parse(localStorage.getItem(LS_KEY)||'[]'); } catch{ return []; }
+  }
+  function saveCache(arr){
+    try { localStorage.setItem(LS_KEY, JSON.stringify(arr)); } catch{}
+  }
+  function mergeHistory(rows){
+    const cache = loadCache();
+    const map = new Map(cache.map(r => [keyOf(r), r]));
+    for (const r of rows) {
+      if (!r.eta) continue;
+      map.set(keyOf(r), r);
     }
-    const s = (r.status||'').toLowerCase();
-    if (s.includes('delayed')) return 'puck-amber';
-    if (s.includes('estimated')) return 'puck-ontime';
-    if (s.includes('early')) return 'puck-blue';
-    return 'puck-ontime';
-  }
-
-  function buildWindow(rows){
-    // Determine canvas time range: now - back … now + fwd, but
-    // also include min/max from data to avoid clipping if all data is far away.
+    // prune older than HISTORY_HOURS
     const now = new Date();
-    let minT = addMin(now, -HOURS_BACK*60);
-    let maxT = addMin(now,  HOURS_FWD*60);
-
-    for (const r of rows){
-      const start = parseISO(r.start) || addMin(parseISO(r.eta)||now, START_DELAY_MIN);
-      const end   = parseISO(r.end)   || addMin(start, DWELL_MIN);
-      if (start && start < minT) minT = start;
-      if (end   && end   > maxT) maxT = end;
+    const cutoff = addMin(now, -HISTORY_HOURS*60);
+    const kept = [];
+    for (const r of map.values()){
+      const endIso = r.end || r.eta;
+      const end = toDate(endIso);
+      if (end >= cutoff) kept.push(r);
     }
-    return {minT, maxT, now};
+    saveCache(kept);
+    return kept;
   }
 
-  function setCanvasSize(minT, maxT){
-    const mins = Math.ceil((maxT - minT)/60000);
-    const w = LEFT_PAD + Math.max(1200, mins * PX_PER_MIN) + 200;
-    const h = TOP_PAD + BELT_ROWS.length*ROW_H + 60;
-    CANVAS.style.width  = `${w}px`;
-    CANVAS.style.height = `${h}px`;
-    return {w,h, mins};
-  }
-
-  function clearCanvas(){ CANVAS.innerHTML = ''; }
-
-  function addTick(x, label){
-    const line = document.createElement('div');
-    line.className = 'tick';
-    line.style.left = `${x}px`;
-    CANVAS.appendChild(line);
-
-    const lb = document.createElement('div');
-    lb.className = 'tick-label';
-    lb.textContent = label;
-    lb.style.left = `${x+4}px`;
-    CANVAS.appendChild(lb);
-  }
-
-  function renderGrid(minT, maxT){
-    // Belt stripes + labels
-    for (let i=0;i<BELT_ROWS.length;i++){
-      const y = TOP_PAD + i*ROW_H;
-      const stripe = document.createElement('div');
-      stripe.className = 'belt-stripe';
-      stripe.style.top = `${y}px`;
-      stripe.style.height = `${ROW_H}px`;
-      CANVAS.appendChild(stripe);
-
-      const name = document.createElement('div');
-      name.className = 'belt-name';
-      name.textContent = `Belt ${BELT_ROWS[i]}`;
-      name.style.top = `${y+6}px`;
-      name.style.left = '8px';
-      CANVAS.appendChild(name);
-    }
-
-    // Minute ticks every 15 min
-    const totalMin = Math.ceil((maxT - minT)/60000);
-    for (let m=0; m<=totalMin; m+=15){
-      const x = LEFT_PAD + m*PX_PER_MIN;
-      const t = addMin(minT, m);
-      const label = (m % 60 === 0) ? `${pad(t.getHours())}:${pad(t.getMinutes())}` : '';
-      addTick(x, label);
-    }
-  }
-
-  function renderNow(minT, now){
-    const x = LEFT_PAD + Math.max(0, (now - minT)/60000) * PX_PER_MIN;
-    const nl = document.createElement('div');
-    nl.className = 'tl-now-line';
-    nl.style.left = `${x}px`;
-    CANVAS.appendChild(nl);
-    return x;
-  }
-
-  function textFor(r){
-    const f = (r.flight && r.flight.trim()) ? r.flight.trim() : '—';
-    const origin = (r.origin_iata || (r.origin||'')).replace(/[()]/g,'').trim();
-    return `${f} • ${origin || ''}`.trim();
-  }
-
-  function ensureComputedTimes(r){
-    const eta = parseISO(r.eta) || null;
-    const start = parseISO(r.start) || (eta ? addMin(eta, START_DELAY_MIN) : null);
-    const end   = parseISO(r.end)   || (start ? addMin(start, DWELL_MIN) : null);
-    return {eta, start, end};
-  }
-
-  function renderPucks(rows, minT){
-    for (const r of rows){
-      if (!r.belt) continue;
-      const { start, end } = ensureComputedTimes(r);
-      if (!start || !end) continue;
-
-      const x1 = LEFT_PAD + ((start - minT)/60000) * PX_PER_MIN;
-      const x2 = LEFT_PAD + ((end   - minT)/60000) * PX_PER_MIN;
-      const y  = beltY(r.belt) + 26;
-
-      const el = document.createElement('div');
-      el.className = `puck ${reasonColor(r)}`;
-      el.style.left = `${Math.max(LEFT_PAD, x1)}px`;
-      el.style.top  = `${y}px`;
-      el.style.width = `${Math.max(90, (x2-x1))}px`;
-      el.title = [
-        `Flight: ${r.flight || '—'}`,
-        `Origin: ${r.origin_iata || r.origin || '—'}`,
-        `ETA: ${r.eta_local || (r.eta ? hhmm(new Date(r.eta)) : '—')}`,
-        `Start: ${start ? hhmm(start):'—'} • End: ${end ? hhmm(end):'—'}`,
-        `Belt: ${r.belt} • Flow: ${r.flow || '—'}`,
-        `Status: ${r.status || '—'}`,
-        `Reason: ${r.reason || '—'}`
-      ].join('\n');
-
-      el.textContent = textFor(r);
-      CANVAS.appendChild(el);
-    }
-  }
-
-  function updateMeta(data){
-    META.textContent = `Generated ${data.generated_at_local || data.generated_at_utc || ''} • Horizon ${data.horizon_minutes || ''} min`;
-  }
-
-  function scrollToX(x){
-    const viewW = SCROLLER.clientWidth;
-    const target = Math.max(0, x - viewW*0.33);
-    SCROLLER.scrollTo({left: target, behavior: 'smooth'});
-  }
-
-  function applyFilters(){
-    const active = [...document.querySelectorAll('.chip[data-belt].active')]
-                   .map(b => Number(b.dataset.belt));
-    const pucks = CANVAS.querySelectorAll('.puck');
-    if (active.length === 0){
-      pucks.forEach(p => p.style.display = 'none');
+  function classify(r){
+    // status colour
+    let cls = 'ok';
+    const s = (r.status||'').toLowerCase();
+    if (typeof r.delay_min === 'number') {
+      if (r.delay_min >= 20) cls = 'y20';
+      else if (r.delay_min >= 10) cls = 'y10';
+      else if (r.delay_min < 0) cls = 'early';
+      else cls = 'ok';
     } else {
-      pucks.forEach(p => {
-        // read belt from title
-        const m = p.title.match(/Belt:\s(\d+)/);
-        const belt = m ? Number(m[1]) : null;
-        p.style.display = (!belt || active.includes(belt)) ? '' : 'none';
-      });
+      if (s.includes('delayed')) cls = 'y10';
+      else if (s.includes('estimated')) cls = 'ok';
+    }
+    // fade if older than 60 min
+    const now = new Date();
+    const end = toDate(r.end || r.eta);
+    const ageMin = Math.round((now - end)/60000);
+    const faded = ageMin > FADE_AFTER_MIN;
+    return { cls, faded };
+  }
+
+  function computeWindow(data){
+    const now = new Date();
+    const backStart = addMin(now, -HISTORY_HOURS*60);         // past 4h
+    const aheadEnd  = addMin(now,  DEFAULT_AHEAD_HOURS*60);   // next 3h
+    // Allow extra gutters so labels aren't clipped when scrolled to extremes
+    return { start: addMin(backStart,-15), end: addMin(aheadEnd, 30), now };
+  }
+
+  function positionX(minFromStart){ return minFromStart * pxPerMin; }
+
+  function buildGrid(range){
+    $grid.innerHTML = '';
+    const mins = Math.round((range.end - range.start)/60000);
+    const start = new Date(range.start);
+    const firstHour = new Date(start); firstHour.setMinutes(0,0,0);
+    if (firstHour < start) firstHour.setHours(firstHour.getHours()+1);
+
+    for (let t = new Date(firstHour); t <= range.end; t = addMin(t, 60)) {
+      const left = positionX((t - range.start)/60000);
+      const el = document.createElement('div');
+      el.className = 'grid-hour';
+      el.style.left = `${left}px`;
+      const label = document.createElement('div');
+      label.className = 'label';
+      label.textContent = hhmm(t);
+      el.appendChild(label);
+      $grid.appendChild(el);
+    }
+    const nowLeft = positionX((range.now - range.start)/60000);
+    $nowLine.style.left = `${Math.max(0, nowLeft)}px`;
+    // canvas width
+    $canvas.style.width = `${positionX(mins)}px`;
+  }
+
+  function renderLanes(data, range){
+    $lanes.innerHTML = '';
+    const byBelt = new Map(BELTS.map(b => [b, []]));
+    for (const r of data){
+      if (!r.belt || !byBelt.has(Number(r.belt))) continue;
+      if (filterBelt !== 'all' && Number(filterBelt) !== Number(r.belt)) continue;
+      byBelt.get(Number(r.belt)).push(r);
+    }
+
+    for (const belt of BELTS){
+      if (filterBelt !== 'all' && Number(filterBelt) !== belt) continue;
+      const lane = document.createElement('div');
+      lane.className = 'lane';
+      const label = document.createElement('div');
+      label.className = 'belt-label';
+      label.textContent = `Belt ${belt}`;
+      lane.appendChild(label);
+
+      const rows = byBelt.get(belt)||[];
+      for (const r of rows){
+        // Compute time window if missing
+        const eta = toDate(r.eta);
+        const start = r.start ? toDate(r.start) : addMin(eta, 15);
+        const end   = r.end   ? toDate(r.end)   : addMin(start, 30);
+
+        // Skip if completely outside global range
+        if (end < range.start || start > range.end) continue;
+
+        const leftMin = Math.max(0, (start - range.start)/60000);
+        const widthMin = Math.max(4, (end - start)/60000);
+
+        const puck = document.createElement('div');
+        const { cls, faded } = classify(r);
+        puck.className = `puck ${cls} ${faded ? 'faded':''}`;
+        puck.style.left = `${positionX(leftMin)}px`;
+        puck.style.width = `${positionX(widthMin)/pxPerMin * pxPerMin}px`; // stable width
+
+        // content
+        const title = `${(r.flight||'').trim()} • ${(r.origin_iata||r.origin||'').replace(/[()]/g,'').trim()}`;
+        const sub = `${r.scheduled_local||'--:--'} → ${r.eta_local||'--:--'} • ${r.flow||''} • Reason: ${r.reason||''}`;
+
+        puck.innerHTML = `
+          <div class="col">
+            <div class="title">${escapeHtml(title)}</div>
+            <div class="sub">${escapeHtml(sub)}</div>
+          </div>
+        `;
+        lane.appendChild(puck);
+      }
+
+      $lanes.appendChild(lane);
     }
   }
 
-  async function init(){
-    // Fetch JSON (cache-bust)
-    const res = await fetch(`assignments.json?v=${Date.now()}`);
-    const data = await res.json();
-    updateMeta(data);
-
-    const rows = Array.isArray(data.rows) ? data.rows : [];
-
-    // Build time window and canvas
-    const {minT, maxT, now} = buildWindow(rows);
-    clearCanvas();
-    setCanvasSize(minT, maxT);
-    renderGrid(minT, maxT);
-    const nowX = renderNow(minT, now);
-    renderPucks(rows, minT);
-    scrollToX(nowX);
-
-    // Belt filter buttons
-    document.querySelectorAll('.chip[data-belt]').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        btn.classList.toggle('active');
-        applyFilters();
-      });
-    });
-    document.getElementById('filter-all').addEventListener('click', ()=>{
-      document.querySelectorAll('.chip[data-belt]').forEach(b=>b.classList.add('active'));
-      applyFilters();
-    });
-    document.getElementById('filter-none').addEventListener('click', ()=>{
-      document.querySelectorAll('.chip[data-belt]').forEach(b=>b.classList.remove('active'));
-      applyFilters();
-    });
-
-    // Zoom
-    ZOOM_SEL.addEventListener('change', ()=>{
-      PX_PER_MIN = Number(ZOOM_SEL.value);
-      // re-draw with same data
-      clearCanvas();
-      setCanvasSize(minT, maxT);
-      renderGrid(minT, maxT);
-      const nx = renderNow(minT, new Date());
-      renderPucks(rows, minT);
-      applyFilters();
-      scrollToX(nx);
-    });
-
-    // “Now” button
-    BTN_NOW.addEventListener('click', ()=>{
-      const nx = LEFT_PAD + Math.max(0, (new Date() - minT)/60000) * PX_PER_MIN;
-      scrollToX(nx);
-    });
-
-    // Drag to pan
-    let dragging = false, startX=0, startScroll=0;
-    SCROLLER.addEventListener('mousedown', e=>{
-      dragging = true; startX = e.clientX; startScroll = SCROLLER.scrollLeft;
-      SCROLLER.classList.add('grabbing');
-    });
-    window.addEventListener('mousemove', e=>{
-      if (!dragging) return;
-      const dx = e.clientX - startX;
-      SCROLLER.scrollLeft = startScroll - dx;
-    });
-    window.addEventListener('mouseup', ()=>{
-      dragging = false; SCROLLER.classList.remove('grabbing');
-    });
-
-    // Auto-refresh when JSON changes (lightweight poll)
-    setInterval(async ()=>{
-      try{
-        const r2 = await fetch(`assignments.json?v=${Date.now()}`);
-        const d2 = await r2.json();
-        if ((d2.generated_at_utc||'') !== (data.generated_at_utc||'')){
-          location.reload();
-        }
-      }catch(e){}
-    }, 60000);
+  function escapeHtml(s){
+    return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   }
 
-  init().catch(err=>{
-    META.textContent = `Error: ${err?.message||err}`;
-    console.error(err);
+  async function loadAssignments(){
+    const url = `assignments.json?v=${Date.now()}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`Failed to fetch ${url}`);
+    const json = await res.json();
+    $meta.textContent = `Generated ${json.generated_at_local || json.generated_at_utc || ''} • Horizon ${json.horizon_minutes||''} min`;
+    return Array.isArray(json.rows) ? json.rows : [];
+  }
+
+  async function refresh(){
+    try{
+      const liveRows = await loadAssignments();
+      const merged = mergeHistory(liveRows);
+      const range = computeWindow(merged);
+      buildGrid(range);
+      renderLanes(merged, range);
+    } catch(e){
+      console.error(e);
+      $meta.textContent = 'Failed to load data. Retrying…';
+    }
+  }
+
+  function centerOnNow(){
+    const range = computeWindow([]);
+    const left = Math.max(0, positionX((range.now - range.start)/60000) - ($viewport.clientWidth*0.4));
+    $viewport.scrollTo({ left, behavior:'smooth' });
+  }
+
+  // ------- events -------
+  document.querySelectorAll('[data-belt]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('[data-belt]').forEach(b=>b.classList.remove('chip--primary'));
+      btn.classList.add('chip--primary');
+      filterBelt = btn.dataset.belt;
+      refresh();
+    });
   });
+
+  $zoom.addEventListener('change', ()=>{
+    pxPerMin = parseFloat($zoom.value);
+    refresh();
+  });
+
+  $nowBtn.addEventListener('click', centerOnNow);
+
+  // ------- boot -------
+  refresh().then(centerOnNow);
+  // Poll every ~90s to pick up feeder updates
+  setInterval(refresh, 90*1000);
 })();
