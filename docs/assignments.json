@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-20T00:11:19.742Z",
-  "generated_at_local": "2025-10-20T01:11:19",
+  "generated_at_utc": "2025-10-20T00:13:35.324Z",
+  "generated_at_local": "2025-10-20T01:13:35",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -8,21 +8,21 @@
       "flight": "BY325",
       "origin": "(HRG)",
       "origin_iata": "HRG",
-      "eta": "2025-10-20T00:55:00.000Z",
-      "status": "estimated 01:55",
+      "eta": "2025-10-20T00:53:00.000Z",
+      "status": "estimated 01:53",
       "flow": "INTERNATIONAL",
       "belt": 5,
-      "start": "2025-10-20T01:10:00.000Z",
-      "end": "2025-10-20T01:40:00.000Z",
+      "start": "2025-10-20T01:08:00.000Z",
+      "end": "2025-10-20T01:38:00.000Z",
       "reason": "density→belt5",
       "airline": "TUI",
       "aircraft": "(G-TUOA)",
       "pax_estimate": 166,
       "scheduled_local": "02:05",
-      "eta_local": "01:55",
-      "delay_min": -10,
+      "eta_local": "01:53",
+      "delay_min": -12,
       "ui_state": "upcoming",
-      "ui_age_min": -89
+      "ui_age_min": -84
     },
     {
       "flight": "U22852",
@@ -42,7 +42,7 @@
       "eta_local": "01:57",
       "delay_min": 12,
       "ui_state": "upcoming",
-      "ui_age_min": -91
+      "ui_age_min": -88
     },
     {
       "flight": "U22950",
@@ -62,7 +62,7 @@
       "eta_local": "02:01",
       "delay_min": 41,
       "ui_state": "upcoming",
-      "ui_age_min": -95
+      "ui_age_min": -92
     },
     {
       "flight": "U22858",
@@ -82,27 +82,27 @@
       "eta_local": "02:04",
       "delay_min": 34,
       "ui_state": "upcoming",
-      "ui_age_min": -98
+      "ui_age_min": -95
     },
     {
       "flight": "LS1846",
       "origin": "(AYT)",
       "origin_iata": "AYT",
-      "eta": "2025-10-20T01:55:00.000Z",
-      "status": "delayed 02:55",
+      "eta": "2025-10-20T01:57:00.000Z",
+      "status": "delayed 02:57",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-20T02:10:00.000Z",
-      "end": "2025-10-20T02:40:00.000Z",
+      "start": "2025-10-20T02:12:00.000Z",
+      "end": "2025-10-20T02:42:00.000Z",
       "reason": "intl_spread",
       "airline": "Jet2",
       "aircraft": "(G-JZHK)",
       "pax_estimate": 171,
       "scheduled_local": "02:30",
-      "eta_local": "02:55",
-      "delay_min": 25,
+      "eta_local": "02:57",
+      "delay_min": 27,
       "ui_state": "upcoming",
-      "ui_age_min": -149
+      "ui_age_min": -148
     },
     {
       "flight": "BY6765",
@@ -122,7 +122,7 @@
       "eta_local": "04:09",
       "delay_min": -11,
       "ui_state": "upcoming",
-      "ui_age_min": -223
+      "ui_age_min": -220
     }
   ]
 }
