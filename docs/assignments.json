@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-20T19:30:00.554Z",
-  "generated_at_local": "2025-10-20T20:30:00",
+  "generated_at_utc": "2025-10-20T19:31:19.730Z",
+  "generated_at_local": "2025-10-20T20:31:19",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -26,19 +26,19 @@
       "flight": "FR506",
       "origin": "(DUB)",
       "origin_iata": "DUB",
-      "eta": "2025-10-20T19:58:00.000Z",
-      "status": "estimated 20:58",
+      "eta": "2025-10-20T19:56:00.000Z",
+      "status": "estimated 20:56",
       "flow": "CTA",
       "belt": 6,
-      "start": "2025-10-20T20:13:00.000Z",
-      "end": "2025-10-20T20:43:00.000Z",
+      "start": "2025-10-20T20:11:00.000Z",
+      "end": "2025-10-20T20:41:00.000Z",
       "reason": "cta→6",
       "airline": "Ryanair",
       "aircraft": "(9H-QCP)",
       "pax_estimate": 166,
       "scheduled_local": "21:05",
-      "eta_local": "20:58",
-      "delay_min": -7
+      "eta_local": "20:56",
+      "delay_min": -9
     },
     {
       "flight": "FR8235",
@@ -80,19 +80,19 @@
       "flight": "LS1810",
       "origin": "(AYT)",
       "origin_iata": "AYT",
-      "eta": "2025-10-20T22:28:00.000Z",
-      "status": "estimated 23:28",
+      "eta": "2025-10-20T22:26:00.000Z",
+      "status": "estimated 23:26",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-20T22:43:00.000Z",
-      "end": "2025-10-20T23:13:00.000Z",
+      "start": "2025-10-20T22:41:00.000Z",
+      "end": "2025-10-20T23:11:00.000Z",
       "reason": "intl_spread",
       "airline": "Jet2",
       "aircraft": "(G-JZBV)",
       "pax_estimate": 176,
       "scheduled_local": "23:20",
-      "eta_local": "23:28",
-      "delay_min": 8
+      "eta_local": "23:26",
+      "delay_min": 6
     }
   ]
 }
