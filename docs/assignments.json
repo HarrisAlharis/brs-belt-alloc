@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-20T19:31:19.730Z",
-  "generated_at_local": "2025-10-20T20:31:19",
+  "generated_at_utc": "2025-10-20T19:33:35.585Z",
+  "generated_at_local": "2025-10-20T20:33:35",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -26,19 +26,19 @@
       "flight": "FR506",
       "origin": "(DUB)",
       "origin_iata": "DUB",
-      "eta": "2025-10-20T19:56:00.000Z",
-      "status": "estimated 20:56",
+      "eta": "2025-10-20T20:01:00.000Z",
+      "status": "estimated 21:01",
       "flow": "CTA",
       "belt": 6,
-      "start": "2025-10-20T20:11:00.000Z",
-      "end": "2025-10-20T20:41:00.000Z",
+      "start": "2025-10-20T20:16:00.000Z",
+      "end": "2025-10-20T20:46:00.000Z",
       "reason": "cta→6",
       "airline": "Ryanair",
       "aircraft": "(9H-QCP)",
       "pax_estimate": 166,
       "scheduled_local": "21:05",
-      "eta_local": "20:56",
-      "delay_min": -9
+      "eta_local": "21:01",
+      "delay_min": -4
     },
     {
       "flight": "FR8235",
