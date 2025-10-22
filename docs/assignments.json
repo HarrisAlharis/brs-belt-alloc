@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-22T08:28:35.757Z",
-  "generated_at_local": "2025-10-22T09:28:35",
+  "generated_at_utc": "2025-10-22T08:30:00.300Z",
+  "generated_at_local": "2025-10-22T09:30:00",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -22,7 +22,7 @@
       "eta_local": "09:31",
       "delay_min": -24,
       "ui_state": "upcoming",
-      "ui_age_min": -47
+      "ui_age_min": -46
     },
     {
       "flight": "FR4754",
@@ -42,7 +42,7 @@
       "eta_local": "09:33",
       "delay_min": -27,
       "ui_state": "upcoming",
-      "ui_age_min": -49
+      "ui_age_min": -48
     },
     {
       "flight": "U2224",
@@ -62,7 +62,7 @@
       "eta_local": "09:36",
       "delay_min": -19,
       "ui_state": "upcoming",
-      "ui_age_min": -52
+      "ui_age_min": -51
     },
     {
       "flight": "U2202",
@@ -82,7 +82,7 @@
       "eta_local": "09:43",
       "delay_min": -17,
       "ui_state": "upcoming",
-      "ui_age_min": -59
+      "ui_age_min": -58
     },
     {
       "flight": "U2214",
@@ -102,7 +102,7 @@
       "eta_local": "09:44",
       "delay_min": -26,
       "ui_state": "upcoming",
-      "ui_age_min": -60
+      "ui_age_min": -59
     },
     {
       "flight": "",
@@ -122,7 +122,7 @@
       "eta_local": "09:59",
       "delay_min": -9,
       "ui_state": "upcoming",
-      "ui_age_min": -75
+      "ui_age_min": -74
     },
     {
       "flight": "FR1315",
@@ -142,7 +142,7 @@
       "eta_local": "10:25",
       "delay_min": 0,
       "ui_state": "upcoming",
-      "ui_age_min": -101
+      "ui_age_min": -100
     },
     {
       "flight": "LS1880",
@@ -162,7 +162,7 @@
       "eta_local": "11:05",
       "delay_min": 0,
       "ui_state": "upcoming",
-      "ui_age_min": -141
+      "ui_age_min": -140
     },
     {
       "flight": "U22710",
@@ -182,7 +182,7 @@
       "eta_local": "11:27",
       "delay_min": -8,
       "ui_state": "upcoming",
-      "ui_age_min": -163
+      "ui_age_min": -162
     },
     {
       "flight": "FR8682",
@@ -202,7 +202,7 @@
       "eta_local": "11:52",
       "delay_min": -8,
       "ui_state": "upcoming",
-      "ui_age_min": -188
+      "ui_age_min": -187
     }
   ]
 }
