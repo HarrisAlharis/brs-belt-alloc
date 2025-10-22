@@ -1,33 +1,33 @@
 {
-  "generated_at_utc": "2025-10-22T08:16:19.387Z",
-  "generated_at_local": "2025-10-22T09:16:19",
+  "generated_at_utc": "2025-10-22T08:18:36.973Z",
+  "generated_at_local": "2025-10-22T09:18:36",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
     {
-      "flight": "U2238",
-      "origin": "(NCL)",
-      "origin_iata": "NCL",
-      "eta": "2025-10-22T08:34:00.000Z",
-      "status": "estimated 09:34",
-      "flow": "DOMESTIC",
-      "belt": 7,
-      "start": "2025-10-22T08:49:00.000Z",
-      "end": "2025-10-22T09:19:00.000Z",
-      "reason": "domestic→7",
-      "airline": "easyJet",
-      "aircraft": "(G-EZUK)",
-      "pax_estimate": 162,
-      "scheduled_local": "09:55",
-      "eta_local": "09:34",
-      "delay_min": -21,
-      "ui_state": "upcoming",
-      "ui_age_min": -63
-    },
-    {
       "flight": "U2224",
       "origin": "(BFS)",
       "origin_iata": "BFS",
+      "eta": "2025-10-22T08:36:00.000Z",
+      "status": "estimated 09:36",
+      "flow": "DOMESTIC",
+      "belt": 7,
+      "start": "2025-10-22T08:51:00.000Z",
+      "end": "2025-10-22T09:21:00.000Z",
+      "reason": "domestic→7",
+      "airline": "easyJet",
+      "aircraft": "(G-EZOU)",
+      "pax_estimate": 162,
+      "scheduled_local": "09:55",
+      "eta_local": "09:36",
+      "delay_min": -19,
+      "ui_state": "upcoming",
+      "ui_age_min": -62
+    },
+    {
+      "flight": "U2202",
+      "origin": "(GLA)",
+      "origin_iata": "GLA",
       "eta": "2025-10-22T08:38:00.000Z",
       "status": "estimated 09:38",
       "flow": "DOMESTIC",
@@ -36,13 +36,13 @@
       "end": "2025-10-22T09:23:00.000Z",
       "reason": "domestic→7",
       "airline": "easyJet",
-      "aircraft": "(G-EZOU)",
+      "aircraft": "(G-UZLD)",
       "pax_estimate": 162,
-      "scheduled_local": "09:55",
+      "scheduled_local": "10:00",
       "eta_local": "09:38",
-      "delay_min": -17,
+      "delay_min": -22,
       "ui_state": "upcoming",
-      "ui_age_min": -67
+      "ui_age_min": -64
     },
     {
       "flight": "FR4754",
@@ -62,27 +62,27 @@
       "eta_local": "09:38",
       "delay_min": -22,
       "ui_state": "upcoming",
-      "ui_age_min": -67
+      "ui_age_min": -64
     },
     {
-      "flight": "U2202",
-      "origin": "(GLA)",
-      "origin_iata": "GLA",
-      "eta": "2025-10-22T08:40:00.000Z",
-      "status": "estimated 09:40",
+      "flight": "U2238",
+      "origin": "(NCL)",
+      "origin_iata": "NCL",
+      "eta": "2025-10-22T08:39:00.000Z",
+      "status": "estimated 09:39",
       "flow": "DOMESTIC",
       "belt": 7,
-      "start": "2025-10-22T08:55:00.000Z",
-      "end": "2025-10-22T09:25:00.000Z",
+      "start": "2025-10-22T08:54:00.000Z",
+      "end": "2025-10-22T09:24:00.000Z",
       "reason": "domestic→7",
       "airline": "easyJet",
-      "aircraft": "(G-UZLD)",
+      "aircraft": "(G-EZUK)",
       "pax_estimate": 162,
-      "scheduled_local": "10:00",
-      "eta_local": "09:40",
-      "delay_min": -20,
+      "scheduled_local": "09:55",
+      "eta_local": "09:39",
+      "delay_min": -16,
       "ui_state": "upcoming",
-      "ui_age_min": -69
+      "ui_age_min": -65
     },
     {
       "flight": "U2214",
@@ -102,7 +102,7 @@
       "eta_local": "09:46",
       "delay_min": -24,
       "ui_state": "upcoming",
-      "ui_age_min": -75
+      "ui_age_min": -72
     },
     {
       "flight": "",
@@ -122,7 +122,7 @@
       "eta_local": "09:56",
       "delay_min": -12,
       "ui_state": "upcoming",
-      "ui_age_min": -85
+      "ui_age_min": -82
     },
     {
       "flight": "FR1315",
@@ -142,7 +142,7 @@
       "eta_local": "10:25",
       "delay_min": 0,
       "ui_state": "upcoming",
-      "ui_age_min": -114
+      "ui_age_min": -111
     },
     {
       "flight": "LS1880",
@@ -162,7 +162,7 @@
       "eta_local": "10:57",
       "delay_min": -8,
       "ui_state": "upcoming",
-      "ui_age_min": -146
+      "ui_age_min": -143
     }
   ]
 }
