@@ -1,29 +1,9 @@
 {
-  "generated_at_utc": "2025-10-22T08:31:19.411Z",
-  "generated_at_local": "2025-10-22T09:31:19",
+  "generated_at_utc": "2025-10-22T08:33:36.422Z",
+  "generated_at_local": "2025-10-22T09:33:36",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
-    {
-      "flight": "U2238",
-      "origin": "(NCL)",
-      "origin_iata": "NCL",
-      "eta": "2025-10-22T08:31:00.000Z",
-      "status": "estimated 09:31",
-      "flow": "DOMESTIC",
-      "belt": 7,
-      "start": "2025-10-22T08:46:00.000Z",
-      "end": "2025-10-22T09:16:00.000Z",
-      "reason": "domestic→7",
-      "airline": "easyJet",
-      "aircraft": "(G-EZUK)",
-      "pax_estimate": 162,
-      "scheduled_local": "09:55",
-      "eta_local": "09:31",
-      "delay_min": -24,
-      "ui_state": "upcoming",
-      "ui_age_min": -45
-    },
     {
       "flight": "FR4754",
       "origin": "(TFS)",
@@ -42,7 +22,7 @@
       "eta_local": "09:33",
       "delay_min": -27,
       "ui_state": "upcoming",
-      "ui_age_min": -47
+      "ui_age_min": -44
     },
     {
       "flight": "U2224",
@@ -62,7 +42,7 @@
       "eta_local": "09:36",
       "delay_min": -19,
       "ui_state": "upcoming",
-      "ui_age_min": -50
+      "ui_age_min": -47
     },
     {
       "flight": "U2202",
@@ -82,7 +62,7 @@
       "eta_local": "09:43",
       "delay_min": -17,
       "ui_state": "upcoming",
-      "ui_age_min": -57
+      "ui_age_min": -54
     },
     {
       "flight": "U2214",
@@ -102,7 +82,7 @@
       "eta_local": "09:52",
       "delay_min": -18,
       "ui_state": "upcoming",
-      "ui_age_min": -66
+      "ui_age_min": -63
     },
     {
       "flight": "",
@@ -122,7 +102,7 @@
       "eta_local": "09:59",
       "delay_min": -9,
       "ui_state": "upcoming",
-      "ui_age_min": -73
+      "ui_age_min": -70
     },
     {
       "flight": "FR1315",
@@ -142,7 +122,7 @@
       "eta_local": "10:25",
       "delay_min": 0,
       "ui_state": "upcoming",
-      "ui_age_min": -99
+      "ui_age_min": -96
     },
     {
       "flight": "LS1880",
@@ -162,7 +142,7 @@
       "eta_local": "11:03",
       "delay_min": -2,
       "ui_state": "upcoming",
-      "ui_age_min": -137
+      "ui_age_min": -134
     },
     {
       "flight": "U22710",
@@ -182,7 +162,7 @@
       "eta_local": "11:27",
       "delay_min": -8,
       "ui_state": "upcoming",
-      "ui_age_min": -161
+      "ui_age_min": -158
     },
     {
       "flight": "FR8682",
@@ -202,7 +182,7 @@
       "eta_local": "11:52",
       "delay_min": -8,
       "ui_state": "upcoming",
-      "ui_age_min": -186
+      "ui_age_min": -183
     }
   ]
 }
