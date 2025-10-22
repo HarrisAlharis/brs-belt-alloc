@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-22T13:23:35.591Z",
-  "generated_at_local": "2025-10-22T14:23:35",
+  "generated_at_utc": "2025-10-22T13:25:00.758Z",
+  "generated_at_local": "2025-10-22T14:25:00",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -22,7 +22,7 @@
       "eta_local": "14:28",
       "delay_min": -7,
       "ui_state": "upcoming",
-      "ui_age_min": -49
+      "ui_age_min": -48
     },
     {
       "flight": "U22732",
@@ -42,7 +42,7 @@
       "eta_local": "14:54",
       "delay_min": -21,
       "ui_state": "upcoming",
-      "ui_age_min": -75
+      "ui_age_min": -74
     },
     {
       "flight": "FR7948",
@@ -62,7 +62,7 @@
       "eta_local": "15:02",
       "delay_min": 7,
       "ui_state": "upcoming",
-      "ui_age_min": -83
+      "ui_age_min": -82
     },
     {
       "flight": "U22720",
@@ -82,7 +82,7 @@
       "eta_local": "15:36",
       "delay_min": -4,
       "ui_state": "upcoming",
-      "ui_age_min": -117
+      "ui_age_min": -116
     },
     {
       "flight": "LS1892",
@@ -102,7 +102,7 @@
       "eta_local": "15:43",
       "delay_min": 3,
       "ui_state": "upcoming",
-      "ui_age_min": -124
+      "ui_age_min": -123
     },
     {
       "flight": "U22728",
@@ -122,7 +122,7 @@
       "eta_local": "15:45",
       "delay_min": -20,
       "ui_state": "upcoming",
-      "ui_age_min": -126
+      "ui_age_min": -125
     },
     {
       "flight": "U22766",
@@ -142,7 +142,7 @@
       "eta_local": "15:51",
       "delay_min": 6,
       "ui_state": "upcoming",
-      "ui_age_min": -132
+      "ui_age_min": -131
     },
     {
       "flight": "BY6377",
@@ -162,7 +162,7 @@
       "eta_local": "15:58",
       "delay_min": 13,
       "ui_state": "upcoming",
-      "ui_age_min": -139
+      "ui_age_min": -138
     },
     {
       "flight": "U27003",
@@ -182,7 +182,7 @@
       "eta_local": "16:06",
       "delay_min": -4,
       "ui_state": "upcoming",
-      "ui_age_min": -147
+      "ui_age_min": -146
     },
     {
       "flight": "U22938",
@@ -202,7 +202,7 @@
       "eta_local": "16:32",
       "delay_min": -13,
       "ui_state": "upcoming",
-      "ui_age_min": -173
+      "ui_age_min": -172
     },
     {
       "flight": "U22802",
@@ -222,7 +222,7 @@
       "eta_local": "16:42",
       "delay_min": 12,
       "ui_state": "upcoming",
-      "ui_age_min": -183
+      "ui_age_min": -182
     },
     {
       "flight": "BY6385",
@@ -242,7 +242,7 @@
       "eta_local": "16:42",
       "delay_min": -18,
       "ui_state": "upcoming",
-      "ui_age_min": -183
+      "ui_age_min": -182
     }
   ]
 }
