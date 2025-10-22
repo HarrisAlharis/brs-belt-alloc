@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-22T12:16:19.635Z",
-  "generated_at_local": "2025-10-22T13:16:19",
+  "generated_at_utc": "2025-10-22T12:18:36.512Z",
+  "generated_at_local": "2025-10-22T13:18:36",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -22,7 +22,7 @@
       "eta_local": "13:34",
       "delay_min": -6,
       "ui_state": "upcoming",
-      "ui_age_min": -63
+      "ui_age_min": -60
     },
     {
       "flight": "U22892",
@@ -42,7 +42,7 @@
       "eta_local": "13:36",
       "delay_min": 1,
       "ui_state": "upcoming",
-      "ui_age_min": -65
+      "ui_age_min": -62
     },
     {
       "flight": "U2208",
@@ -62,7 +62,7 @@
       "eta_local": "13:37",
       "delay_min": -18,
       "ui_state": "upcoming",
-      "ui_age_min": -66
+      "ui_age_min": -63
     },
     {
       "flight": "LS1872",
@@ -82,7 +82,7 @@
       "eta_local": "13:41",
       "delay_min": 31,
       "ui_state": "upcoming",
-      "ui_age_min": -70
+      "ui_age_min": -67
     },
     {
       "flight": "",
@@ -102,7 +102,7 @@
       "eta_local": "13:41",
       "delay_min": 26,
       "ui_state": "upcoming",
-      "ui_age_min": -70
+      "ui_age_min": -67
     },
     {
       "flight": "LS1816",
@@ -122,7 +122,7 @@
       "eta_local": "13:41",
       "delay_min": 21,
       "ui_state": "upcoming",
-      "ui_age_min": -70
+      "ui_age_min": -67
     },
     {
       "flight": "U22942",
@@ -142,7 +142,7 @@
       "eta_local": "13:43",
       "delay_min": 8,
       "ui_state": "upcoming",
-      "ui_age_min": -72
+      "ui_age_min": -69
     },
     {
       "flight": "U22812",
@@ -162,7 +162,7 @@
       "eta_local": "13:43",
       "delay_min": -17,
       "ui_state": "upcoming",
-      "ui_age_min": -72
+      "ui_age_min": -69
     },
     {
       "flight": "U2246",
@@ -182,7 +182,7 @@
       "eta_local": "13:45",
       "delay_min": -25,
       "ui_state": "upcoming",
-      "ui_age_min": -74
+      "ui_age_min": -71
     },
     {
       "flight": "FR4130",
@@ -202,7 +202,7 @@
       "eta_local": "14:15",
       "delay_min": -5,
       "ui_state": "upcoming",
-      "ui_age_min": -104
+      "ui_age_min": -101
     },
     {
       "flight": "U27267",
@@ -222,7 +222,7 @@
       "eta_local": "14:15",
       "delay_min": -5,
       "ui_state": "upcoming",
-      "ui_age_min": -104
+      "ui_age_min": -101
     },
     {
       "flight": "U22732",
@@ -242,7 +242,7 @@
       "eta_local": "14:58",
       "delay_min": -17,
       "ui_state": "upcoming",
-      "ui_age_min": -147
+      "ui_age_min": -144
     },
     {
       "flight": "FR7948",
@@ -262,7 +262,7 @@
       "eta_local": "15:00",
       "delay_min": 5,
       "ui_state": "upcoming",
-      "ui_age_min": -149
+      "ui_age_min": -146
     },
     {
       "flight": "U22720",
@@ -282,7 +282,7 @@
       "eta_local": "15:41",
       "delay_min": 1,
       "ui_state": "upcoming",
-      "ui_age_min": -190
+      "ui_age_min": -187
     },
     {
       "flight": "LS1892",
@@ -302,7 +302,7 @@
       "eta_local": "15:45",
       "delay_min": 5,
       "ui_state": "upcoming",
-      "ui_age_min": -194
+      "ui_age_min": -191
     },
     {
       "flight": "BY6377",
@@ -322,7 +322,7 @@
       "eta_local": "15:58",
       "delay_min": 13,
       "ui_state": "upcoming",
-      "ui_age_min": -207
+      "ui_age_min": -204
     }
   ]
 }
