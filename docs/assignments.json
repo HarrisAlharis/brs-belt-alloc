@@ -1,88 +1,68 @@
 {
-  "generated_at_utc": "2025-10-22T08:46:19.197Z",
-  "generated_at_local": "2025-10-22T09:46:19",
+  "generated_at_utc": "2025-10-22T08:48:35.243Z",
+  "generated_at_local": "2025-10-22T09:48:35",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
     {
-      "flight": "U2214",
-      "origin": "(EDI)",
-      "origin_iata": "EDI",
-      "eta": "2025-10-22T08:48:00.000Z",
-      "status": "estimated 09:48",
-      "flow": "DOMESTIC",
-      "belt": 7,
-      "start": "2025-10-22T09:03:00.000Z",
-      "end": "2025-10-22T09:33:00.000Z",
-      "reason": "domestic→7",
-      "airline": "easyJet",
-      "aircraft": "(G-EZTH)",
-      "pax_estimate": 162,
-      "scheduled_local": "10:10",
-      "eta_local": "09:48",
-      "delay_min": -22,
-      "ui_state": "upcoming",
-      "ui_age_min": -47
-    },
-    {
       "flight": "",
       "origin": "(CGN)",
       "origin_iata": "CGN",
-      "eta": "2025-10-22T09:07:00.000Z",
-      "status": "estimated 10:07",
+      "eta": "2025-10-22T09:08:00.000Z",
+      "status": "estimated 10:08",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-22T09:22:00.000Z",
-      "end": "2025-10-22T09:52:00.000Z",
+      "start": "2025-10-22T09:23:00.000Z",
+      "end": "2025-10-22T09:53:00.000Z",
       "reason": "intl_spread",
       "airline": "",
       "aircraft": "(D-IPVD)",
       "pax_estimate": 166,
       "scheduled_local": "10:08",
-      "eta_local": "10:07",
-      "delay_min": -1,
+      "eta_local": "10:08",
+      "delay_min": 0,
       "ui_state": "upcoming",
-      "ui_age_min": -66
+      "ui_age_min": -64
     },
     {
       "flight": "FR1315",
       "origin": "(MRS)",
       "origin_iata": "MRS",
-      "eta": "2025-10-22T09:23:00.000Z",
-      "status": "estimated 10:23",
+      "eta": "2025-10-22T09:25:00.000Z",
+      "status": "estimated 10:25",
       "flow": "INTERNATIONAL",
       "belt": 5,
-      "start": "2025-10-22T09:38:00.000Z",
-      "end": "2025-10-22T10:08:00.000Z",
+      "start": "2025-10-22T09:40:00.000Z",
+      "end": "2025-10-22T10:10:00.000Z",
       "reason": "density→belt5",
       "airline": "Ryanair",
       "aircraft": "(9H-QCP)",
       "pax_estimate": 166,
       "scheduled_local": "10:25",
-      "eta_local": "10:23",
-      "delay_min": -2,
+      "eta_local": "10:25",
+      "delay_min": 0,
       "ui_state": "upcoming",
-      "ui_age_min": -82
+      "ui_age_min": -81
     },
     {
       "flight": "U22774",
       "origin": "(CDG)",
       "origin_iata": "CDG",
-      "eta": "2025-10-22T09:36:00.000Z",
-      "status": "estimated 10:36",
+      "eta": "2025-10-22T09:33:00.000Z",
+      "status": "estimated 10:33",
       "flow": "INTERNATIONAL",
       "belt": 2,
-      "start": "2025-10-22T09:51:00.000Z",
-      "end": "2025-10-22T10:21:00.000Z",
+      "start": "2025-10-22T09:48:00.000Z",
+      "end": "2025-10-22T10:18:00.000Z",
       "reason": "intl_spread",
       "airline": "easyJet",
       "aircraft": "(G-EZUI)",
       "pax_estimate": 162,
       "scheduled_local": "10:25",
-      "eta_local": "10:36",
-      "delay_min": 11,
+      "eta_local": "10:33",
+      "delay_min": 8,
       "ui_state": "upcoming",
-      "ui_age_min": -95
+      "ui_age_min": -89
     },
     {
       "flight": "LS1880",
@@ -102,7 +82,7 @@
       "eta_local": "11:03",
       "delay_min": -2,
       "ui_state": "upcoming",
-      "ui_age_min": -122
+      "ui_age_min": -119
     },
     {
       "flight": "U22710",
@@ -122,7 +102,7 @@
       "eta_local": "11:29",
       "delay_min": -6,
       "ui_state": "upcoming",
-      "ui_age_min": -148
+      "ui_age_min": -145
     },
     {
       "flight": "FR8682",
@@ -142,7 +122,7 @@
       "eta_local": "11:54",
       "delay_min": -6,
       "ui_state": "upcoming",
-      "ui_age_min": -173
+      "ui_age_min": -170
     }
   ]
 }
