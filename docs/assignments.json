@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-22T07:43:35.711Z",
-  "generated_at_local": "2025-10-22T08:43:35",
+  "generated_at_utc": "2025-10-22T07:45:01.253Z",
+  "generated_at_local": "2025-10-22T08:45:01",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -44,37 +44,37 @@
       "flight": "",
       "origin": "(CGN)",
       "origin_iata": "CGN",
-      "eta": "2025-10-22T08:48:00.000Z",
-      "status": "estimated 09:48",
+      "eta": "2025-10-22T08:50:00.000Z",
+      "status": "estimated 09:50",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-22T09:03:00.000Z",
-      "end": "2025-10-22T09:33:00.000Z",
+      "start": "2025-10-22T09:05:00.000Z",
+      "end": "2025-10-22T09:35:00.000Z",
       "reason": "intl_spread",
       "airline": "",
       "aircraft": "(D-IPVD)",
       "pax_estimate": 166,
       "scheduled_local": "10:08",
-      "eta_local": "09:48",
-      "delay_min": -20
+      "eta_local": "09:50",
+      "delay_min": -18
     },
     {
       "flight": "FR1315",
       "origin": "(MRS)",
       "origin_iata": "MRS",
-      "eta": "2025-10-22T09:23:00.000Z",
-      "status": "estimated 10:23",
+      "eta": "2025-10-22T09:21:00.000Z",
+      "status": "estimated 10:21",
       "flow": "INTERNATIONAL",
       "belt": 2,
-      "start": "2025-10-22T09:38:00.000Z",
-      "end": "2025-10-22T10:08:00.000Z",
+      "start": "2025-10-22T09:36:00.000Z",
+      "end": "2025-10-22T10:06:00.000Z",
       "reason": "intl_spread",
       "airline": "Ryanair",
       "aircraft": "(9H-QCP)",
       "pax_estimate": 166,
       "scheduled_local": "10:25",
-      "eta_local": "10:23",
-      "delay_min": -2
+      "eta_local": "10:21",
+      "delay_min": -4
     }
   ]
 }
