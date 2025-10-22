@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-22T12:38:37.316Z",
-  "generated_at_local": "2025-10-22T13:38:37",
+  "generated_at_utc": "2025-10-22T12:40:02.411Z",
+  "generated_at_local": "2025-10-22T13:40:02",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -22,7 +22,7 @@
       "eta_local": "13:41",
       "delay_min": 6,
       "ui_state": "upcoming",
-      "ui_age_min": -47
+      "ui_age_min": -46
     },
     {
       "flight": "U2246",
@@ -42,7 +42,7 @@
       "eta_local": "13:47",
       "delay_min": -23,
       "ui_state": "upcoming",
-      "ui_age_min": -53
+      "ui_age_min": -52
     },
     {
       "flight": "U22812",
@@ -62,7 +62,7 @@
       "eta_local": "13:47",
       "delay_min": -13,
       "ui_state": "upcoming",
-      "ui_age_min": -53
+      "ui_age_min": -52
     },
     {
       "flight": "FR4130",
@@ -82,7 +82,7 @@
       "eta_local": "14:13",
       "delay_min": -7,
       "ui_state": "upcoming",
-      "ui_age_min": -79
+      "ui_age_min": -78
     },
     {
       "flight": "U27267",
@@ -102,7 +102,7 @@
       "eta_local": "14:17",
       "delay_min": -3,
       "ui_state": "upcoming",
-      "ui_age_min": -83
+      "ui_age_min": -82
     },
     {
       "flight": "U22732",
@@ -122,7 +122,7 @@
       "eta_local": "14:54",
       "delay_min": -21,
       "ui_state": "upcoming",
-      "ui_age_min": -120
+      "ui_age_min": -119
     },
     {
       "flight": "FR7948",
@@ -142,7 +142,7 @@
       "eta_local": "15:02",
       "delay_min": 7,
       "ui_state": "upcoming",
-      "ui_age_min": -128
+      "ui_age_min": -127
     },
     {
       "flight": "U22720",
@@ -162,7 +162,7 @@
       "eta_local": "15:41",
       "delay_min": 1,
       "ui_state": "upcoming",
-      "ui_age_min": -167
+      "ui_age_min": -166
     },
     {
       "flight": "U22728",
@@ -182,7 +182,7 @@
       "eta_local": "15:41",
       "delay_min": -24,
       "ui_state": "upcoming",
-      "ui_age_min": -167
+      "ui_age_min": -166
     },
     {
       "flight": "LS1892",
@@ -202,7 +202,7 @@
       "eta_local": "15:45",
       "delay_min": 5,
       "ui_state": "upcoming",
-      "ui_age_min": -171
+      "ui_age_min": -170
     },
     {
       "flight": "BY6377",
@@ -222,7 +222,27 @@
       "eta_local": "15:56",
       "delay_min": 11,
       "ui_state": "upcoming",
-      "ui_age_min": -182
+      "ui_age_min": -181
+    },
+    {
+      "flight": "U22802",
+      "origin": "(RHO)",
+      "origin_iata": "RHO",
+      "eta": "2025-10-22T15:40:00.000Z",
+      "status": "estimated 16:40",
+      "flow": "INTERNATIONAL",
+      "belt": 1,
+      "start": "2025-10-22T15:55:00.000Z",
+      "end": "2025-10-22T16:25:00.000Z",
+      "reason": "intl_spread",
+      "airline": "easyJet",
+      "aircraft": "(G-UZLT)",
+      "pax_estimate": 162,
+      "scheduled_local": "16:30",
+      "eta_local": "16:40",
+      "delay_min": 10,
+      "ui_state": "upcoming",
+      "ui_age_min": -225
     }
   ]
 }
