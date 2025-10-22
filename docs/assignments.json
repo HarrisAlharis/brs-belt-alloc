@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-22T08:05:00.442Z",
-  "generated_at_local": "2025-10-22T09:05:00",
+  "generated_at_utc": "2025-10-22T08:06:20.518Z",
+  "generated_at_local": "2025-10-22T09:06:20",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -22,7 +22,27 @@
       "eta_local": "09:34",
       "delay_min": -21,
       "ui_state": "upcoming",
-      "ui_age_min": -74
+      "ui_age_min": -73
+    },
+    {
+      "flight": "FR4754",
+      "origin": "(TFS)",
+      "origin_iata": "TFS",
+      "eta": "2025-10-22T08:34:00.000Z",
+      "status": "estimated 09:34",
+      "flow": "INTERNATIONAL",
+      "belt": 1,
+      "start": "2025-10-22T08:49:00.000Z",
+      "end": "2025-10-22T09:19:00.000Z",
+      "reason": "intl_spread",
+      "airline": "Ryanair",
+      "aircraft": "(EI-IKZ)",
+      "pax_estimate": 166,
+      "scheduled_local": "10:00",
+      "eta_local": "09:34",
+      "delay_min": -26,
+      "ui_state": "upcoming",
+      "ui_age_min": -73
     },
     {
       "flight": "U2224",
@@ -42,27 +62,7 @@
       "eta_local": "09:36",
       "delay_min": -19,
       "ui_state": "upcoming",
-      "ui_age_min": -76
-    },
-    {
-      "flight": "FR4754",
-      "origin": "(TFS)",
-      "origin_iata": "TFS",
-      "eta": "2025-10-22T08:36:00.000Z",
-      "status": "estimated 09:36",
-      "flow": "INTERNATIONAL",
-      "belt": 1,
-      "start": "2025-10-22T08:51:00.000Z",
-      "end": "2025-10-22T09:21:00.000Z",
-      "reason": "intl_spread",
-      "airline": "Ryanair",
-      "aircraft": "(EI-IKZ)",
-      "pax_estimate": 166,
-      "scheduled_local": "10:00",
-      "eta_local": "09:36",
-      "delay_min": -24,
-      "ui_state": "upcoming",
-      "ui_age_min": -76
+      "ui_age_min": -75
     },
     {
       "flight": "U2202",
@@ -82,7 +82,7 @@
       "eta_local": "09:40",
       "delay_min": -20,
       "ui_state": "upcoming",
-      "ui_age_min": -80
+      "ui_age_min": -79
     },
     {
       "flight": "U2214",
@@ -102,25 +102,25 @@
       "eta_local": "09:44",
       "delay_min": -26,
       "ui_state": "upcoming",
-      "ui_age_min": -84
+      "ui_age_min": -83
     },
     {
       "flight": "",
       "origin": "(CGN)",
       "origin_iata": "CGN",
-      "eta": "2025-10-22T08:54:00.000Z",
-      "status": "estimated 09:54",
+      "eta": "2025-10-22T08:55:00.000Z",
+      "status": "estimated 09:55",
       "flow": "INTERNATIONAL",
       "belt": 2,
-      "start": "2025-10-22T09:09:00.000Z",
-      "end": "2025-10-22T09:39:00.000Z",
+      "start": "2025-10-22T09:10:00.000Z",
+      "end": "2025-10-22T09:40:00.000Z",
       "reason": "intl_spread",
       "airline": "",
       "aircraft": "(D-IPVD)",
       "pax_estimate": 166,
       "scheduled_local": "10:08",
-      "eta_local": "09:54",
-      "delay_min": -14,
+      "eta_local": "09:55",
+      "delay_min": -13,
       "ui_state": "upcoming",
       "ui_age_min": -94
     },
@@ -128,21 +128,21 @@
       "flight": "FR1315",
       "origin": "(MRS)",
       "origin_iata": "MRS",
-      "eta": "2025-10-22T09:25:00.000Z",
-      "status": "estimated 10:25",
+      "eta": "2025-10-22T09:23:00.000Z",
+      "status": "estimated 10:23",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-22T09:40:00.000Z",
-      "end": "2025-10-22T10:10:00.000Z",
+      "start": "2025-10-22T09:38:00.000Z",
+      "end": "2025-10-22T10:08:00.000Z",
       "reason": "intl_spread",
       "airline": "Ryanair",
       "aircraft": "(9H-QCP)",
       "pax_estimate": 166,
       "scheduled_local": "10:25",
-      "eta_local": "10:25",
-      "delay_min": 0,
+      "eta_local": "10:23",
+      "delay_min": -2,
       "ui_state": "upcoming",
-      "ui_age_min": -125
+      "ui_age_min": -122
     }
   ]
 }
