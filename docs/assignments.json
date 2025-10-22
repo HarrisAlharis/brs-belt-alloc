@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-22T08:15:00.708Z",
-  "generated_at_local": "2025-10-22T09:15:00",
+  "generated_at_utc": "2025-10-22T08:16:19.387Z",
+  "generated_at_local": "2025-10-22T09:16:19",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -22,7 +22,7 @@
       "eta_local": "09:34",
       "delay_min": -21,
       "ui_state": "upcoming",
-      "ui_age_min": -64
+      "ui_age_min": -63
     },
     {
       "flight": "U2224",
@@ -42,7 +42,7 @@
       "eta_local": "09:38",
       "delay_min": -17,
       "ui_state": "upcoming",
-      "ui_age_min": -68
+      "ui_age_min": -67
     },
     {
       "flight": "FR4754",
@@ -62,7 +62,7 @@
       "eta_local": "09:38",
       "delay_min": -22,
       "ui_state": "upcoming",
-      "ui_age_min": -68
+      "ui_age_min": -67
     },
     {
       "flight": "U2202",
@@ -82,7 +82,7 @@
       "eta_local": "09:40",
       "delay_min": -20,
       "ui_state": "upcoming",
-      "ui_age_min": -70
+      "ui_age_min": -69
     },
     {
       "flight": "U2214",
@@ -102,7 +102,7 @@
       "eta_local": "09:46",
       "delay_min": -24,
       "ui_state": "upcoming",
-      "ui_age_min": -76
+      "ui_age_min": -75
     },
     {
       "flight": "",
@@ -122,7 +122,7 @@
       "eta_local": "09:56",
       "delay_min": -12,
       "ui_state": "upcoming",
-      "ui_age_min": -86
+      "ui_age_min": -85
     },
     {
       "flight": "FR1315",
@@ -142,7 +142,7 @@
       "eta_local": "10:25",
       "delay_min": 0,
       "ui_state": "upcoming",
-      "ui_age_min": -115
+      "ui_age_min": -114
     },
     {
       "flight": "LS1880",
@@ -162,7 +162,7 @@
       "eta_local": "10:57",
       "delay_min": -8,
       "ui_state": "upcoming",
-      "ui_age_min": -147
+      "ui_age_min": -146
     }
   ]
 }
