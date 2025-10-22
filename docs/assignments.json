@@ -1,27 +1,9 @@
 {
-  "generated_at_utc": "2025-10-22T07:16:19.403Z",
-  "generated_at_local": "2025-10-22T08:16:19",
+  "generated_at_utc": "2025-10-22T07:18:36.165Z",
+  "generated_at_local": "2025-10-22T08:18:36",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
-    {
-      "flight": "",
-      "origin": "(JER)",
-      "origin_iata": "JER",
-      "eta": "2025-10-22T07:18:00.000Z",
-      "status": "estimated 08:18",
-      "flow": "DOMESTIC",
-      "belt": 7,
-      "start": "2025-10-22T07:33:00.000Z",
-      "end": "2025-10-22T08:03:00.000Z",
-      "reason": "domestic→7",
-      "airline": "Jetfly Aviation",
-      "aircraft": "(LX-JFA)",
-      "pax_estimate": 166,
-      "scheduled_local": "08:26",
-      "eta_local": "08:18",
-      "delay_min": -8
-    },
     {
       "flight": "U25527",
       "origin": "(ALC)",
