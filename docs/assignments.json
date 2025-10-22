@@ -1,29 +1,9 @@
 {
-  "generated_at_utc": "2025-10-22T08:40:00.332Z",
-  "generated_at_local": "2025-10-22T09:40:00",
+  "generated_at_utc": "2025-10-22T08:41:20.649Z",
+  "generated_at_local": "2025-10-22T09:41:20",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
-    {
-      "flight": "U2224",
-      "origin": "(BFS)",
-      "origin_iata": "BFS",
-      "eta": "2025-10-22T08:41:00.000Z",
-      "status": "estimated 09:41",
-      "flow": "DOMESTIC",
-      "belt": 7,
-      "start": "2025-10-22T08:56:00.000Z",
-      "end": "2025-10-22T09:26:00.000Z",
-      "reason": "domestic→7",
-      "airline": "easyJet",
-      "aircraft": "(G-EZOU)",
-      "pax_estimate": 162,
-      "scheduled_local": "09:55",
-      "eta_local": "09:41",
-      "delay_min": -14,
-      "ui_state": "upcoming",
-      "ui_age_min": -46
-    },
     {
       "flight": "U2202",
       "origin": "(GLA)",
@@ -42,7 +22,7 @@
       "eta_local": "09:42",
       "delay_min": -18,
       "ui_state": "upcoming",
-      "ui_age_min": -47
+      "ui_age_min": -46
     },
     {
       "flight": "U2214",
@@ -62,27 +42,27 @@
       "eta_local": "09:45",
       "delay_min": -25,
       "ui_state": "upcoming",
-      "ui_age_min": -50
+      "ui_age_min": -49
     },
     {
       "flight": "",
       "origin": "(CGN)",
       "origin_iata": "CGN",
-      "eta": "2025-10-22T09:07:00.000Z",
-      "status": "estimated 10:07",
+      "eta": "2025-10-22T09:06:00.000Z",
+      "status": "estimated 10:06",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-22T09:22:00.000Z",
-      "end": "2025-10-22T09:52:00.000Z",
+      "start": "2025-10-22T09:21:00.000Z",
+      "end": "2025-10-22T09:51:00.000Z",
       "reason": "intl_spread",
       "airline": "",
       "aircraft": "(D-IPVD)",
       "pax_estimate": 166,
       "scheduled_local": "10:08",
-      "eta_local": "10:07",
-      "delay_min": -1,
+      "eta_local": "10:06",
+      "delay_min": -2,
       "ui_state": "upcoming",
-      "ui_age_min": -72
+      "ui_age_min": -70
     },
     {
       "flight": "FR1315",
@@ -102,7 +82,7 @@
       "eta_local": "10:23",
       "delay_min": -2,
       "ui_state": "upcoming",
-      "ui_age_min": -88
+      "ui_age_min": -87
     },
     {
       "flight": "LS1880",
@@ -122,7 +102,7 @@
       "eta_local": "11:01",
       "delay_min": -4,
       "ui_state": "upcoming",
-      "ui_age_min": -126
+      "ui_age_min": -125
     },
     {
       "flight": "U22710",
@@ -142,7 +122,7 @@
       "eta_local": "11:29",
       "delay_min": -6,
       "ui_state": "upcoming",
-      "ui_age_min": -154
+      "ui_age_min": -153
     },
     {
       "flight": "FR8682",
@@ -162,7 +142,7 @@
       "eta_local": "11:52",
       "delay_min": -8,
       "ui_state": "upcoming",
-      "ui_age_min": -177
+      "ui_age_min": -176
     }
   ]
 }
