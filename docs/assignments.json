@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-22T08:01:20.441Z",
-  "generated_at_local": "2025-10-22T09:01:20",
+  "generated_at_utc": "2025-10-22T08:03:35.742Z",
+  "generated_at_local": "2025-10-22T09:03:35",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -20,7 +20,9 @@
       "pax_estimate": 162,
       "scheduled_local": "09:55",
       "eta_local": "09:34",
-      "delay_min": -21
+      "delay_min": -21,
+      "ui_state": "upcoming",
+      "ui_age_min": -75
     },
     {
       "flight": "U2224",
@@ -38,7 +40,9 @@
       "pax_estimate": 162,
       "scheduled_local": "09:55",
       "eta_local": "09:36",
-      "delay_min": -19
+      "delay_min": -19,
+      "ui_state": "upcoming",
+      "ui_age_min": -77
     },
     {
       "flight": "FR4754",
@@ -56,7 +60,9 @@
       "pax_estimate": 166,
       "scheduled_local": "10:00",
       "eta_local": "09:36",
-      "delay_min": -24
+      "delay_min": -24,
+      "ui_state": "upcoming",
+      "ui_age_min": -77
     },
     {
       "flight": "U2202",
@@ -74,7 +80,9 @@
       "pax_estimate": 162,
       "scheduled_local": "10:00",
       "eta_local": "09:40",
-      "delay_min": -20
+      "delay_min": -20,
+      "ui_state": "upcoming",
+      "ui_age_min": -81
     },
     {
       "flight": "U2214",
@@ -92,7 +100,9 @@
       "pax_estimate": 162,
       "scheduled_local": "10:10",
       "eta_local": "09:44",
-      "delay_min": -26
+      "delay_min": -26,
+      "ui_state": "upcoming",
+      "ui_age_min": -85
     },
     {
       "flight": "",
@@ -110,7 +120,9 @@
       "pax_estimate": 166,
       "scheduled_local": "10:08",
       "eta_local": "09:54",
-      "delay_min": -14
+      "delay_min": -14,
+      "ui_state": "upcoming",
+      "ui_age_min": -95
     },
     {
       "flight": "FR1315",
@@ -128,7 +140,9 @@
       "pax_estimate": 166,
       "scheduled_local": "10:25",
       "eta_local": "10:25",
-      "delay_min": 0
+      "delay_min": 0,
+      "ui_state": "upcoming",
+      "ui_age_min": -126
     }
   ]
 }
