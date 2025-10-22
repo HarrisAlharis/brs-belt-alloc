@@ -1,29 +1,9 @@
 {
-  "generated_at_utc": "2025-10-22T08:10:01.425Z",
-  "generated_at_local": "2025-10-22T09:10:01",
+  "generated_at_utc": "2025-10-22T08:11:19.332Z",
+  "generated_at_local": "2025-10-22T09:11:19",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
-    {
-      "flight": "U2224",
-      "origin": "(BFS)",
-      "origin_iata": "BFS",
-      "eta": "2025-10-22T08:34:00.000Z",
-      "status": "estimated 09:34",
-      "flow": "DOMESTIC",
-      "belt": 7,
-      "start": "2025-10-22T08:49:00.000Z",
-      "end": "2025-10-22T09:19:00.000Z",
-      "reason": "domestic→7",
-      "airline": "easyJet",
-      "aircraft": "(G-EZOU)",
-      "pax_estimate": 162,
-      "scheduled_local": "09:55",
-      "eta_local": "09:34",
-      "delay_min": -21,
-      "ui_state": "upcoming",
-      "ui_age_min": -69
-    },
     {
       "flight": "U2238",
       "origin": "(NCL)",
@@ -42,7 +22,27 @@
       "eta_local": "09:34",
       "delay_min": -21,
       "ui_state": "upcoming",
-      "ui_age_min": -69
+      "ui_age_min": -68
+    },
+    {
+      "flight": "U2224",
+      "origin": "(BFS)",
+      "origin_iata": "BFS",
+      "eta": "2025-10-22T08:38:00.000Z",
+      "status": "estimated 09:38",
+      "flow": "DOMESTIC",
+      "belt": 7,
+      "start": "2025-10-22T08:53:00.000Z",
+      "end": "2025-10-22T09:23:00.000Z",
+      "reason": "domestic→7",
+      "airline": "easyJet",
+      "aircraft": "(G-EZOU)",
+      "pax_estimate": 162,
+      "scheduled_local": "09:55",
+      "eta_local": "09:38",
+      "delay_min": -17,
+      "ui_state": "upcoming",
+      "ui_age_min": -72
     },
     {
       "flight": "FR4754",
@@ -62,7 +62,7 @@
       "eta_local": "09:38",
       "delay_min": -22,
       "ui_state": "upcoming",
-      "ui_age_min": -73
+      "ui_age_min": -72
     },
     {
       "flight": "U2202",
@@ -82,7 +82,7 @@
       "eta_local": "09:40",
       "delay_min": -20,
       "ui_state": "upcoming",
-      "ui_age_min": -75
+      "ui_age_min": -74
     },
     {
       "flight": "U2214",
@@ -102,7 +102,7 @@
       "eta_local": "09:46",
       "delay_min": -24,
       "ui_state": "upcoming",
-      "ui_age_min": -81
+      "ui_age_min": -80
     },
     {
       "flight": "",
@@ -122,7 +122,7 @@
       "eta_local": "09:56",
       "delay_min": -12,
       "ui_state": "upcoming",
-      "ui_age_min": -91
+      "ui_age_min": -90
     },
     {
       "flight": "FR1315",
@@ -142,7 +142,27 @@
       "eta_local": "10:25",
       "delay_min": 0,
       "ui_state": "upcoming",
-      "ui_age_min": -120
+      "ui_age_min": -119
+    },
+    {
+      "flight": "LS1880",
+      "origin": "(REU)",
+      "origin_iata": "REU",
+      "eta": "2025-10-22T09:57:00.000Z",
+      "status": "estimated 10:57",
+      "flow": "INTERNATIONAL",
+      "belt": 2,
+      "start": "2025-10-22T10:12:00.000Z",
+      "end": "2025-10-22T10:42:00.000Z",
+      "reason": "intl_spread",
+      "airline": "Jet2",
+      "aircraft": "(G-JZBO)",
+      "pax_estimate": 171,
+      "scheduled_local": "11:05",
+      "eta_local": "10:57",
+      "delay_min": -8,
+      "ui_state": "upcoming",
+      "ui_age_min": -151
     }
   ]
 }
