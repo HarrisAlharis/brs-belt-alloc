@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-23T14:08:35.115Z",
-  "generated_at_local": "2025-10-23T15:08:35",
+  "generated_at_utc": "2025-10-23T14:09:59.796Z",
+  "generated_at_local": "2025-10-23T15:09:59",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -8,61 +8,61 @@
       "flight": "U22842",
       "origin": "(MXP)",
       "origin_iata": "MXP",
-      "eta": "2025-10-23T14:19:00.000Z",
-      "status": "estimated 15:19",
+      "eta": "2025-10-23T14:17:00.000Z",
+      "status": "estimated 15:17",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-23T14:34:00.000Z",
-      "end": "2025-10-23T15:04:00.000Z",
+      "start": "2025-10-23T14:32:00.000Z",
+      "end": "2025-10-23T15:02:00.000Z",
       "reason": "intl_spread",
       "airline": "easyJet",
       "aircraft": "(G-EZOU)",
       "pax_estimate": 162,
       "scheduled_local": "15:05",
-      "eta_local": "15:19",
-      "delay_min": 14,
+      "eta_local": "15:17",
+      "delay_min": 12,
       "ui_state": "upcoming",
-      "ui_age_min": -55
+      "ui_age_min": -52
     },
     {
       "flight": "U27003",
       "origin": "(AGP)",
       "origin_iata": "AGP",
-      "eta": "2025-10-23T14:25:00.000Z",
-      "status": "estimated 15:25",
+      "eta": "2025-10-23T14:24:00.000Z",
+      "status": "estimated 15:24",
       "flow": "INTERNATIONAL",
       "belt": 5,
-      "start": "2025-10-23T14:40:00.000Z",
-      "end": "2025-10-23T15:10:00.000Z",
+      "start": "2025-10-23T14:39:00.000Z",
+      "end": "2025-10-23T15:09:00.000Z",
       "reason": "density→belt5",
       "airline": "easyJet",
       "aircraft": "(OE-LQC)",
       "pax_estimate": 162,
       "scheduled_local": "15:25",
-      "eta_local": "15:25",
-      "delay_min": 0,
+      "eta_local": "15:24",
+      "delay_min": -1,
       "ui_state": "upcoming",
-      "ui_age_min": -61
+      "ui_age_min": -59
     },
     {
       "flight": "U22712",
       "origin": "(PMI)",
       "origin_iata": "PMI",
-      "eta": "2025-10-23T14:43:00.000Z",
-      "status": "estimated 15:43",
+      "eta": "2025-10-23T14:41:00.000Z",
+      "status": "estimated 15:41",
       "flow": "INTERNATIONAL",
       "belt": 2,
-      "start": "2025-10-23T14:58:00.000Z",
-      "end": "2025-10-23T15:28:00.000Z",
+      "start": "2025-10-23T14:56:00.000Z",
+      "end": "2025-10-23T15:26:00.000Z",
       "reason": "intl_spread",
       "airline": "easyJet (NEO Livery)",
       "aircraft": "(G-UZLW)",
       "pax_estimate": 166,
       "scheduled_local": "16:00",
-      "eta_local": "15:43",
-      "delay_min": -17,
+      "eta_local": "15:41",
+      "delay_min": -19,
       "ui_state": "upcoming",
-      "ui_age_min": -79
+      "ui_age_min": -76
     },
     {
       "flight": "U22766",
@@ -82,7 +82,7 @@
       "eta_local": "15:51",
       "delay_min": 11,
       "ui_state": "upcoming",
-      "ui_age_min": -87
+      "ui_age_min": -86
     },
     {
       "flight": "U27509",
@@ -102,7 +102,7 @@
       "eta_local": "16:00",
       "delay_min": -5,
       "ui_state": "upcoming",
-      "ui_age_min": -96
+      "ui_age_min": -95
     },
     {
       "flight": "U22936",
@@ -122,7 +122,7 @@
       "eta_local": "16:17",
       "delay_min": 22,
       "ui_state": "upcoming",
-      "ui_age_min": -113
+      "ui_age_min": -112
     },
     {
       "flight": "CS-PHX",
@@ -142,27 +142,27 @@
       "eta_local": "16:19",
       "delay_min": -3,
       "ui_state": "upcoming",
-      "ui_age_min": -115
+      "ui_age_min": -114
     },
     {
       "flight": "LS1888",
       "origin": "(CHQ)",
       "origin_iata": "CHQ",
-      "eta": "2025-10-23T16:38:00.000Z",
-      "status": "delayed 17:38",
+      "eta": "2025-10-23T16:36:00.000Z",
+      "status": "delayed 17:36",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-23T16:53:00.000Z",
-      "end": "2025-10-23T17:23:00.000Z",
+      "start": "2025-10-23T16:51:00.000Z",
+      "end": "2025-10-23T17:21:00.000Z",
       "reason": "intl_spread",
       "airline": "Jet2",
       "aircraft": "(G-DRTX)",
       "pax_estimate": 171,
       "scheduled_local": "17:15",
-      "eta_local": "17:38",
-      "delay_min": 23,
+      "eta_local": "17:36",
+      "delay_min": 21,
       "ui_state": "upcoming",
-      "ui_age_min": -194
+      "ui_age_min": -191
     },
     {
       "flight": "U29852",
@@ -182,7 +182,7 @@
       "eta_local": "17:51",
       "delay_min": 17,
       "ui_state": "upcoming",
-      "ui_age_min": -207
+      "ui_age_min": -206
     }
   ]
 }
