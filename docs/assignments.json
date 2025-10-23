@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-23T13:36:19.005Z",
-  "generated_at_local": "2025-10-23T14:36:19",
+  "generated_at_utc": "2025-10-23T13:38:34.979Z",
+  "generated_at_local": "2025-10-23T14:38:34",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -8,41 +8,41 @@
       "flight": "U22878",
       "origin": "(FNC)",
       "origin_iata": "FNC",
-      "eta": "2025-10-23T13:44:00.000Z",
-      "status": "estimated 14:44",
+      "eta": "2025-10-23T13:43:00.000Z",
+      "status": "estimated 14:43",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-23T13:59:00.000Z",
-      "end": "2025-10-23T14:29:00.000Z",
+      "start": "2025-10-23T13:58:00.000Z",
+      "end": "2025-10-23T14:28:00.000Z",
       "reason": "intl_spread",
       "airline": "easyJet",
       "aircraft": "(G-UZHH)",
       "pax_estimate": 162,
       "scheduled_local": "15:05",
-      "eta_local": "14:44",
-      "delay_min": -21,
+      "eta_local": "14:43",
+      "delay_min": -22,
       "ui_state": "upcoming",
-      "ui_age_min": -53
+      "ui_age_min": -49
     },
     {
       "flight": "U22732",
       "origin": "(TFS)",
       "origin_iata": "TFS",
-      "eta": "2025-10-23T13:49:00.000Z",
-      "status": "estimated 14:49",
+      "eta": "2025-10-23T13:47:00.000Z",
+      "status": "estimated 14:47",
       "flow": "INTERNATIONAL",
       "belt": 2,
-      "start": "2025-10-23T14:04:00.000Z",
-      "end": "2025-10-23T14:34:00.000Z",
+      "start": "2025-10-23T14:02:00.000Z",
+      "end": "2025-10-23T14:32:00.000Z",
       "reason": "intl_spread",
       "airline": "easyJet",
       "aircraft": "(G-UZMK)",
       "pax_estimate": 162,
       "scheduled_local": "15:25",
-      "eta_local": "14:49",
-      "delay_min": -36,
+      "eta_local": "14:47",
+      "delay_min": -38,
       "ui_state": "upcoming",
-      "ui_age_min": -58
+      "ui_age_min": -53
     },
     {
       "flight": "U22842",
@@ -62,7 +62,7 @@
       "eta_local": "15:17",
       "delay_min": 12,
       "ui_state": "upcoming",
-      "ui_age_min": -86
+      "ui_age_min": -83
     },
     {
       "flight": "U27003",
@@ -82,7 +82,7 @@
       "eta_local": "15:21",
       "delay_min": -4,
       "ui_state": "upcoming",
-      "ui_age_min": -90
+      "ui_age_min": -87
     },
     {
       "flight": "U22712",
@@ -102,7 +102,7 @@
       "eta_local": "15:41",
       "delay_min": -19,
       "ui_state": "upcoming",
-      "ui_age_min": -110
+      "ui_age_min": -107
     },
     {
       "flight": "U22766",
@@ -122,7 +122,7 @@
       "eta_local": "15:47",
       "delay_min": 7,
       "ui_state": "upcoming",
-      "ui_age_min": -116
+      "ui_age_min": -113
     },
     {
       "flight": "U27509",
@@ -142,65 +142,65 @@
       "eta_local": "16:00",
       "delay_min": -5,
       "ui_state": "upcoming",
-      "ui_age_min": -129
+      "ui_age_min": -126
     },
     {
       "flight": "U22936",
       "origin": "(PRG)",
       "origin_iata": "PRG",
-      "eta": "2025-10-23T15:13:00.000Z",
-      "status": "delayed 16:13",
+      "eta": "2025-10-23T15:17:00.000Z",
+      "status": "delayed 16:17",
       "flow": "INTERNATIONAL",
       "belt": 5,
-      "start": "2025-10-23T15:28:00.000Z",
-      "end": "2025-10-23T15:58:00.000Z",
+      "start": "2025-10-23T15:32:00.000Z",
+      "end": "2025-10-23T16:02:00.000Z",
       "reason": "density→belt5",
       "airline": "easyJet (easyJet Holidays Livery)",
       "aircraft": "(G-EZOA)",
       "pax_estimate": 166,
       "scheduled_local": "15:55",
-      "eta_local": "16:13",
-      "delay_min": 18,
+      "eta_local": "16:17",
+      "delay_min": 22,
       "ui_state": "upcoming",
-      "ui_age_min": -142
+      "ui_age_min": -143
     },
     {
       "flight": "CS-PHX",
       "origin": "(CAT)",
       "origin_iata": "CAT",
-      "eta": "2025-10-23T15:23:00.000Z",
-      "status": "estimated 16:23",
+      "eta": "2025-10-23T15:18:00.000Z",
+      "status": "estimated 16:18",
       "flow": "INTERNATIONAL",
       "belt": 3,
-      "start": "2025-10-23T15:38:00.000Z",
-      "end": "2025-10-23T16:08:00.000Z",
+      "start": "2025-10-23T15:33:00.000Z",
+      "end": "2025-10-23T16:03:00.000Z",
       "reason": "intl_spread",
       "airline": "NetJets",
       "aircraft": "(CS-PHX)",
       "pax_estimate": 166,
       "scheduled_local": "16:22",
-      "eta_local": "16:23",
-      "delay_min": 1,
+      "eta_local": "16:18",
+      "delay_min": -4,
       "ui_state": "upcoming",
-      "ui_age_min": -152
+      "ui_age_min": -144
     },
     {
       "flight": "LS1888",
       "origin": "(CHQ)",
       "origin_iata": "CHQ",
-      "eta": "2025-10-23T16:29:00.000Z",
-      "status": "estimated 17:29",
+      "eta": "2025-10-23T16:32:00.000Z",
+      "status": "delayed 17:32",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-23T16:44:00.000Z",
-      "end": "2025-10-23T17:14:00.000Z",
+      "start": "2025-10-23T16:47:00.000Z",
+      "end": "2025-10-23T17:17:00.000Z",
       "reason": "intl_spread",
       "airline": "Jet2",
       "aircraft": "(G-DRTX)",
       "pax_estimate": 171,
       "scheduled_local": "17:15",
-      "eta_local": "17:29",
-      "delay_min": 14,
+      "eta_local": "17:32",
+      "delay_min": 17,
       "ui_state": "upcoming",
       "ui_age_min": -218
     }
