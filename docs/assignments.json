@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-23T13:39:59.797Z",
-  "generated_at_local": "2025-10-23T14:39:59",
+  "generated_at_utc": "2025-10-23T13:41:20.138Z",
+  "generated_at_local": "2025-10-23T14:41:20",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -8,21 +8,21 @@
       "flight": "U22878",
       "origin": "(FNC)",
       "origin_iata": "FNC",
-      "eta": "2025-10-23T13:43:00.000Z",
-      "status": "estimated 14:43",
+      "eta": "2025-10-23T13:45:00.000Z",
+      "status": "estimated 14:45",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-23T13:58:00.000Z",
-      "end": "2025-10-23T14:28:00.000Z",
+      "start": "2025-10-23T14:00:00.000Z",
+      "end": "2025-10-23T14:30:00.000Z",
       "reason": "intl_spread",
       "airline": "easyJet",
       "aircraft": "(G-UZHH)",
       "pax_estimate": 162,
       "scheduled_local": "15:05",
-      "eta_local": "14:43",
-      "delay_min": -22,
+      "eta_local": "14:45",
+      "delay_min": -20,
       "ui_state": "upcoming",
-      "ui_age_min": -48
+      "ui_age_min": -49
     },
     {
       "flight": "U22732",
@@ -42,27 +42,27 @@
       "eta_local": "14:47",
       "delay_min": -38,
       "ui_state": "upcoming",
-      "ui_age_min": -52
+      "ui_age_min": -51
     },
     {
       "flight": "U22842",
       "origin": "(MXP)",
       "origin_iata": "MXP",
-      "eta": "2025-10-23T14:19:00.000Z",
-      "status": "estimated 15:19",
+      "eta": "2025-10-23T14:17:00.000Z",
+      "status": "estimated 15:17",
       "flow": "INTERNATIONAL",
       "belt": 3,
-      "start": "2025-10-23T14:34:00.000Z",
-      "end": "2025-10-23T15:04:00.000Z",
+      "start": "2025-10-23T14:32:00.000Z",
+      "end": "2025-10-23T15:02:00.000Z",
       "reason": "intl_spread",
       "airline": "easyJet",
       "aircraft": "(G-EZOU)",
       "pax_estimate": 162,
       "scheduled_local": "15:05",
-      "eta_local": "15:19",
-      "delay_min": 14,
+      "eta_local": "15:17",
+      "delay_min": 12,
       "ui_state": "upcoming",
-      "ui_age_min": -84
+      "ui_age_min": -81
     },
     {
       "flight": "U27003",
@@ -82,47 +82,47 @@
       "eta_local": "15:19",
       "delay_min": -6,
       "ui_state": "upcoming",
-      "ui_age_min": -84
+      "ui_age_min": -83
     },
     {
       "flight": "U22712",
       "origin": "(PMI)",
       "origin_iata": "PMI",
-      "eta": "2025-10-23T14:41:00.000Z",
-      "status": "estimated 15:41",
+      "eta": "2025-10-23T14:43:00.000Z",
+      "status": "estimated 15:43",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-23T14:56:00.000Z",
-      "end": "2025-10-23T15:26:00.000Z",
+      "start": "2025-10-23T14:58:00.000Z",
+      "end": "2025-10-23T15:28:00.000Z",
       "reason": "intl_spread",
       "airline": "easyJet (NEO Livery)",
       "aircraft": "(G-UZLW)",
       "pax_estimate": 166,
       "scheduled_local": "16:00",
-      "eta_local": "15:41",
-      "delay_min": -19,
+      "eta_local": "15:43",
+      "delay_min": -17,
       "ui_state": "upcoming",
-      "ui_age_min": -106
+      "ui_age_min": -107
     },
     {
       "flight": "U22766",
       "origin": "(NCE)",
       "origin_iata": "NCE",
-      "eta": "2025-10-23T14:49:00.000Z",
-      "status": "estimated 15:49",
+      "eta": "2025-10-23T14:47:00.000Z",
+      "status": "estimated 15:47",
       "flow": "INTERNATIONAL",
       "belt": 2,
-      "start": "2025-10-23T15:04:00.000Z",
-      "end": "2025-10-23T15:34:00.000Z",
+      "start": "2025-10-23T15:02:00.000Z",
+      "end": "2025-10-23T15:32:00.000Z",
       "reason": "intl_spread",
       "airline": "easyJet",
       "aircraft": "(G-EZTH)",
       "pax_estimate": 162,
       "scheduled_local": "15:40",
-      "eta_local": "15:49",
-      "delay_min": 9,
+      "eta_local": "15:47",
+      "delay_min": 7,
       "ui_state": "upcoming",
-      "ui_age_min": -114
+      "ui_age_min": -111
     },
     {
       "flight": "U27509",
@@ -142,27 +142,27 @@
       "eta_local": "16:00",
       "delay_min": -5,
       "ui_state": "upcoming",
-      "ui_age_min": -125
+      "ui_age_min": -124
     },
     {
       "flight": "U22936",
       "origin": "(PRG)",
       "origin_iata": "PRG",
-      "eta": "2025-10-23T15:17:00.000Z",
-      "status": "delayed 16:17",
+      "eta": "2025-10-23T15:15:00.000Z",
+      "status": "delayed 16:15",
       "flow": "INTERNATIONAL",
       "belt": 5,
-      "start": "2025-10-23T15:32:00.000Z",
-      "end": "2025-10-23T16:02:00.000Z",
+      "start": "2025-10-23T15:30:00.000Z",
+      "end": "2025-10-23T16:00:00.000Z",
       "reason": "density→belt5",
       "airline": "easyJet (easyJet Holidays Livery)",
       "aircraft": "(G-EZOA)",
       "pax_estimate": 166,
       "scheduled_local": "15:55",
-      "eta_local": "16:17",
-      "delay_min": 22,
+      "eta_local": "16:15",
+      "delay_min": 20,
       "ui_state": "upcoming",
-      "ui_age_min": -142
+      "ui_age_min": -139
     },
     {
       "flight": "CS-PHX",
@@ -182,7 +182,7 @@
       "eta_local": "16:18",
       "delay_min": -4,
       "ui_state": "upcoming",
-      "ui_age_min": -143
+      "ui_age_min": -142
     },
     {
       "flight": "LS1888",
@@ -202,7 +202,7 @@
       "eta_local": "17:29",
       "delay_min": 14,
       "ui_state": "upcoming",
-      "ui_age_min": -214
+      "ui_age_min": -213
     }
   ]
 }
