@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-23T14:03:36.210Z",
-  "generated_at_local": "2025-10-23T15:03:36",
+  "generated_at_utc": "2025-10-23T14:05:01.754Z",
+  "generated_at_local": "2025-10-23T15:05:01",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -22,7 +22,7 @@
       "eta_local": "15:24",
       "delay_min": 19,
       "ui_state": "upcoming",
-      "ui_age_min": -65
+      "ui_age_min": -64
     },
     {
       "flight": "U27003",
@@ -42,7 +42,7 @@
       "eta_local": "15:29",
       "delay_min": 4,
       "ui_state": "upcoming",
-      "ui_age_min": -70
+      "ui_age_min": -69
     },
     {
       "flight": "U22712",
@@ -62,7 +62,7 @@
       "eta_local": "15:41",
       "delay_min": -19,
       "ui_state": "upcoming",
-      "ui_age_min": -82
+      "ui_age_min": -81
     },
     {
       "flight": "U22766",
@@ -82,7 +82,7 @@
       "eta_local": "15:51",
       "delay_min": 11,
       "ui_state": "upcoming",
-      "ui_age_min": -92
+      "ui_age_min": -91
     },
     {
       "flight": "U27509",
@@ -102,7 +102,7 @@
       "eta_local": "16:00",
       "delay_min": -5,
       "ui_state": "upcoming",
-      "ui_age_min": -101
+      "ui_age_min": -100
     },
     {
       "flight": "U22936",
@@ -122,7 +122,7 @@
       "eta_local": "16:17",
       "delay_min": 22,
       "ui_state": "upcoming",
-      "ui_age_min": -118
+      "ui_age_min": -117
     },
     {
       "flight": "CS-PHX",
@@ -142,7 +142,7 @@
       "eta_local": "16:20",
       "delay_min": -2,
       "ui_state": "upcoming",
-      "ui_age_min": -121
+      "ui_age_min": -120
     },
     {
       "flight": "LS1888",
@@ -162,7 +162,7 @@
       "eta_local": "17:38",
       "delay_min": 23,
       "ui_state": "upcoming",
-      "ui_age_min": -199
+      "ui_age_min": -198
     },
     {
       "flight": "U29852",
@@ -182,7 +182,7 @@
       "eta_local": "17:53",
       "delay_min": 19,
       "ui_state": "upcoming",
-      "ui_age_min": -214
+      "ui_age_min": -213
     }
   ]
 }
