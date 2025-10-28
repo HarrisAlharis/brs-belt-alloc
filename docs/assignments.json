@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-28T17:29:59.926Z",
-  "generated_at_local": "2025-10-28T17:29:59",
+  "generated_at_utc": "2025-10-28T17:31:19.125Z",
+  "generated_at_local": "2025-10-28T17:31:19",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -22,7 +22,7 @@
       "eta_local": "17:51",
       "delay_min": -4,
       "ui_state": "upcoming",
-      "ui_age_min": -66
+      "ui_age_min": -65
     },
     {
       "flight": "U22746",
@@ -42,7 +42,7 @@
       "eta_local": "17:59",
       "delay_min": -1,
       "ui_state": "upcoming",
-      "ui_age_min": -74
+      "ui_age_min": -73
     },
     {
       "flight": "U27509",
@@ -62,7 +62,7 @@
       "eta_local": "18:01",
       "delay_min": -19,
       "ui_state": "upcoming",
-      "ui_age_min": -76
+      "ui_age_min": -75
     },
     {
       "flight": "Aer Lingus Regional-DUB",
@@ -82,7 +82,7 @@
       "eta_local": "18:03",
       "delay_min": -37,
       "ui_state": "upcoming",
-      "ui_age_min": -78
+      "ui_age_min": -77
     },
     {
       "flight": "LS1884",
@@ -102,7 +102,7 @@
       "eta_local": "18:48",
       "delay_min": 28,
       "ui_state": "upcoming",
-      "ui_age_min": -123
+      "ui_age_min": -122
     },
     {
       "flight": "LS1804",
@@ -122,7 +122,7 @@
       "eta_local": "19:01",
       "delay_min": 16,
       "ui_state": "upcoming",
-      "ui_age_min": -136
+      "ui_age_min": -135
     },
     {
       "flight": "U22724",
@@ -142,7 +142,7 @@
       "eta_local": "19:26",
       "delay_min": -24,
       "ui_state": "upcoming",
-      "ui_age_min": -161
+      "ui_age_min": -160
     },
     {
       "flight": "U27203",
@@ -162,7 +162,7 @@
       "eta_local": "19:29",
       "delay_min": -6,
       "ui_state": "upcoming",
-      "ui_age_min": -164
+      "ui_age_min": -163
     },
     {
       "flight": "LS1850",
@@ -182,7 +182,7 @@
       "eta_local": "19:33",
       "delay_min": 108,
       "ui_state": "upcoming",
-      "ui_age_min": -168
+      "ui_age_min": -167
     }
   ]
 }
