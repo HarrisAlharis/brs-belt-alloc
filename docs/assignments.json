@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-28T18:50:00.098Z",
-  "generated_at_local": "2025-10-28T18:50:00",
+  "generated_at_utc": "2025-10-28T18:51:19.568Z",
+  "generated_at_local": "2025-10-28T18:51:19",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -8,21 +8,21 @@
       "flight": "LS1804",
       "origin": "(ACE)",
       "origin_iata": "ACE",
-      "eta": "2025-10-28T19:01:00.000Z",
-      "status": "delayed 19:01",
+      "eta": "2025-10-28T19:00:00.000Z",
+      "status": "estimated 19:00",
       "flow": "INTERNATIONAL",
       "belt": 5,
-      "start": "2025-10-28T19:16:00.000Z",
-      "end": "2025-10-28T19:46:00.000Z",
+      "start": "2025-10-28T19:15:00.000Z",
+      "end": "2025-10-28T19:45:00.000Z",
       "reason": "density→belt5",
       "airline": "Jet2",
       "aircraft": "(G-JZBO)",
       "pax_estimate": 171,
       "scheduled_local": "18:45",
-      "eta_local": "19:01",
-      "delay_min": 16,
+      "eta_local": "19:00",
+      "delay_min": 15,
       "ui_state": "upcoming",
-      "ui_age_min": -56
+      "ui_age_min": -54
     },
     {
       "flight": "U27076",
@@ -42,7 +42,7 @@
       "eta_local": "19:09",
       "delay_min": -21,
       "ui_state": "upcoming",
-      "ui_age_min": -64
+      "ui_age_min": -63
     },
     {
       "flight": "U27203",
@@ -62,7 +62,7 @@
       "eta_local": "19:20",
       "delay_min": -15,
       "ui_state": "upcoming",
-      "ui_age_min": -75
+      "ui_age_min": -74
     },
     {
       "flight": "U22724",
@@ -82,27 +82,27 @@
       "eta_local": "19:22",
       "delay_min": -28,
       "ui_state": "upcoming",
-      "ui_age_min": -77
+      "ui_age_min": -76
     },
     {
       "flight": "Aer Lingus Regional-ORK",
       "origin": "(ORK)",
       "origin_iata": "ORK",
-      "eta": "2025-10-28T19:26:00.000Z",
-      "status": "delayed 19:26",
+      "eta": "2025-10-28T19:25:00.000Z",
+      "status": "estimated 19:25",
       "flow": "INTERNATIONAL",
       "belt": 6,
-      "start": "2025-10-28T19:41:00.000Z",
-      "end": "2025-10-28T20:11:00.000Z",
+      "start": "2025-10-28T19:40:00.000Z",
+      "end": "2025-10-28T20:10:00.000Z",
       "reason": "last_resort→6",
       "airline": "Aer Lingus Regional",
       "aircraft": "(EI-GPO)",
       "pax_estimate": 166,
       "scheduled_local": "19:10",
-      "eta_local": "19:26",
-      "delay_min": 16,
+      "eta_local": "19:25",
+      "delay_min": 15,
       "ui_state": "upcoming",
-      "ui_age_min": -81
+      "ui_age_min": -79
     },
     {
       "flight": "U27267",
@@ -122,7 +122,7 @@
       "eta_local": "19:52",
       "delay_min": -28,
       "ui_state": "upcoming",
-      "ui_age_min": -107
+      "ui_age_min": -106
     },
     {
       "flight": "FR746",
@@ -142,7 +142,7 @@
       "eta_local": "20:16",
       "delay_min": -14,
       "ui_state": "upcoming",
-      "ui_age_min": -131
+      "ui_age_min": -130
     },
     {
       "flight": "X36279",
@@ -162,27 +162,27 @@
       "eta_local": "21:00",
       "delay_min": -35,
       "ui_state": "upcoming",
-      "ui_age_min": -175
+      "ui_age_min": -174
     },
     {
       "flight": "U22716",
       "origin": "(AGP)",
       "origin_iata": "AGP",
-      "eta": "2025-10-28T21:05:00.000Z",
-      "status": "estimated 21:05",
+      "eta": "2025-10-28T21:02:00.000Z",
+      "status": "estimated 21:02",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-28T21:20:00.000Z",
-      "end": "2025-10-28T21:50:00.000Z",
+      "start": "2025-10-28T21:17:00.000Z",
+      "end": "2025-10-28T21:47:00.000Z",
       "reason": "intl_spread",
       "airline": "easyJet",
       "aircraft": "(G-EZOF)",
       "pax_estimate": 162,
       "scheduled_local": "20:50",
-      "eta_local": "21:05",
-      "delay_min": 15,
+      "eta_local": "21:02",
+      "delay_min": 12,
       "ui_state": "upcoming",
-      "ui_age_min": -180
+      "ui_age_min": -176
     },
     {
       "flight": "U22720",
@@ -202,7 +202,7 @@
       "eta_local": "21:26",
       "delay_min": -24,
       "ui_state": "upcoming",
-      "ui_age_min": -201
+      "ui_age_min": -200
     },
     {
       "flight": "LS1846",
@@ -211,7 +211,7 @@
       "eta": "2025-10-28T21:47:00.000Z",
       "status": "delayed 21:47",
       "flow": "INTERNATIONAL",
-      "belt": 2,
+      "belt": 1,
       "start": "2025-10-28T22:02:00.000Z",
       "end": "2025-10-28T22:32:00.000Z",
       "reason": "intl_spread",
@@ -222,7 +222,7 @@
       "eta_local": "21:47",
       "delay_min": 162,
       "ui_state": "upcoming",
-      "ui_age_min": -222
+      "ui_age_min": -221
     }
   ]
 }
