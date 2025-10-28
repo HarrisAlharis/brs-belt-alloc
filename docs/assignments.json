@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-28T18:10:00.539Z",
-  "generated_at_local": "2025-10-28T18:10:00",
+  "generated_at_utc": "2025-10-28T18:11:20.346Z",
+  "generated_at_local": "2025-10-28T18:11:20",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -22,7 +22,7 @@
       "eta_local": "18:46",
       "delay_min": 26,
       "ui_state": "upcoming",
-      "ui_age_min": -81
+      "ui_age_min": -80
     },
     {
       "flight": "LS1804",
@@ -42,7 +42,7 @@
       "eta_local": "19:01",
       "delay_min": 16,
       "ui_state": "upcoming",
-      "ui_age_min": -96
+      "ui_age_min": -95
     },
     {
       "flight": "U27203",
@@ -62,7 +62,7 @@
       "eta_local": "19:22",
       "delay_min": -13,
       "ui_state": "upcoming",
-      "ui_age_min": -117
+      "ui_age_min": -116
     },
     {
       "flight": "U22724",
@@ -82,7 +82,7 @@
       "eta_local": "19:26",
       "delay_min": -24,
       "ui_state": "upcoming",
-      "ui_age_min": -121
+      "ui_age_min": -120
     },
     {
       "flight": "U27267",
@@ -102,7 +102,7 @@
       "eta_local": "19:52",
       "delay_min": -28,
       "ui_state": "upcoming",
-      "ui_age_min": -147
+      "ui_age_min": -146
     }
   ]
 }
