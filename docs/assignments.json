@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-28T15:48:35.236Z",
-  "generated_at_local": "2025-10-28T15:48:35",
+  "generated_at_utc": "2025-10-28T15:50:00.012Z",
+  "generated_at_local": "2025-10-28T15:50:00",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -8,61 +8,61 @@
       "flight": "FR4122",
       "origin": "(AGP)",
       "origin_iata": "AGP",
-      "eta": "2025-10-28T16:29:00.000Z",
-      "status": "estimated 16:29",
+      "eta": "2025-10-28T16:27:00.000Z",
+      "status": "estimated 16:27",
       "flow": "INTERNATIONAL",
       "belt": 5,
-      "start": "2025-10-28T16:44:00.000Z",
-      "end": "2025-10-28T17:14:00.000Z",
+      "start": "2025-10-28T16:42:00.000Z",
+      "end": "2025-10-28T17:12:00.000Z",
       "reason": "density→belt5",
       "airline": "Ryanair",
       "aircraft": "(EI-HAY)",
       "pax_estimate": 166,
       "scheduled_local": "16:50",
-      "eta_local": "16:29",
-      "delay_min": -21,
+      "eta_local": "16:27",
+      "delay_min": -23,
       "ui_state": "upcoming",
-      "ui_age_min": -85
+      "ui_age_min": -82
     },
     {
       "flight": "KLM-AMS",
       "origin": "(AMS)",
       "origin_iata": "AMS",
-      "eta": "2025-10-28T16:40:00.000Z",
-      "status": "estimated 16:40",
+      "eta": "2025-10-28T16:42:00.000Z",
+      "status": "estimated 16:42",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-28T16:55:00.000Z",
-      "end": "2025-10-28T17:25:00.000Z",
+      "start": "2025-10-28T16:57:00.000Z",
+      "end": "2025-10-28T17:27:00.000Z",
       "reason": "intl_spread",
       "airline": "KLM",
       "aircraft": "(PH-BGF)",
       "pax_estimate": 166,
       "scheduled_local": "16:55",
-      "eta_local": "16:40",
-      "delay_min": -15,
+      "eta_local": "16:42",
+      "delay_min": -13,
       "ui_state": "upcoming",
-      "ui_age_min": -96
+      "ui_age_min": -97
     },
     {
       "flight": "UNK-VAF",
       "origin": "(VAF)",
       "origin_iata": "VAF",
-      "eta": "2025-10-28T16:46:00.000Z",
-      "status": "estimated 16:46",
+      "eta": "2025-10-28T16:45:00.000Z",
+      "status": "estimated 16:45",
       "flow": "INTERNATIONAL",
       "belt": 2,
-      "start": "2025-10-28T17:01:00.000Z",
-      "end": "2025-10-28T17:31:00.000Z",
+      "start": "2025-10-28T17:00:00.000Z",
+      "end": "2025-10-28T17:30:00.000Z",
       "reason": "intl_spread",
       "airline": "",
       "aircraft": "(F-HNFC)",
       "pax_estimate": 166,
       "scheduled_local": "17:43",
-      "eta_local": "16:46",
-      "delay_min": -57,
+      "eta_local": "16:45",
+      "delay_min": -58,
       "ui_state": "upcoming",
-      "ui_age_min": -102
+      "ui_age_min": -100
     },
     {
       "flight": "U22936",
@@ -82,7 +82,7 @@
       "eta_local": "16:49",
       "delay_min": -26,
       "ui_state": "upcoming",
-      "ui_age_min": -105
+      "ui_age_min": -104
     },
     {
       "flight": "FR5518",
@@ -102,7 +102,7 @@
       "eta_local": "16:57",
       "delay_min": -3,
       "ui_state": "upcoming",
-      "ui_age_min": -113
+      "ui_age_min": -112
     },
     {
       "flight": "U22802",
@@ -122,7 +122,7 @@
       "eta_local": "16:59",
       "delay_min": -1,
       "ui_state": "upcoming",
-      "ui_age_min": -115
+      "ui_age_min": -114
     },
     {
       "flight": "FR750",
@@ -142,7 +142,7 @@
       "eta_local": "16:59",
       "delay_min": -6,
       "ui_state": "upcoming",
-      "ui_age_min": -115
+      "ui_age_min": -114
     },
     {
       "flight": "U22734",
@@ -162,7 +162,7 @@
       "eta_local": "17:14",
       "delay_min": 89,
       "ui_state": "upcoming",
-      "ui_age_min": -130
+      "ui_age_min": -129
     },
     {
       "flight": "U22964",
@@ -182,27 +182,47 @@
       "eta_local": "17:21",
       "delay_min": 56,
       "ui_state": "upcoming",
-      "ui_age_min": -137
+      "ui_age_min": -136
     },
     {
       "flight": "U22746",
       "origin": "(MAH)",
       "origin_iata": "MAH",
-      "eta": "2025-10-28T17:57:00.000Z",
-      "status": "estimated 17:57",
+      "eta": "2025-10-28T17:58:00.000Z",
+      "status": "estimated 17:58",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-28T18:12:00.000Z",
-      "end": "2025-10-28T18:42:00.000Z",
+      "start": "2025-10-28T18:13:00.000Z",
+      "end": "2025-10-28T18:43:00.000Z",
       "reason": "intl_spread",
       "airline": "easyJet",
       "aircraft": "(G-UZHH)",
       "pax_estimate": 162,
       "scheduled_local": "18:00",
-      "eta_local": "17:57",
-      "delay_min": -3,
+      "eta_local": "17:58",
+      "delay_min": -2,
       "ui_state": "upcoming",
       "ui_age_min": -173
+    },
+    {
+      "flight": "U27509",
+      "origin": "(FAO)",
+      "origin_iata": "FAO",
+      "eta": "2025-10-28T18:01:00.000Z",
+      "status": "estimated 18:01",
+      "flow": "INTERNATIONAL",
+      "belt": 2,
+      "start": "2025-10-28T18:16:00.000Z",
+      "end": "2025-10-28T18:46:00.000Z",
+      "reason": "intl_spread",
+      "airline": "easyJet",
+      "aircraft": "(OE-IND)",
+      "pax_estimate": 162,
+      "scheduled_local": "18:20",
+      "eta_local": "18:01",
+      "delay_min": -19,
+      "ui_state": "upcoming",
+      "ui_age_min": -176
     }
   ]
 }
