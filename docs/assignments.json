@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-28T18:41:19.415Z",
-  "generated_at_local": "2025-10-28T18:41:19",
+  "generated_at_utc": "2025-10-28T18:43:35.183Z",
+  "generated_at_local": "2025-10-28T18:43:35",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -8,21 +8,21 @@
       "flight": "LS1804",
       "origin": "(ACE)",
       "origin_iata": "ACE",
-      "eta": "2025-10-28T19:03:00.000Z",
-      "status": "delayed 19:03",
+      "eta": "2025-10-28T19:05:00.000Z",
+      "status": "delayed 19:05",
       "flow": "INTERNATIONAL",
       "belt": 5,
-      "start": "2025-10-28T19:18:00.000Z",
-      "end": "2025-10-28T19:48:00.000Z",
+      "start": "2025-10-28T19:20:00.000Z",
+      "end": "2025-10-28T19:50:00.000Z",
       "reason": "density→belt5",
       "airline": "Jet2",
       "aircraft": "(G-JZBO)",
       "pax_estimate": 171,
       "scheduled_local": "18:45",
-      "eta_local": "19:03",
-      "delay_min": 18,
+      "eta_local": "19:05",
+      "delay_min": 20,
       "ui_state": "upcoming",
-      "ui_age_min": -67
+      "ui_age_min": -66
     },
     {
       "flight": "U27076",
@@ -42,27 +42,27 @@
       "eta_local": "19:09",
       "delay_min": -21,
       "ui_state": "upcoming",
-      "ui_age_min": -73
+      "ui_age_min": -70
     },
     {
       "flight": "Aer Lingus Regional-ORK",
       "origin": "(ORK)",
       "origin_iata": "ORK",
-      "eta": "2025-10-28T19:13:00.000Z",
-      "status": "estimated 19:13",
+      "eta": "2025-10-28T19:14:00.000Z",
+      "status": "estimated 19:14",
       "flow": "INTERNATIONAL",
       "belt": 2,
-      "start": "2025-10-28T19:28:00.000Z",
-      "end": "2025-10-28T19:58:00.000Z",
+      "start": "2025-10-28T19:29:00.000Z",
+      "end": "2025-10-28T19:59:00.000Z",
       "reason": "intl_spread",
       "airline": "Aer Lingus Regional",
       "aircraft": "(EI-GPO)",
       "pax_estimate": 166,
       "scheduled_local": "19:10",
-      "eta_local": "19:13",
-      "delay_min": 3,
+      "eta_local": "19:14",
+      "delay_min": 4,
       "ui_state": "upcoming",
-      "ui_age_min": -77
+      "ui_age_min": -75
     },
     {
       "flight": "U27203",
@@ -82,7 +82,7 @@
       "eta_local": "19:22",
       "delay_min": -13,
       "ui_state": "upcoming",
-      "ui_age_min": -86
+      "ui_age_min": -83
     },
     {
       "flight": "U22724",
@@ -102,7 +102,7 @@
       "eta_local": "19:22",
       "delay_min": -28,
       "ui_state": "upcoming",
-      "ui_age_min": -86
+      "ui_age_min": -83
     },
     {
       "flight": "U27267",
@@ -122,47 +122,27 @@
       "eta_local": "19:52",
       "delay_min": -28,
       "ui_state": "upcoming",
-      "ui_age_min": -116
+      "ui_age_min": -113
     },
     {
       "flight": "FR746",
       "origin": "(CPH)",
       "origin_iata": "CPH",
-      "eta": "2025-10-28T20:16:00.000Z",
-      "status": "estimated 20:16",
+      "eta": "2025-10-28T20:18:00.000Z",
+      "status": "estimated 20:18",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-28T20:31:00.000Z",
-      "end": "2025-10-28T21:01:00.000Z",
+      "start": "2025-10-28T20:33:00.000Z",
+      "end": "2025-10-28T21:03:00.000Z",
       "reason": "intl_spread",
       "airline": "Buzz",
       "aircraft": "(SP-RZG)",
       "pax_estimate": 166,
       "scheduled_local": "20:30",
-      "eta_local": "20:16",
-      "delay_min": -14,
+      "eta_local": "20:18",
+      "delay_min": -12,
       "ui_state": "upcoming",
-      "ui_age_min": -140
-    },
-    {
-      "flight": "U22716",
-      "origin": "(AGP)",
-      "origin_iata": "AGP",
-      "eta": "2025-10-28T20:57:00.000Z",
-      "status": "estimated 20:57",
-      "flow": "INTERNATIONAL",
-      "belt": 2,
-      "start": "2025-10-28T21:12:00.000Z",
-      "end": "2025-10-28T21:42:00.000Z",
-      "reason": "intl_spread",
-      "airline": "easyJet",
-      "aircraft": "(G-EZOF)",
-      "pax_estimate": 162,
-      "scheduled_local": "20:50",
-      "eta_local": "20:57",
-      "delay_min": 7,
-      "ui_state": "upcoming",
-      "ui_age_min": -181
+      "ui_age_min": -139
     },
     {
       "flight": "X36279",
@@ -171,7 +151,7 @@
       "eta": "2025-10-28T20:58:00.000Z",
       "status": "estimated 20:58",
       "flow": "INTERNATIONAL",
-      "belt": 3,
+      "belt": 2,
       "start": "2025-10-28T21:13:00.000Z",
       "end": "2025-10-28T21:43:00.000Z",
       "reason": "intl_spread",
@@ -182,7 +162,27 @@
       "eta_local": "20:58",
       "delay_min": -37,
       "ui_state": "upcoming",
-      "ui_age_min": -182
+      "ui_age_min": -179
+    },
+    {
+      "flight": "U22716",
+      "origin": "(AGP)",
+      "origin_iata": "AGP",
+      "eta": "2025-10-28T20:59:00.000Z",
+      "status": "estimated 20:59",
+      "flow": "INTERNATIONAL",
+      "belt": 3,
+      "start": "2025-10-28T21:14:00.000Z",
+      "end": "2025-10-28T21:44:00.000Z",
+      "reason": "intl_spread",
+      "airline": "easyJet",
+      "aircraft": "(G-EZOF)",
+      "pax_estimate": 162,
+      "scheduled_local": "20:50",
+      "eta_local": "20:59",
+      "delay_min": 9,
+      "ui_state": "upcoming",
+      "ui_age_min": -180
     },
     {
       "flight": "U22720",
@@ -202,7 +202,7 @@
       "eta_local": "21:26",
       "delay_min": -24,
       "ui_state": "upcoming",
-      "ui_age_min": -210
+      "ui_age_min": -207
     }
   ]
 }
