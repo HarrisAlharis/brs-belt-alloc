@@ -1,56 +1,79 @@
 // docs/timeline.js
-// Updated: adds 4-hour history from alloc-log.json, merges with current assignments.
+// Combines current and past 4h allocations into one unified timeline view.
 
-const ASSIGN_URL = "assignments.json";
+const LIVE_URL = "assignments.json";
 const HISTORY_URL = "alloc-log.json";
 
 async function fetchJson(url) {
   try {
     const res = await fetch(url, { cache: "no-store" });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    if (!res.ok) throw new Error(res.statusText);
     return await res.json();
   } catch (err) {
-    console.warn("fetch failed:", url, err.message);
+    console.warn("⚠️ fetch failed for", url, err.message);
     return null;
   }
 }
 
-function buildKey(r) {
-  const f = (r.flight || "").trim() || (r.airline || "").trim() || "UNK";
-  const start = (r.start || "").slice(0, 16);
-  return `${f}|${start}`;
-}
+// Merge and filter data
+function mergeRows(history, live) {
+  const cutoff = Date.now() - 4 * 60 * 60 * 1000; // 4h ago
+  const recentHistory = (history || []).filter(r => {
+    const end = r.end ? new Date(r.end).getTime() : 0;
+    return end > cutoff;
+  });
 
-function combineRows(hist, live) {
-  const map = new Map();
-  for (const r of (hist || [])) map.set(buildKey(r), r);
-  for (const r of (live || [])) map.set(buildKey(r), r);
-  const merged = Array.from(map.values());
-  merged.sort((a,b) => new Date(a.start) - new Date(b.start));
+  const all = [...recentHistory, ...(live?.rows || [])];
+  // remove duplicates (same flight + start minute)
+  const seen = new Set();
+  const merged = all.filter(r => {
+    const key = `${r.flight}|${(r.start || '').slice(0, 16)}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+
+  // Sort chronologically
+  merged.sort((a, b) => new Date(a.start) - new Date(b.start));
   return merged;
 }
 
-function renderTimeline(rows) {
-  // === Your existing drawing logic ===
-  // This section must match your previous code that draws the timeline.
-  // Replace this placeholder with the code you already had for building
-  // the Gantt bars. If you copy the file on top of your old timeline.js,
-  // everything below this comment will already exist.
-  console.log(`Rendering ${rows.length} items`);
-  drawTimeline(rows); // assuming you already have drawTimeline()
+// Flag past flights (for greying)
+function markHistory(row) {
+  const now = Date.now();
+  const end = new Date(row.end).getTime();
+  if (now > end + 2 * 60 * 1000) {
+    row.isPast = true;
+  }
+  return row;
 }
 
+// Draw timeline (use your existing layout logic)
+function drawTimeline(rows) {
+  // Example placeholder — replace with your existing Gantt-drawing code.
+  const container = document.getElementById("timeline");
+  container.innerHTML = "";
+  rows.forEach(r => {
+    const div = document.createElement("div");
+    div.className = "puck";
+    div.style.top = `calc(${r.belt * 60}px)`;
+    div.style.left = `${(new Date(r.start) - Date.now()) / 60000 * 8}px`;
+    div.style.width = `${(new Date(r.end) - new Date(r.start)) / 60000 * 8}px`;
+    div.textContent = `${r.flight} ${r.origin_iata} ${r.eta_local}`;
+    if (r.isPast) div.style.opacity = "0.4";
+    container.appendChild(div);
+  });
+}
+
+// Main
 async function init() {
-  const [hist, assignData] = await Promise.all([
+  const [history, live] = await Promise.all([
     fetchJson(HISTORY_URL),
-    fetchJson(ASSIGN_URL)
+    fetchJson(LIVE_URL)
   ]);
 
-  const histRows = hist && Array.isArray(hist) ? hist : hist?.rows || [];
-  const liveRows = assignData && Array.isArray(assignData.rows) ? assignData.rows : [];
-
-  const allRows = combineRows(histRows, liveRows);
-  renderTimeline(allRows);
+  const merged = mergeRows(history, live).map(markHistory);
+  drawTimeline(merged);
 }
 
 document.addEventListener("DOMContentLoaded", init);
