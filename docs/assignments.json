@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-28T16:14:59.810Z",
-  "generated_at_local": "2025-10-28T16:14:59",
+  "generated_at_utc": "2025-10-28T16:16:19.073Z",
+  "generated_at_local": "2025-10-28T16:16:19",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -8,41 +8,41 @@
       "flight": "FR4122",
       "origin": "(AGP)",
       "origin_iata": "AGP",
-      "eta": "2025-10-28T16:26:00.000Z",
-      "status": "estimated 16:26",
+      "eta": "2025-10-28T16:25:00.000Z",
+      "status": "estimated 16:25",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-28T16:41:00.000Z",
-      "end": "2025-10-28T17:11:00.000Z",
+      "start": "2025-10-28T16:40:00.000Z",
+      "end": "2025-10-28T17:10:00.000Z",
       "reason": "intl_spread",
       "airline": "Ryanair",
       "aircraft": "(EI-HAY)",
       "pax_estimate": 166,
       "scheduled_local": "16:50",
-      "eta_local": "16:26",
-      "delay_min": -24,
+      "eta_local": "16:25",
+      "delay_min": -25,
       "ui_state": "upcoming",
-      "ui_age_min": -56
+      "ui_age_min": -54
     },
     {
       "flight": "KLM-AMS",
       "origin": "(AMS)",
       "origin_iata": "AMS",
-      "eta": "2025-10-28T16:44:00.000Z",
-      "status": "estimated 16:44",
+      "eta": "2025-10-28T16:46:00.000Z",
+      "status": "estimated 16:46",
       "flow": "INTERNATIONAL",
       "belt": 5,
-      "start": "2025-10-28T16:59:00.000Z",
-      "end": "2025-10-28T17:29:00.000Z",
+      "start": "2025-10-28T17:01:00.000Z",
+      "end": "2025-10-28T17:31:00.000Z",
       "reason": "density→belt5",
       "airline": "KLM",
       "aircraft": "(PH-BGF)",
       "pax_estimate": 166,
       "scheduled_local": "16:55",
-      "eta_local": "16:44",
-      "delay_min": -11,
+      "eta_local": "16:46",
+      "delay_min": -9,
       "ui_state": "upcoming",
-      "ui_age_min": -74
+      "ui_age_min": -75
     },
     {
       "flight": "U2220",
@@ -62,7 +62,7 @@
       "eta_local": "16:53",
       "delay_min": -12,
       "ui_state": "upcoming",
-      "ui_age_min": -83
+      "ui_age_min": -82
     },
     {
       "flight": "U22936",
@@ -82,7 +82,7 @@
       "eta_local": "16:53",
       "delay_min": -22,
       "ui_state": "upcoming",
-      "ui_age_min": -83
+      "ui_age_min": -82
     },
     {
       "flight": "UNK-VAF",
@@ -102,7 +102,7 @@
       "eta_local": "16:57",
       "delay_min": -46,
       "ui_state": "upcoming",
-      "ui_age_min": -87
+      "ui_age_min": -86
     },
     {
       "flight": "U22802",
@@ -122,7 +122,27 @@
       "eta_local": "17:01",
       "delay_min": 1,
       "ui_state": "upcoming",
-      "ui_age_min": -91
+      "ui_age_min": -90
+    },
+    {
+      "flight": "FR750",
+      "origin": "(PRG)",
+      "origin_iata": "PRG",
+      "eta": "2025-10-28T17:01:00.000Z",
+      "status": "estimated 17:01",
+      "flow": "INTERNATIONAL",
+      "belt": "",
+      "start": "2025-10-28T17:16:00.000Z",
+      "end": "2025-10-28T17:46:00.000Z",
+      "reason": "no_slot_available",
+      "airline": "Ryanair",
+      "aircraft": "(SP-RSU)",
+      "pax_estimate": 166,
+      "scheduled_local": "17:05",
+      "eta_local": "17:01",
+      "delay_min": -4,
+      "ui_state": "upcoming",
+      "ui_age_min": -90
     },
     {
       "flight": "FR5518",
@@ -142,27 +162,7 @@
       "eta_local": "17:04",
       "delay_min": 4,
       "ui_state": "upcoming",
-      "ui_age_min": -94
-    },
-    {
-      "flight": "FR750",
-      "origin": "(PRG)",
-      "origin_iata": "PRG",
-      "eta": "2025-10-28T17:04:00.000Z",
-      "status": "estimated 17:04",
-      "flow": "INTERNATIONAL",
-      "belt": "",
-      "start": "2025-10-28T17:19:00.000Z",
-      "end": "2025-10-28T17:49:00.000Z",
-      "reason": "no_slot_available",
-      "airline": "Ryanair",
-      "aircraft": "(SP-RSU)",
-      "pax_estimate": 166,
-      "scheduled_local": "17:05",
-      "eta_local": "17:04",
-      "delay_min": -1,
-      "ui_state": "upcoming",
-      "ui_age_min": -94
+      "ui_age_min": -93
     },
     {
       "flight": "U22964",
@@ -182,7 +182,7 @@
       "eta_local": "17:16",
       "delay_min": 51,
       "ui_state": "upcoming",
-      "ui_age_min": -106
+      "ui_age_min": -105
     },
     {
       "flight": "U22746",
@@ -202,7 +202,7 @@
       "eta_local": "17:57",
       "delay_min": -3,
       "ui_state": "upcoming",
-      "ui_age_min": -147
+      "ui_age_min": -146
     },
     {
       "flight": "U27509",
@@ -222,7 +222,7 @@
       "eta_local": "18:08",
       "delay_min": -12,
       "ui_state": "upcoming",
-      "ui_age_min": -158
+      "ui_age_min": -157
     },
     {
       "flight": "LS1884",
@@ -242,7 +242,7 @@
       "eta_local": "18:48",
       "delay_min": 28,
       "ui_state": "upcoming",
-      "ui_age_min": -198
+      "ui_age_min": -197
     },
     {
       "flight": "LS1804",
@@ -262,7 +262,7 @@
       "eta_local": "19:09",
       "delay_min": 24,
       "ui_state": "upcoming",
-      "ui_age_min": -219
+      "ui_age_min": -218
     }
   ]
 }
