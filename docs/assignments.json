@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-28T16:00:01.152Z",
-  "generated_at_local": "2025-10-28T16:00:01",
+  "generated_at_utc": "2025-10-28T16:01:19.672Z",
+  "generated_at_local": "2025-10-28T16:01:19",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -22,7 +22,7 @@
       "eta_local": "16:27",
       "delay_min": -23,
       "ui_state": "upcoming",
-      "ui_age_min": -72
+      "ui_age_min": -71
     },
     {
       "flight": "KLM-AMS",
@@ -42,7 +42,7 @@
       "eta_local": "16:40",
       "delay_min": -15,
       "ui_state": "upcoming",
-      "ui_age_min": -85
+      "ui_age_min": -84
     },
     {
       "flight": "UNK-VAF",
@@ -62,7 +62,7 @@
       "eta_local": "16:50",
       "delay_min": -53,
       "ui_state": "upcoming",
-      "ui_age_min": -95
+      "ui_age_min": -94
     },
     {
       "flight": "U22936",
@@ -82,7 +82,7 @@
       "eta_local": "16:51",
       "delay_min": -24,
       "ui_state": "upcoming",
-      "ui_age_min": -96
+      "ui_age_min": -95
     },
     {
       "flight": "FR5518",
@@ -102,27 +102,27 @@
       "eta_local": "16:57",
       "delay_min": -3,
       "ui_state": "upcoming",
-      "ui_age_min": -102
+      "ui_age_min": -101
     },
     {
       "flight": "U22802",
       "origin": "(RHO)",
       "origin_iata": "RHO",
-      "eta": "2025-10-28T17:01:00.000Z",
-      "status": "estimated 17:01",
+      "eta": "2025-10-28T16:59:00.000Z",
+      "status": "estimated 16:59",
       "flow": "INTERNATIONAL",
       "belt": "",
-      "start": "2025-10-28T17:16:00.000Z",
-      "end": "2025-10-28T17:46:00.000Z",
+      "start": "2025-10-28T17:14:00.000Z",
+      "end": "2025-10-28T17:44:00.000Z",
       "reason": "no_slot_available",
       "airline": "easyJet",
       "aircraft": "(G-UZMI)",
       "pax_estimate": 162,
       "scheduled_local": "17:00",
-      "eta_local": "17:01",
-      "delay_min": 1,
+      "eta_local": "16:59",
+      "delay_min": -1,
       "ui_state": "upcoming",
-      "ui_age_min": -106
+      "ui_age_min": -103
     },
     {
       "flight": "FR750",
@@ -142,27 +142,7 @@
       "eta_local": "17:01",
       "delay_min": -4,
       "ui_state": "upcoming",
-      "ui_age_min": -106
-    },
-    {
-      "flight": "U22734",
-      "origin": "(ACE)",
-      "origin_iata": "ACE",
-      "eta": "2025-10-28T17:14:00.000Z",
-      "status": "delayed 17:14",
-      "flow": "INTERNATIONAL",
-      "belt": 1,
-      "start": "2025-10-28T17:29:00.000Z",
-      "end": "2025-10-28T17:59:00.000Z",
-      "reason": "intl_spread",
-      "airline": "easyJet",
-      "aircraft": "(G-UZHJ)",
-      "pax_estimate": 162,
-      "scheduled_local": "15:45",
-      "eta_local": "17:14",
-      "delay_min": 89,
-      "ui_state": "upcoming",
-      "ui_age_min": -119
+      "ui_age_min": -105
     },
     {
       "flight": "U22964",
@@ -171,10 +151,10 @@
       "eta": "2025-10-28T17:18:00.000Z",
       "status": "delayed 17:18",
       "flow": "INTERNATIONAL",
-      "belt": "",
+      "belt": 1,
       "start": "2025-10-28T17:33:00.000Z",
       "end": "2025-10-28T18:03:00.000Z",
-      "reason": "no_slot_available",
+      "reason": "intl_spread",
       "airline": "easyJet",
       "aircraft": "(G-EZTL)",
       "pax_estimate": 162,
@@ -182,7 +162,7 @@
       "eta_local": "17:18",
       "delay_min": 53,
       "ui_state": "upcoming",
-      "ui_age_min": -123
+      "ui_age_min": -122
     },
     {
       "flight": "U22746",
@@ -202,7 +182,7 @@
       "eta_local": "17:55",
       "delay_min": -5,
       "ui_state": "upcoming",
-      "ui_age_min": -160
+      "ui_age_min": -159
     },
     {
       "flight": "U27509",
@@ -222,7 +202,7 @@
       "eta_local": "18:10",
       "delay_min": -10,
       "ui_state": "upcoming",
-      "ui_age_min": -175
+      "ui_age_min": -174
     },
     {
       "flight": "LS1884",
@@ -242,7 +222,7 @@
       "eta_local": "18:48",
       "delay_min": 28,
       "ui_state": "upcoming",
-      "ui_age_min": -213
+      "ui_age_min": -212
     }
   ]
 }
