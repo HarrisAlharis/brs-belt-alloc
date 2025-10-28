@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-28T15:56:19.032Z",
-  "generated_at_local": "2025-10-28T15:56:19",
+  "generated_at_utc": "2025-10-28T15:58:36.198Z",
+  "generated_at_local": "2025-10-28T15:58:36",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -22,7 +22,7 @@
       "eta_local": "16:27",
       "delay_min": -23,
       "ui_state": "upcoming",
-      "ui_age_min": -76
+      "ui_age_min": -73
     },
     {
       "flight": "KLM-AMS",
@@ -42,27 +42,7 @@
       "eta_local": "16:40",
       "delay_min": -15,
       "ui_state": "upcoming",
-      "ui_age_min": -89
-    },
-    {
-      "flight": "UNK-VAF",
-      "origin": "(VAF)",
-      "origin_iata": "VAF",
-      "eta": "2025-10-28T16:48:00.000Z",
-      "status": "estimated 16:48",
-      "flow": "INTERNATIONAL",
-      "belt": 2,
-      "start": "2025-10-28T17:03:00.000Z",
-      "end": "2025-10-28T17:33:00.000Z",
-      "reason": "intl_spread",
-      "airline": "",
-      "aircraft": "(F-HNFC)",
-      "pax_estimate": 166,
-      "scheduled_local": "17:43",
-      "eta_local": "16:48",
-      "delay_min": -55,
-      "ui_state": "upcoming",
-      "ui_age_min": -97
+      "ui_age_min": -86
     },
     {
       "flight": "U22936",
@@ -71,7 +51,7 @@
       "eta": "2025-10-28T16:49:00.000Z",
       "status": "estimated 16:49",
       "flow": "INTERNATIONAL",
-      "belt": 3,
+      "belt": 2,
       "start": "2025-10-28T17:04:00.000Z",
       "end": "2025-10-28T17:34:00.000Z",
       "reason": "intl_spread",
@@ -82,27 +62,47 @@
       "eta_local": "16:49",
       "delay_min": -26,
       "ui_state": "upcoming",
-      "ui_age_min": -98
+      "ui_age_min": -95
+    },
+    {
+      "flight": "UNK-VAF",
+      "origin": "(VAF)",
+      "origin_iata": "VAF",
+      "eta": "2025-10-28T16:49:00.000Z",
+      "status": "estimated 16:49",
+      "flow": "INTERNATIONAL",
+      "belt": 3,
+      "start": "2025-10-28T17:04:00.000Z",
+      "end": "2025-10-28T17:34:00.000Z",
+      "reason": "intl_spread",
+      "airline": "",
+      "aircraft": "(F-HNFC)",
+      "pax_estimate": 166,
+      "scheduled_local": "17:43",
+      "eta_local": "16:49",
+      "delay_min": -54,
+      "ui_state": "upcoming",
+      "ui_age_min": -95
     },
     {
       "flight": "FR5518",
       "origin": "(KRK)",
       "origin_iata": "KRK",
-      "eta": "2025-10-28T16:57:00.000Z",
-      "status": "estimated 16:57",
+      "eta": "2025-10-28T16:59:00.000Z",
+      "status": "estimated 16:59",
       "flow": "INTERNATIONAL",
       "belt": 6,
-      "start": "2025-10-28T17:12:00.000Z",
-      "end": "2025-10-28T17:42:00.000Z",
+      "start": "2025-10-28T17:14:00.000Z",
+      "end": "2025-10-28T17:44:00.000Z",
       "reason": "last_resort→6",
       "airline": "Buzz",
       "aircraft": "(SP-RZH)",
       "pax_estimate": 166,
       "scheduled_local": "17:00",
-      "eta_local": "16:57",
-      "delay_min": -3,
+      "eta_local": "16:59",
+      "delay_min": -1,
       "ui_state": "upcoming",
-      "ui_age_min": -106
+      "ui_age_min": -105
     },
     {
       "flight": "U22802",
@@ -122,7 +122,7 @@
       "eta_local": "17:01",
       "delay_min": 1,
       "ui_state": "upcoming",
-      "ui_age_min": -110
+      "ui_age_min": -107
     },
     {
       "flight": "FR750",
@@ -142,7 +142,7 @@
       "eta_local": "17:01",
       "delay_min": -4,
       "ui_state": "upcoming",
-      "ui_age_min": -110
+      "ui_age_min": -107
     },
     {
       "flight": "U22734",
@@ -162,7 +162,7 @@
       "eta_local": "17:16",
       "delay_min": 91,
       "ui_state": "upcoming",
-      "ui_age_min": -125
+      "ui_age_min": -122
     },
     {
       "flight": "U22964",
@@ -182,7 +182,7 @@
       "eta_local": "17:18",
       "delay_min": 53,
       "ui_state": "upcoming",
-      "ui_age_min": -127
+      "ui_age_min": -124
     },
     {
       "flight": "U22746",
@@ -202,7 +202,7 @@
       "eta_local": "17:55",
       "delay_min": -5,
       "ui_state": "upcoming",
-      "ui_age_min": -164
+      "ui_age_min": -161
     },
     {
       "flight": "U27509",
@@ -222,7 +222,7 @@
       "eta_local": "18:10",
       "delay_min": -10,
       "ui_state": "upcoming",
-      "ui_age_min": -179
+      "ui_age_min": -176
     },
     {
       "flight": "LS1884",
@@ -242,7 +242,7 @@
       "eta_local": "18:52",
       "delay_min": 32,
       "ui_state": "upcoming",
-      "ui_age_min": -221
+      "ui_age_min": -218
     }
   ]
 }
