@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-28T17:40:00.040Z",
-  "generated_at_local": "2025-10-28T17:40:00",
+  "generated_at_utc": "2025-10-28T17:41:20.193Z",
+  "generated_at_local": "2025-10-28T17:41:20",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -8,21 +8,21 @@
       "flight": "U2206",
       "origin": "(GLA)",
       "origin_iata": "GLA",
-      "eta": "2025-10-28T17:46:00.000Z",
-      "status": "estimated 17:46",
+      "eta": "2025-10-28T17:45:00.000Z",
+      "status": "estimated 17:45",
       "flow": "DOMESTIC",
       "belt": 7,
-      "start": "2025-10-28T18:01:00.000Z",
-      "end": "2025-10-28T18:31:00.000Z",
+      "start": "2025-10-28T18:00:00.000Z",
+      "end": "2025-10-28T18:30:00.000Z",
       "reason": "domestic→7",
       "airline": "easyJet",
       "aircraft": "(G-EZTZ)",
       "pax_estimate": 162,
       "scheduled_local": "17:55",
-      "eta_local": "17:46",
-      "delay_min": -9,
+      "eta_local": "17:45",
+      "delay_min": -10,
       "ui_state": "upcoming",
-      "ui_age_min": -51
+      "ui_age_min": -49
     },
     {
       "flight": "U27509",
@@ -42,7 +42,7 @@
       "eta_local": "18:01",
       "delay_min": -19,
       "ui_state": "upcoming",
-      "ui_age_min": -66
+      "ui_age_min": -65
     },
     {
       "flight": "U22746",
@@ -62,7 +62,7 @@
       "eta_local": "18:07",
       "delay_min": 7,
       "ui_state": "upcoming",
-      "ui_age_min": -72
+      "ui_age_min": -71
     },
     {
       "flight": "Aer Lingus Regional-DUB",
@@ -82,7 +82,7 @@
       "eta_local": "18:22",
       "delay_min": -18,
       "ui_state": "upcoming",
-      "ui_age_min": -87
+      "ui_age_min": -86
     },
     {
       "flight": "LS1884",
@@ -102,7 +102,7 @@
       "eta_local": "18:46",
       "delay_min": 26,
       "ui_state": "upcoming",
-      "ui_age_min": -111
+      "ui_age_min": -110
     },
     {
       "flight": "LS1804",
@@ -122,7 +122,7 @@
       "eta_local": "19:01",
       "delay_min": 16,
       "ui_state": "upcoming",
-      "ui_age_min": -126
+      "ui_age_min": -125
     },
     {
       "flight": "U27203",
@@ -142,7 +142,7 @@
       "eta_local": "19:26",
       "delay_min": -9,
       "ui_state": "upcoming",
-      "ui_age_min": -151
+      "ui_age_min": -150
     },
     {
       "flight": "U22724",
@@ -162,7 +162,7 @@
       "eta_local": "19:26",
       "delay_min": -24,
       "ui_state": "upcoming",
-      "ui_age_min": -151
+      "ui_age_min": -150
     },
     {
       "flight": "LS1850",
@@ -182,7 +182,7 @@
       "eta_local": "19:35",
       "delay_min": 110,
       "ui_state": "upcoming",
-      "ui_age_min": -160
+      "ui_age_min": -159
     }
   ]
 }
