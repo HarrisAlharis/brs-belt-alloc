@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-28T18:38:37.144Z",
-  "generated_at_local": "2025-10-28T18:38:37",
+  "generated_at_utc": "2025-10-28T18:40:00.106Z",
+  "generated_at_local": "2025-10-28T18:40:00",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -22,7 +22,7 @@
       "eta_local": "19:03",
       "delay_min": 18,
       "ui_state": "upcoming",
-      "ui_age_min": -69
+      "ui_age_min": -68
     },
     {
       "flight": "U27076",
@@ -42,7 +42,7 @@
       "eta_local": "19:09",
       "delay_min": -21,
       "ui_state": "upcoming",
-      "ui_age_min": -75
+      "ui_age_min": -74
     },
     {
       "flight": "Aer Lingus Regional-ORK",
@@ -62,7 +62,7 @@
       "eta_local": "19:12",
       "delay_min": 2,
       "ui_state": "upcoming",
-      "ui_age_min": -78
+      "ui_age_min": -77
     },
     {
       "flight": "U27203",
@@ -82,7 +82,7 @@
       "eta_local": "19:22",
       "delay_min": -13,
       "ui_state": "upcoming",
-      "ui_age_min": -88
+      "ui_age_min": -87
     },
     {
       "flight": "U22724",
@@ -102,7 +102,7 @@
       "eta_local": "19:22",
       "delay_min": -28,
       "ui_state": "upcoming",
-      "ui_age_min": -88
+      "ui_age_min": -87
     },
     {
       "flight": "U27267",
@@ -122,7 +122,7 @@
       "eta_local": "19:52",
       "delay_min": -28,
       "ui_state": "upcoming",
-      "ui_age_min": -118
+      "ui_age_min": -117
     },
     {
       "flight": "FR746",
@@ -142,27 +142,27 @@
       "eta_local": "20:16",
       "delay_min": -14,
       "ui_state": "upcoming",
-      "ui_age_min": -142
+      "ui_age_min": -141
     },
     {
       "flight": "X36279",
       "origin": "(TFS)",
       "origin_iata": "TFS",
-      "eta": "2025-10-28T21:00:00.000Z",
-      "status": "estimated 21:00",
+      "eta": "2025-10-28T20:59:00.000Z",
+      "status": "estimated 20:59",
       "flow": "INTERNATIONAL",
       "belt": 2,
-      "start": "2025-10-28T21:15:00.000Z",
-      "end": "2025-10-28T21:45:00.000Z",
+      "start": "2025-10-28T21:14:00.000Z",
+      "end": "2025-10-28T21:44:00.000Z",
       "reason": "intl_spread",
       "airline": "TUI",
       "aircraft": "(G-TUOB)",
       "pax_estimate": 166,
       "scheduled_local": "21:35",
-      "eta_local": "21:00",
-      "delay_min": -35,
+      "eta_local": "20:59",
+      "delay_min": -36,
       "ui_state": "upcoming",
-      "ui_age_min": -186
+      "ui_age_min": -184
     },
     {
       "flight": "U22720",
@@ -182,7 +182,7 @@
       "eta_local": "21:28",
       "delay_min": -22,
       "ui_state": "upcoming",
-      "ui_age_min": -214
+      "ui_age_min": -213
     }
   ]
 }
