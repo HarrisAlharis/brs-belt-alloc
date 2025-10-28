@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-28T18:45:00.751Z",
-  "generated_at_local": "2025-10-28T18:45:00",
+  "generated_at_utc": "2025-10-28T18:46:19.881Z",
+  "generated_at_local": "2025-10-28T18:46:19",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -8,21 +8,21 @@
       "flight": "LS1804",
       "origin": "(ACE)",
       "origin_iata": "ACE",
-      "eta": "2025-10-28T19:04:00.000Z",
-      "status": "delayed 19:04",
+      "eta": "2025-10-28T19:03:00.000Z",
+      "status": "delayed 19:03",
       "flow": "INTERNATIONAL",
       "belt": 5,
-      "start": "2025-10-28T19:19:00.000Z",
-      "end": "2025-10-28T19:49:00.000Z",
+      "start": "2025-10-28T19:18:00.000Z",
+      "end": "2025-10-28T19:48:00.000Z",
       "reason": "density→belt5",
       "airline": "Jet2",
       "aircraft": "(G-JZBO)",
       "pax_estimate": 171,
       "scheduled_local": "18:45",
-      "eta_local": "19:04",
-      "delay_min": 19,
+      "eta_local": "19:03",
+      "delay_min": 18,
       "ui_state": "upcoming",
-      "ui_age_min": -64
+      "ui_age_min": -62
     },
     {
       "flight": "U27076",
@@ -42,7 +42,7 @@
       "eta_local": "19:09",
       "delay_min": -21,
       "ui_state": "upcoming",
-      "ui_age_min": -69
+      "ui_age_min": -68
     },
     {
       "flight": "U27203",
@@ -62,7 +62,7 @@
       "eta_local": "19:22",
       "delay_min": -13,
       "ui_state": "upcoming",
-      "ui_age_min": -82
+      "ui_age_min": -81
     },
     {
       "flight": "U22724",
@@ -82,27 +82,27 @@
       "eta_local": "19:22",
       "delay_min": -28,
       "ui_state": "upcoming",
-      "ui_age_min": -82
+      "ui_age_min": -81
     },
     {
       "flight": "Aer Lingus Regional-ORK",
       "origin": "(ORK)",
       "origin_iata": "ORK",
-      "eta": "2025-10-28T19:27:00.000Z",
-      "status": "delayed 19:27",
+      "eta": "2025-10-28T19:26:00.000Z",
+      "status": "delayed 19:26",
       "flow": "INTERNATIONAL",
       "belt": 6,
-      "start": "2025-10-28T19:42:00.000Z",
-      "end": "2025-10-28T20:12:00.000Z",
+      "start": "2025-10-28T19:41:00.000Z",
+      "end": "2025-10-28T20:11:00.000Z",
       "reason": "last_resort→6",
       "airline": "Aer Lingus Regional",
       "aircraft": "(EI-GPO)",
       "pax_estimate": 166,
       "scheduled_local": "19:10",
-      "eta_local": "19:27",
-      "delay_min": 17,
+      "eta_local": "19:26",
+      "delay_min": 16,
       "ui_state": "upcoming",
-      "ui_age_min": -87
+      "ui_age_min": -85
     },
     {
       "flight": "U27267",
@@ -122,27 +122,27 @@
       "eta_local": "19:52",
       "delay_min": -28,
       "ui_state": "upcoming",
-      "ui_age_min": -112
+      "ui_age_min": -111
     },
     {
       "flight": "FR746",
       "origin": "(CPH)",
       "origin_iata": "CPH",
-      "eta": "2025-10-28T20:16:00.000Z",
-      "status": "estimated 20:16",
+      "eta": "2025-10-28T20:18:00.000Z",
+      "status": "estimated 20:18",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-28T20:31:00.000Z",
-      "end": "2025-10-28T21:01:00.000Z",
+      "start": "2025-10-28T20:33:00.000Z",
+      "end": "2025-10-28T21:03:00.000Z",
       "reason": "intl_spread",
       "airline": "Buzz",
       "aircraft": "(SP-RZG)",
       "pax_estimate": 166,
       "scheduled_local": "20:30",
-      "eta_local": "20:16",
-      "delay_min": -14,
+      "eta_local": "20:18",
+      "delay_min": -12,
       "ui_state": "upcoming",
-      "ui_age_min": -136
+      "ui_age_min": -137
     },
     {
       "flight": "U22716",
@@ -162,7 +162,7 @@
       "eta_local": "20:52",
       "delay_min": 2,
       "ui_state": "upcoming",
-      "ui_age_min": -172
+      "ui_age_min": -171
     },
     {
       "flight": "X36279",
@@ -182,7 +182,7 @@
       "eta_local": "20:58",
       "delay_min": -37,
       "ui_state": "upcoming",
-      "ui_age_min": -178
+      "ui_age_min": -177
     },
     {
       "flight": "U22720",
@@ -202,7 +202,7 @@
       "eta_local": "21:28",
       "delay_min": -22,
       "ui_state": "upcoming",
-      "ui_age_min": -208
+      "ui_age_min": -207
     }
   ]
 }
