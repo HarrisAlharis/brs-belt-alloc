@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-28T17:25:02.679Z",
-  "generated_at_local": "2025-10-28T17:25:02",
+  "generated_at_utc": "2025-10-28T17:26:19.377Z",
+  "generated_at_local": "2025-10-28T17:26:19",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -8,41 +8,41 @@
       "flight": "U2206",
       "origin": "(GLA)",
       "origin_iata": "GLA",
-      "eta": "2025-10-28T17:48:00.000Z",
-      "status": "estimated 17:48",
+      "eta": "2025-10-28T17:46:00.000Z",
+      "status": "estimated 17:46",
       "flow": "DOMESTIC",
       "belt": 7,
-      "start": "2025-10-28T18:03:00.000Z",
-      "end": "2025-10-28T18:33:00.000Z",
+      "start": "2025-10-28T18:01:00.000Z",
+      "end": "2025-10-28T18:31:00.000Z",
       "reason": "domestic→7",
       "airline": "easyJet",
       "aircraft": "(G-EZTZ)",
       "pax_estimate": 162,
       "scheduled_local": "17:55",
-      "eta_local": "17:48",
-      "delay_min": -7,
+      "eta_local": "17:46",
+      "delay_min": -9,
       "ui_state": "upcoming",
-      "ui_age_min": -68
+      "ui_age_min": -65
     },
     {
       "flight": "U22746",
       "origin": "(MAH)",
       "origin_iata": "MAH",
-      "eta": "2025-10-28T17:59:00.000Z",
-      "status": "estimated 17:59",
+      "eta": "2025-10-28T17:58:00.000Z",
+      "status": "estimated 17:58",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-28T18:14:00.000Z",
-      "end": "2025-10-28T18:44:00.000Z",
+      "start": "2025-10-28T18:13:00.000Z",
+      "end": "2025-10-28T18:43:00.000Z",
       "reason": "intl_spread",
       "airline": "easyJet",
       "aircraft": "(G-UZHH)",
       "pax_estimate": 162,
       "scheduled_local": "18:00",
-      "eta_local": "17:59",
-      "delay_min": -1,
+      "eta_local": "17:58",
+      "delay_min": -2,
       "ui_state": "upcoming",
-      "ui_age_min": -79
+      "ui_age_min": -77
     },
     {
       "flight": "Aer Lingus Regional-DUB",
@@ -62,7 +62,7 @@
       "eta_local": "18:01",
       "delay_min": -39,
       "ui_state": "upcoming",
-      "ui_age_min": -81
+      "ui_age_min": -80
     },
     {
       "flight": "U27509",
@@ -82,7 +82,7 @@
       "eta_local": "18:01",
       "delay_min": -19,
       "ui_state": "upcoming",
-      "ui_age_min": -81
+      "ui_age_min": -80
     },
     {
       "flight": "LS1884",
@@ -102,7 +102,7 @@
       "eta_local": "18:48",
       "delay_min": 28,
       "ui_state": "upcoming",
-      "ui_age_min": -128
+      "ui_age_min": -127
     },
     {
       "flight": "LS1804",
@@ -122,27 +122,27 @@
       "eta_local": "19:03",
       "delay_min": 18,
       "ui_state": "upcoming",
-      "ui_age_min": -143
+      "ui_age_min": -142
     },
     {
       "flight": "U27203",
       "origin": "(BCN)",
       "origin_iata": "BCN",
-      "eta": "2025-10-28T19:08:00.000Z",
-      "status": "estimated 19:08",
+      "eta": "2025-10-28T19:10:00.000Z",
+      "status": "estimated 19:10",
       "flow": "INTERNATIONAL",
       "belt": 2,
-      "start": "2025-10-28T19:23:00.000Z",
-      "end": "2025-10-28T19:53:00.000Z",
+      "start": "2025-10-28T19:25:00.000Z",
+      "end": "2025-10-28T19:55:00.000Z",
       "reason": "intl_spread",
       "airline": "easyJet",
       "aircraft": "(OE-LQJ)",
       "pax_estimate": 162,
       "scheduled_local": "19:35",
-      "eta_local": "19:08",
-      "delay_min": -27,
+      "eta_local": "19:10",
+      "delay_min": -25,
       "ui_state": "upcoming",
-      "ui_age_min": -148
+      "ui_age_min": -149
     },
     {
       "flight": "U22724",
@@ -162,7 +162,7 @@
       "eta_local": "19:26",
       "delay_min": -24,
       "ui_state": "upcoming",
-      "ui_age_min": -166
+      "ui_age_min": -165
     },
     {
       "flight": "LS1850",
@@ -182,7 +182,7 @@
       "eta_local": "19:35",
       "delay_min": 110,
       "ui_state": "upcoming",
-      "ui_age_min": -175
+      "ui_age_min": -174
     }
   ]
 }
