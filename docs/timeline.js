@@ -1,5 +1,5 @@
 // docs/timeline.js
-// Combines current and past 4h allocations into one unified timeline view.
+// Unified baggage belt timeline: last 4h + current/upcoming allocations
 
 const LIVE_URL = "assignments.json";
 const HISTORY_URL = "alloc-log.json";
@@ -10,69 +10,94 @@ async function fetchJson(url) {
     if (!res.ok) throw new Error(res.statusText);
     return await res.json();
   } catch (err) {
-    console.warn("⚠️ fetch failed for", url, err.message);
+    console.warn("⚠️ Fetch failed:", url, err.message);
     return null;
   }
 }
 
-// Merge and filter data
 function mergeRows(history, live) {
   const cutoff = Date.now() - 4 * 60 * 60 * 1000; // 4h ago
-  const recentHistory = (history || []).filter(r => {
-    const end = r.end ? new Date(r.end).getTime() : 0;
-    return end > cutoff;
-  });
+  const histRows = Array.isArray(history)
+    ? history.filter(r => new Date(r.end).getTime() > cutoff)
+    : Array.isArray(history?.rows)
+    ? history.rows.filter(r => new Date(r.end).getTime() > cutoff)
+    : [];
 
-  const all = [...recentHistory, ...(live?.rows || [])];
-  // remove duplicates (same flight + start minute)
+  const liveRows = Array.isArray(live?.rows) ? live.rows : [];
+
   const seen = new Set();
-  const merged = all.filter(r => {
-    const key = `${r.flight}|${(r.start || '').slice(0, 16)}`;
+  const all = [...histRows, ...liveRows].filter(r => {
+    const key = `${r.flight}|${(r.start || "").slice(0, 16)}`;
     if (seen.has(key)) return false;
     seen.add(key);
     return true;
   });
 
-  // Sort chronologically
-  merged.sort((a, b) => new Date(a.start) - new Date(b.start));
-  return merged;
+  all.sort((a, b) => new Date(a.start) - new Date(b.start));
+  return all;
 }
 
-// Flag past flights (for greying)
 function markHistory(row) {
   const now = Date.now();
   const end = new Date(row.end).getTime();
-  if (now > end + 2 * 60 * 1000) {
-    row.isPast = true;
-  }
+  row.isPast = now > end + 2 * 60 * 1000;
   return row;
 }
 
-// Draw timeline (use your existing layout logic)
+// Draw function (safe minimal)
 function drawTimeline(rows) {
-  // Example placeholder — replace with your existing Gantt-drawing code.
   const container = document.getElementById("timeline");
+  if (!container) {
+    console.error("❌ Missing #timeline element in HTML");
+    return;
+  }
   container.innerHTML = "";
-  rows.forEach(r => {
-    const div = document.createElement("div");
-    div.className = "puck";
-    div.style.top = `calc(${r.belt * 60}px)`;
-    div.style.left = `${(new Date(r.start) - Date.now()) / 60000 * 8}px`;
-    div.style.width = `${(new Date(r.end) - new Date(r.start)) / 60000 * 8}px`;
-    div.textContent = `${r.flight} ${r.origin_iata} ${r.eta_local}`;
-    if (r.isPast) div.style.opacity = "0.4";
-    container.appendChild(div);
-  });
+
+  if (!rows || rows.length === 0) {
+    container.innerHTML = "<p style='color:#666'>No timeline data found.</p>";
+    console.warn("⚠️ No timeline data found");
+    return;
+  }
+
+  // 8px = 1 minute scale
+  const PX_PER_MIN = 8;
+  const now = Date.now();
+
+  for (const r of rows) {
+    const start = new Date(r.start).getTime();
+    const end = new Date(r.end).getTime();
+    const minsFromNow = (start - now) / 60000;
+    const durationMin = (end - start) / 60000;
+
+    const puck = document.createElement("div");
+    puck.className = "puck";
+    puck.style.position = "absolute";
+    puck.style.left = `${minsFromNow * PX_PER_MIN + 1000}px`; // offset for view
+    puck.style.top = `${(r.belt || 1) * 50}px`;
+    puck.style.width = `${durationMin * PX_PER_MIN}px`;
+    puck.style.height = "24px";
+    puck.style.borderRadius = "4px";
+    puck.style.background = r.isPast ? "#bbb" : "#3cb371";
+    puck.style.opacity = r.isPast ? "0.5" : "1";
+    puck.style.color = "#000";
+    puck.style.font = "12px Arial, sans-serif";
+    puck.style.display = "flex";
+    puck.style.alignItems = "center";
+    puck.style.justifyContent = "center";
+    puck.textContent = `${r.flight} ${r.origin_iata || ""} ${r.eta_local || ""}`;
+    container.appendChild(puck);
+  }
 }
 
-// Main
 async function init() {
+  console.log("⏳ Loading timeline data...");
   const [history, live] = await Promise.all([
     fetchJson(HISTORY_URL),
     fetchJson(LIVE_URL)
   ]);
 
   const merged = mergeRows(history, live).map(markHistory);
+  console.log(`✅ Loaded ${merged.length} total records`);
   drawTimeline(merged);
 }
 
