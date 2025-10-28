@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-28T18:00:01.615Z",
-  "generated_at_local": "2025-10-28T18:00:01",
+  "generated_at_utc": "2025-10-28T18:01:19.161Z",
+  "generated_at_local": "2025-10-28T18:01:19",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -22,7 +22,7 @@
       "eta_local": "18:04",
       "delay_min": 4,
       "ui_state": "upcoming",
-      "ui_age_min": -49
+      "ui_age_min": -48
     },
     {
       "flight": "Aer Lingus Regional-DUB",
@@ -42,7 +42,7 @@
       "eta_local": "18:06",
       "delay_min": -34,
       "ui_state": "upcoming",
-      "ui_age_min": -51
+      "ui_age_min": -50
     },
     {
       "flight": "LS1884",
@@ -62,7 +62,7 @@
       "eta_local": "18:46",
       "delay_min": 26,
       "ui_state": "upcoming",
-      "ui_age_min": -91
+      "ui_age_min": -90
     },
     {
       "flight": "LS1804",
@@ -82,7 +82,7 @@
       "eta_local": "19:03",
       "delay_min": 18,
       "ui_state": "upcoming",
-      "ui_age_min": -108
+      "ui_age_min": -107
     },
     {
       "flight": "U27203",
@@ -102,7 +102,7 @@
       "eta_local": "19:24",
       "delay_min": -11,
       "ui_state": "upcoming",
-      "ui_age_min": -129
+      "ui_age_min": -128
     },
     {
       "flight": "U22724",
@@ -122,27 +122,7 @@
       "eta_local": "19:26",
       "delay_min": -24,
       "ui_state": "upcoming",
-      "ui_age_min": -131
-    },
-    {
-      "flight": "LS1850",
-      "origin": "(DLM)",
-      "origin_iata": "DLM",
-      "eta": "2025-10-28T19:35:00.000Z",
-      "status": "delayed 19:35",
-      "flow": "INTERNATIONAL",
-      "belt": 5,
-      "start": "2025-10-28T19:50:00.000Z",
-      "end": "2025-10-28T20:20:00.000Z",
-      "reason": "density→belt5",
-      "airline": "Jet2",
-      "aircraft": "(G-DRTJ)",
-      "pax_estimate": 171,
-      "scheduled_local": "17:45",
-      "eta_local": "19:35",
-      "delay_min": 110,
-      "ui_state": "upcoming",
-      "ui_age_min": -140
+      "ui_age_min": -130
     },
     {
       "flight": "U27267",
@@ -162,7 +142,7 @@
       "eta_local": "19:52",
       "delay_min": -28,
       "ui_state": "upcoming",
-      "ui_age_min": -157
+      "ui_age_min": -156
     }
   ]
 }
