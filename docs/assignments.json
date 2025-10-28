@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-28T17:20:00.119Z",
-  "generated_at_local": "2025-10-28T17:20:00",
+  "generated_at_utc": "2025-10-28T17:21:19.251Z",
+  "generated_at_local": "2025-10-28T17:21:19",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -22,7 +22,7 @@
       "eta_local": "17:22",
       "delay_min": -21,
       "ui_state": "upcoming",
-      "ui_age_min": -47
+      "ui_age_min": -46
     },
     {
       "flight": "U2206",
@@ -42,7 +42,7 @@
       "eta_local": "17:44",
       "delay_min": -11,
       "ui_state": "upcoming",
-      "ui_age_min": -69
+      "ui_age_min": -68
     },
     {
       "flight": "Aer Lingus Regional-DUB",
@@ -62,7 +62,7 @@
       "eta_local": "17:59",
       "delay_min": -24,
       "ui_state": "upcoming",
-      "ui_age_min": -84
+      "ui_age_min": -83
     },
     {
       "flight": "U22746",
@@ -82,7 +82,7 @@
       "eta_local": "17:59",
       "delay_min": -1,
       "ui_state": "upcoming",
-      "ui_age_min": -84
+      "ui_age_min": -83
     },
     {
       "flight": "U27509",
@@ -102,7 +102,7 @@
       "eta_local": "18:05",
       "delay_min": -15,
       "ui_state": "upcoming",
-      "ui_age_min": -90
+      "ui_age_min": -89
     },
     {
       "flight": "LS1884",
@@ -122,7 +122,7 @@
       "eta_local": "18:48",
       "delay_min": 28,
       "ui_state": "upcoming",
-      "ui_age_min": -133
+      "ui_age_min": -132
     },
     {
       "flight": "LS1804",
@@ -142,7 +142,7 @@
       "eta_local": "19:05",
       "delay_min": 20,
       "ui_state": "upcoming",
-      "ui_age_min": -150
+      "ui_age_min": -149
     },
     {
       "flight": "U22724",
@@ -162,7 +162,7 @@
       "eta_local": "19:26",
       "delay_min": -24,
       "ui_state": "upcoming",
-      "ui_age_min": -171
+      "ui_age_min": -170
     },
     {
       "flight": "LS1850",
@@ -182,7 +182,7 @@
       "eta_local": "19:33",
       "delay_min": 108,
       "ui_state": "upcoming",
-      "ui_age_min": -178
+      "ui_age_min": -177
     }
   ]
 }
