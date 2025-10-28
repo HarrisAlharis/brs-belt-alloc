@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-28T16:23:35.100Z",
-  "generated_at_local": "2025-10-28T16:23:35",
+  "generated_at_utc": "2025-10-28T16:24:59.885Z",
+  "generated_at_local": "2025-10-28T16:24:59",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -22,7 +22,7 @@
       "eta_local": "16:25",
       "delay_min": -25,
       "ui_state": "upcoming",
-      "ui_age_min": -46
+      "ui_age_min": -45
     },
     {
       "flight": "KLM-AMS",
@@ -42,27 +42,27 @@
       "eta_local": "16:51",
       "delay_min": -4,
       "ui_state": "upcoming",
-      "ui_age_min": -72
+      "ui_age_min": -71
     },
     {
       "flight": "U2220",
       "origin": "(EDI)",
       "origin_iata": "EDI",
-      "eta": "2025-10-28T16:53:00.000Z",
-      "status": "estimated 16:53",
+      "eta": "2025-10-28T16:55:00.000Z",
+      "status": "estimated 16:55",
       "flow": "DOMESTIC",
       "belt": 7,
-      "start": "2025-10-28T17:08:00.000Z",
-      "end": "2025-10-28T17:38:00.000Z",
+      "start": "2025-10-28T17:10:00.000Z",
+      "end": "2025-10-28T17:40:00.000Z",
       "reason": "domestic→7",
       "airline": "easyJet",
       "aircraft": "(G-EZUK)",
       "pax_estimate": 162,
       "scheduled_local": "17:05",
-      "eta_local": "16:53",
-      "delay_min": -12,
+      "eta_local": "16:55",
+      "delay_min": -10,
       "ui_state": "upcoming",
-      "ui_age_min": -74
+      "ui_age_min": -75
     },
     {
       "flight": "U22936",
@@ -82,7 +82,7 @@
       "eta_local": "16:57",
       "delay_min": -18,
       "ui_state": "upcoming",
-      "ui_age_min": -78
+      "ui_age_min": -77
     },
     {
       "flight": "U22802",
@@ -102,25 +102,25 @@
       "eta_local": "17:01",
       "delay_min": 1,
       "ui_state": "upcoming",
-      "ui_age_min": -82
+      "ui_age_min": -81
     },
     {
       "flight": "UNK-VAF",
       "origin": "(VAF)",
       "origin_iata": "VAF",
-      "eta": "2025-10-28T17:01:00.000Z",
-      "status": "estimated 17:01",
+      "eta": "2025-10-28T17:02:00.000Z",
+      "status": "estimated 17:02",
       "flow": "INTERNATIONAL",
       "belt": 6,
-      "start": "2025-10-28T17:16:00.000Z",
-      "end": "2025-10-28T17:46:00.000Z",
+      "start": "2025-10-28T17:17:00.000Z",
+      "end": "2025-10-28T17:47:00.000Z",
       "reason": "last_resort→6",
       "airline": "",
       "aircraft": "(F-HNFC)",
       "pax_estimate": 166,
       "scheduled_local": "17:43",
-      "eta_local": "17:01",
-      "delay_min": -42,
+      "eta_local": "17:02",
+      "delay_min": -41,
       "ui_state": "upcoming",
       "ui_age_min": -82
     },
@@ -142,7 +142,7 @@
       "eta_local": "17:06",
       "delay_min": 6,
       "ui_state": "upcoming",
-      "ui_age_min": -87
+      "ui_age_min": -86
     },
     {
       "flight": "FR750",
@@ -162,7 +162,7 @@
       "eta_local": "17:06",
       "delay_min": 1,
       "ui_state": "upcoming",
-      "ui_age_min": -87
+      "ui_age_min": -86
     },
     {
       "flight": "U22964",
@@ -182,7 +182,7 @@
       "eta_local": "17:14",
       "delay_min": 49,
       "ui_state": "upcoming",
-      "ui_age_min": -95
+      "ui_age_min": -94
     },
     {
       "flight": "U22746",
@@ -202,7 +202,7 @@
       "eta_local": "17:55",
       "delay_min": -5,
       "ui_state": "upcoming",
-      "ui_age_min": -136
+      "ui_age_min": -135
     },
     {
       "flight": "U27509",
@@ -222,7 +222,7 @@
       "eta_local": "18:08",
       "delay_min": -12,
       "ui_state": "upcoming",
-      "ui_age_min": -149
+      "ui_age_min": -148
     },
     {
       "flight": "LS1884",
@@ -242,7 +242,7 @@
       "eta_local": "18:48",
       "delay_min": 28,
       "ui_state": "upcoming",
-      "ui_age_min": -189
+      "ui_age_min": -188
     },
     {
       "flight": "LS1804",
@@ -262,7 +262,7 @@
       "eta_local": "19:09",
       "delay_min": 24,
       "ui_state": "upcoming",
-      "ui_age_min": -210
+      "ui_age_min": -209
     }
   ]
 }
