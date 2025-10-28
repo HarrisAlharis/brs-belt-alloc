@@ -1,48 +1,28 @@
 {
-  "generated_at_utc": "2025-10-28T17:43:35.141Z",
-  "generated_at_local": "2025-10-28T17:43:35",
+  "generated_at_utc": "2025-10-28T17:45:00.768Z",
+  "generated_at_local": "2025-10-28T17:45:00",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
     {
-      "flight": "U2206",
-      "origin": "(GLA)",
-      "origin_iata": "GLA",
-      "eta": "2025-10-28T17:45:00.000Z",
-      "status": "estimated 17:45",
-      "flow": "DOMESTIC",
-      "belt": 7,
-      "start": "2025-10-28T18:00:00.000Z",
-      "end": "2025-10-28T18:30:00.000Z",
-      "reason": "domestic→7",
-      "airline": "easyJet",
-      "aircraft": "(G-EZTZ)",
-      "pax_estimate": 162,
-      "scheduled_local": "17:55",
-      "eta_local": "17:45",
-      "delay_min": -10,
-      "ui_state": "upcoming",
-      "ui_age_min": -46
-    },
-    {
       "flight": "U27509",
       "origin": "(FAO)",
       "origin_iata": "FAO",
-      "eta": "2025-10-28T18:06:00.000Z",
-      "status": "estimated 18:06",
+      "eta": "2025-10-28T18:05:00.000Z",
+      "status": "estimated 18:05",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-28T18:21:00.000Z",
-      "end": "2025-10-28T18:51:00.000Z",
+      "start": "2025-10-28T18:20:00.000Z",
+      "end": "2025-10-28T18:50:00.000Z",
       "reason": "intl_spread",
       "airline": "easyJet",
       "aircraft": "(OE-IND)",
       "pax_estimate": 162,
       "scheduled_local": "18:20",
-      "eta_local": "18:06",
-      "delay_min": -14,
+      "eta_local": "18:05",
+      "delay_min": -15,
       "ui_state": "upcoming",
-      "ui_age_min": -67
+      "ui_age_min": -65
     },
     {
       "flight": "U22746",
@@ -62,25 +42,25 @@
       "eta_local": "18:07",
       "delay_min": 7,
       "ui_state": "upcoming",
-      "ui_age_min": -68
+      "ui_age_min": -67
     },
     {
       "flight": "Aer Lingus Regional-DUB",
       "origin": "(DUB)",
       "origin_iata": "DUB",
-      "eta": "2025-10-28T18:19:00.000Z",
-      "status": "estimated 18:19",
+      "eta": "2025-10-28T18:20:00.000Z",
+      "status": "estimated 18:20",
       "flow": "CTA",
       "belt": 6,
-      "start": "2025-10-28T18:34:00.000Z",
-      "end": "2025-10-28T19:04:00.000Z",
+      "start": "2025-10-28T18:35:00.000Z",
+      "end": "2025-10-28T19:05:00.000Z",
       "reason": "cta→6",
       "airline": "Aer Lingus Regional",
       "aircraft": "(EI-HDK)",
       "pax_estimate": 166,
       "scheduled_local": "18:40",
-      "eta_local": "18:19",
-      "delay_min": -21,
+      "eta_local": "18:20",
+      "delay_min": -20,
       "ui_state": "upcoming",
       "ui_age_min": -80
     },
@@ -102,7 +82,7 @@
       "eta_local": "18:44",
       "delay_min": 24,
       "ui_state": "upcoming",
-      "ui_age_min": -105
+      "ui_age_min": -104
     },
     {
       "flight": "LS1804",
@@ -122,7 +102,7 @@
       "eta_local": "19:03",
       "delay_min": 18,
       "ui_state": "upcoming",
-      "ui_age_min": -124
+      "ui_age_min": -123
     },
     {
       "flight": "U27203",
@@ -142,7 +122,7 @@
       "eta_local": "19:26",
       "delay_min": -9,
       "ui_state": "upcoming",
-      "ui_age_min": -147
+      "ui_age_min": -146
     },
     {
       "flight": "U22724",
@@ -162,7 +142,7 @@
       "eta_local": "19:26",
       "delay_min": -24,
       "ui_state": "upcoming",
-      "ui_age_min": -147
+      "ui_age_min": -146
     },
     {
       "flight": "LS1850",
@@ -182,7 +162,27 @@
       "eta_local": "19:35",
       "delay_min": 110,
       "ui_state": "upcoming",
-      "ui_age_min": -156
+      "ui_age_min": -155
+    },
+    {
+      "flight": "U27267",
+      "origin": "(PMI)",
+      "origin_iata": "PMI",
+      "eta": "2025-10-28T19:41:00.000Z",
+      "status": "estimated 19:41",
+      "flow": "INTERNATIONAL",
+      "belt": 6,
+      "start": "2025-10-28T19:56:00.000Z",
+      "end": "2025-10-28T20:26:00.000Z",
+      "reason": "last_resort→6",
+      "airline": "easyJet",
+      "aircraft": "(OE-LQI)",
+      "pax_estimate": 162,
+      "scheduled_local": "20:20",
+      "eta_local": "19:41",
+      "delay_min": -39,
+      "ui_state": "upcoming",
+      "ui_age_min": -161
     }
   ]
 }
