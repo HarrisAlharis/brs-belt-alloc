@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-28T17:35:00.135Z",
-  "generated_at_local": "2025-10-28T17:35:00",
+  "generated_at_utc": "2025-10-28T17:36:18.972Z",
+  "generated_at_local": "2025-10-28T17:36:18",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -22,12 +22,12 @@
       "eta_local": "17:49",
       "delay_min": -6,
       "ui_state": "upcoming",
-      "ui_age_min": -59
+      "ui_age_min": -58
     },
     {
-      "flight": "U22746",
-      "origin": "(MAH)",
-      "origin_iata": "MAH",
+      "flight": "U27509",
+      "origin": "(FAO)",
+      "origin_iata": "FAO",
       "eta": "2025-10-28T18:01:00.000Z",
       "status": "estimated 18:01",
       "flow": "INTERNATIONAL",
@@ -36,18 +36,18 @@
       "end": "2025-10-28T18:46:00.000Z",
       "reason": "intl_spread",
       "airline": "easyJet",
-      "aircraft": "(G-UZHH)",
+      "aircraft": "(OE-IND)",
       "pax_estimate": 162,
-      "scheduled_local": "18:00",
+      "scheduled_local": "18:20",
       "eta_local": "18:01",
-      "delay_min": 1,
+      "delay_min": -19,
       "ui_state": "upcoming",
-      "ui_age_min": -71
+      "ui_age_min": -70
     },
     {
-      "flight": "U27509",
-      "origin": "(FAO)",
-      "origin_iata": "FAO",
+      "flight": "U22746",
+      "origin": "(MAH)",
+      "origin_iata": "MAH",
       "eta": "2025-10-28T18:03:00.000Z",
       "status": "estimated 18:03",
       "flow": "INTERNATIONAL",
@@ -56,33 +56,33 @@
       "end": "2025-10-28T18:48:00.000Z",
       "reason": "intl_spread",
       "airline": "easyJet",
-      "aircraft": "(OE-IND)",
+      "aircraft": "(G-UZHH)",
       "pax_estimate": 162,
-      "scheduled_local": "18:20",
+      "scheduled_local": "18:00",
       "eta_local": "18:03",
-      "delay_min": -17,
+      "delay_min": 3,
       "ui_state": "upcoming",
-      "ui_age_min": -73
+      "ui_age_min": -72
     },
     {
       "flight": "Aer Lingus Regional-DUB",
       "origin": "(DUB)",
       "origin_iata": "DUB",
-      "eta": "2025-10-28T18:05:00.000Z",
-      "status": "estimated 18:05",
+      "eta": "2025-10-28T18:20:00.000Z",
+      "status": "estimated 18:20",
       "flow": "CTA",
       "belt": 6,
-      "start": "2025-10-28T18:20:00.000Z",
-      "end": "2025-10-28T18:50:00.000Z",
+      "start": "2025-10-28T18:35:00.000Z",
+      "end": "2025-10-28T19:05:00.000Z",
       "reason": "cta→6",
       "airline": "Aer Lingus Regional",
       "aircraft": "(EI-HDK)",
       "pax_estimate": 166,
       "scheduled_local": "18:40",
-      "eta_local": "18:05",
-      "delay_min": -35,
+      "eta_local": "18:20",
+      "delay_min": -20,
       "ui_state": "upcoming",
-      "ui_age_min": -75
+      "ui_age_min": -89
     },
     {
       "flight": "LS1884",
@@ -102,27 +102,27 @@
       "eta_local": "18:48",
       "delay_min": 28,
       "ui_state": "upcoming",
-      "ui_age_min": -118
+      "ui_age_min": -117
     },
     {
       "flight": "LS1804",
       "origin": "(ACE)",
       "origin_iata": "ACE",
-      "eta": "2025-10-28T19:01:00.000Z",
-      "status": "delayed 19:01",
+      "eta": "2025-10-28T19:03:00.000Z",
+      "status": "delayed 19:03",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-28T19:16:00.000Z",
-      "end": "2025-10-28T19:46:00.000Z",
+      "start": "2025-10-28T19:18:00.000Z",
+      "end": "2025-10-28T19:48:00.000Z",
       "reason": "intl_spread",
       "airline": "Jet2",
       "aircraft": "(G-JZBO)",
       "pax_estimate": 171,
       "scheduled_local": "18:45",
-      "eta_local": "19:01",
-      "delay_min": 16,
+      "eta_local": "19:03",
+      "delay_min": 18,
       "ui_state": "upcoming",
-      "ui_age_min": -131
+      "ui_age_min": -132
     },
     {
       "flight": "U27203",
@@ -142,27 +142,27 @@
       "eta_local": "19:26",
       "delay_min": -9,
       "ui_state": "upcoming",
-      "ui_age_min": -156
+      "ui_age_min": -155
     },
     {
       "flight": "U22724",
       "origin": "(ALC)",
       "origin_iata": "ALC",
-      "eta": "2025-10-28T19:29:00.000Z",
-      "status": "estimated 19:29",
+      "eta": "2025-10-28T19:26:00.000Z",
+      "status": "estimated 19:26",
       "flow": "INTERNATIONAL",
       "belt": 3,
-      "start": "2025-10-28T19:44:00.000Z",
-      "end": "2025-10-28T20:14:00.000Z",
+      "start": "2025-10-28T19:41:00.000Z",
+      "end": "2025-10-28T20:11:00.000Z",
       "reason": "intl_spread",
       "airline": "easyJet",
       "aircraft": "(G-UZEG)",
       "pax_estimate": 162,
       "scheduled_local": "19:50",
-      "eta_local": "19:29",
-      "delay_min": -21,
+      "eta_local": "19:26",
+      "delay_min": -24,
       "ui_state": "upcoming",
-      "ui_age_min": -159
+      "ui_age_min": -155
     },
     {
       "flight": "LS1850",
@@ -182,7 +182,7 @@
       "eta_local": "19:35",
       "delay_min": 110,
       "ui_state": "upcoming",
-      "ui_age_min": -165
+      "ui_age_min": -164
     }
   ]
 }
