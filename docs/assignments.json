@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-28T17:53:35.205Z",
-  "generated_at_local": "2025-10-28T17:53:35",
+  "generated_at_utc": "2025-10-28T17:54:59.939Z",
+  "generated_at_local": "2025-10-28T17:54:59",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -22,7 +22,7 @@
       "eta_local": "18:00",
       "delay_min": -20,
       "ui_state": "upcoming",
-      "ui_age_min": -51
+      "ui_age_min": -50
     },
     {
       "flight": "U22746",
@@ -42,27 +42,27 @@
       "eta_local": "18:03",
       "delay_min": 3,
       "ui_state": "upcoming",
-      "ui_age_min": -54
+      "ui_age_min": -53
     },
     {
       "flight": "Aer Lingus Regional-DUB",
       "origin": "(DUB)",
       "origin_iata": "DUB",
-      "eta": "2025-10-28T18:10:00.000Z",
-      "status": "estimated 18:10",
+      "eta": "2025-10-28T18:09:00.000Z",
+      "status": "estimated 18:09",
       "flow": "CTA",
       "belt": 6,
-      "start": "2025-10-28T18:25:00.000Z",
-      "end": "2025-10-28T18:55:00.000Z",
+      "start": "2025-10-28T18:24:00.000Z",
+      "end": "2025-10-28T18:54:00.000Z",
       "reason": "cta→6",
       "airline": "Aer Lingus Regional",
       "aircraft": "(EI-HDK)",
       "pax_estimate": 166,
       "scheduled_local": "18:40",
-      "eta_local": "18:10",
-      "delay_min": -30,
+      "eta_local": "18:09",
+      "delay_min": -31,
       "ui_state": "upcoming",
-      "ui_age_min": -61
+      "ui_age_min": -59
     },
     {
       "flight": "LS1884",
@@ -82,7 +82,7 @@
       "eta_local": "18:46",
       "delay_min": 26,
       "ui_state": "upcoming",
-      "ui_age_min": -97
+      "ui_age_min": -96
     },
     {
       "flight": "LS1804",
@@ -102,7 +102,7 @@
       "eta_local": "19:01",
       "delay_min": 16,
       "ui_state": "upcoming",
-      "ui_age_min": -112
+      "ui_age_min": -111
     },
     {
       "flight": "U27203",
@@ -122,7 +122,7 @@
       "eta_local": "19:24",
       "delay_min": -11,
       "ui_state": "upcoming",
-      "ui_age_min": -135
+      "ui_age_min": -134
     },
     {
       "flight": "U22724",
@@ -142,7 +142,7 @@
       "eta_local": "19:26",
       "delay_min": -24,
       "ui_state": "upcoming",
-      "ui_age_min": -137
+      "ui_age_min": -136
     },
     {
       "flight": "LS1850",
@@ -162,7 +162,7 @@
       "eta_local": "19:35",
       "delay_min": 110,
       "ui_state": "upcoming",
-      "ui_age_min": -146
+      "ui_age_min": -145
     },
     {
       "flight": "U27267",
@@ -182,7 +182,7 @@
       "eta_local": "19:50",
       "delay_min": -30,
       "ui_state": "upcoming",
-      "ui_age_min": -161
+      "ui_age_min": -160
     }
   ]
 }
