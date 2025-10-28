@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-28T15:40:00.113Z",
-  "generated_at_local": "2025-10-28T15:40:00",
+  "generated_at_utc": "2025-10-28T15:41:19.057Z",
+  "generated_at_local": "2025-10-28T15:41:19",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -22,7 +22,7 @@
       "eta_local": "16:27",
       "delay_min": -23,
       "ui_state": "upcoming",
-      "ui_age_min": -92
+      "ui_age_min": -91
     },
     {
       "flight": "",
@@ -42,7 +42,7 @@
       "eta_local": "16:43",
       "delay_min": -60,
       "ui_state": "upcoming",
-      "ui_age_min": -108
+      "ui_age_min": -107
     },
     {
       "flight": "U22936",
@@ -62,27 +62,7 @@
       "eta_local": "16:49",
       "delay_min": -26,
       "ui_state": "upcoming",
-      "ui_age_min": -114
-    },
-    {
-      "flight": "U22802",
-      "origin": "(RHO)",
-      "origin_iata": "RHO",
-      "eta": "2025-10-28T16:53:00.000Z",
-      "status": "estimated 16:53",
-      "flow": "INTERNATIONAL",
-      "belt": "",
-      "start": "2025-10-28T17:08:00.000Z",
-      "end": "2025-10-28T17:38:00.000Z",
-      "reason": "no_slot_available",
-      "airline": "easyJet",
-      "aircraft": "(G-UZMI)",
-      "pax_estimate": 162,
-      "scheduled_local": "17:00",
-      "eta_local": "16:53",
-      "delay_min": -7,
-      "ui_state": "upcoming",
-      "ui_age_min": -118
+      "ui_age_min": -113
     },
     {
       "flight": "",
@@ -102,7 +82,27 @@
       "eta_local": "16:55",
       "delay_min": 0,
       "ui_state": "upcoming",
-      "ui_age_min": -120
+      "ui_age_min": -119
+    },
+    {
+      "flight": "U22802",
+      "origin": "(RHO)",
+      "origin_iata": "RHO",
+      "eta": "2025-10-28T16:55:00.000Z",
+      "status": "estimated 16:55",
+      "flow": "INTERNATIONAL",
+      "belt": "",
+      "start": "2025-10-28T17:10:00.000Z",
+      "end": "2025-10-28T17:40:00.000Z",
+      "reason": "no_slot_available",
+      "airline": "easyJet",
+      "aircraft": "(G-UZMI)",
+      "pax_estimate": 162,
+      "scheduled_local": "17:00",
+      "eta_local": "16:55",
+      "delay_min": -5,
+      "ui_state": "upcoming",
+      "ui_age_min": -119
     },
     {
       "flight": "FR5518",
@@ -122,7 +122,7 @@
       "eta_local": "16:57",
       "delay_min": -3,
       "ui_state": "upcoming",
-      "ui_age_min": -122
+      "ui_age_min": -121
     },
     {
       "flight": "FR750",
@@ -142,7 +142,7 @@
       "eta_local": "16:59",
       "delay_min": -6,
       "ui_state": "upcoming",
-      "ui_age_min": -124
+      "ui_age_min": -123
     },
     {
       "flight": "U2220",
@@ -162,7 +162,7 @@
       "eta_local": "17:05",
       "delay_min": 0,
       "ui_state": "upcoming",
-      "ui_age_min": -130
+      "ui_age_min": -129
     },
     {
       "flight": "U22734",
@@ -182,7 +182,7 @@
       "eta_local": "17:14",
       "delay_min": 89,
       "ui_state": "upcoming",
-      "ui_age_min": -139
+      "ui_age_min": -138
     },
     {
       "flight": "U22964",
@@ -202,7 +202,7 @@
       "eta_local": "17:21",
       "delay_min": 56,
       "ui_state": "upcoming",
-      "ui_age_min": -146
+      "ui_age_min": -145
     },
     {
       "flight": "U2206",
@@ -222,7 +222,7 @@
       "eta_local": "17:55",
       "delay_min": 0,
       "ui_state": "upcoming",
-      "ui_age_min": -180
+      "ui_age_min": -179
     },
     {
       "flight": "U22746",
@@ -242,7 +242,7 @@
       "eta_local": "18:00",
       "delay_min": 0,
       "ui_state": "upcoming",
-      "ui_age_min": -185
+      "ui_age_min": -184
     },
     {
       "flight": "U27509",
@@ -262,7 +262,7 @@
       "eta_local": "18:20",
       "delay_min": 0,
       "ui_state": "upcoming",
-      "ui_age_min": -205
+      "ui_age_min": -204
     },
     {
       "flight": "",
@@ -282,7 +282,7 @@
       "eta_local": "18:23",
       "delay_min": 0,
       "ui_state": "upcoming",
-      "ui_age_min": -208
+      "ui_age_min": -207
     },
     {
       "flight": "",
@@ -302,7 +302,7 @@
       "eta_local": "18:40",
       "delay_min": 0,
       "ui_state": "upcoming",
-      "ui_age_min": -225
+      "ui_age_min": -224
     }
   ]
 }
