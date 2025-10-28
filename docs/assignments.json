@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-28T18:20:01.927Z",
-  "generated_at_local": "2025-10-28T18:20:01",
+  "generated_at_utc": "2025-10-28T18:21:21.116Z",
+  "generated_at_local": "2025-10-28T18:21:21",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -8,19 +8,19 @@
       "flight": "LS1884",
       "origin": "(TFS)",
       "origin_iata": "TFS",
-      "eta": "2025-10-28T18:48:00.000Z",
-      "status": "delayed 18:48",
+      "eta": "2025-10-28T18:49:00.000Z",
+      "status": "delayed 18:49",
       "flow": "INTERNATIONAL",
       "belt": 5,
-      "start": "2025-10-28T19:03:00.000Z",
-      "end": "2025-10-28T19:33:00.000Z",
+      "start": "2025-10-28T19:04:00.000Z",
+      "end": "2025-10-28T19:34:00.000Z",
       "reason": "density→belt5",
       "airline": "Jet2",
       "aircraft": "(G-JZDG)",
       "pax_estimate": 171,
       "scheduled_local": "18:20",
-      "eta_local": "18:48",
-      "delay_min": 28,
+      "eta_local": "18:49",
+      "delay_min": 29,
       "ui_state": "upcoming",
       "ui_age_min": -73
     },
@@ -42,7 +42,7 @@
       "eta_local": "19:01",
       "delay_min": 16,
       "ui_state": "upcoming",
-      "ui_age_min": -86
+      "ui_age_min": -85
     },
     {
       "flight": "U27076",
@@ -62,7 +62,7 @@
       "eta_local": "19:05",
       "delay_min": -25,
       "ui_state": "upcoming",
-      "ui_age_min": -90
+      "ui_age_min": -89
     },
     {
       "flight": "U27203",
@@ -82,7 +82,7 @@
       "eta_local": "19:22",
       "delay_min": -13,
       "ui_state": "upcoming",
-      "ui_age_min": -107
+      "ui_age_min": -106
     },
     {
       "flight": "U22724",
@@ -102,7 +102,7 @@
       "eta_local": "19:22",
       "delay_min": -28,
       "ui_state": "upcoming",
-      "ui_age_min": -107
+      "ui_age_min": -106
     },
     {
       "flight": "U27267",
@@ -122,27 +122,27 @@
       "eta_local": "19:50",
       "delay_min": -30,
       "ui_state": "upcoming",
-      "ui_age_min": -135
+      "ui_age_min": -134
     },
     {
       "flight": "X36279",
       "origin": "(TFS)",
       "origin_iata": "TFS",
-      "eta": "2025-10-28T21:03:00.000Z",
-      "status": "estimated 21:03",
+      "eta": "2025-10-28T21:02:00.000Z",
+      "status": "estimated 21:02",
       "flow": "INTERNATIONAL",
       "belt": 1,
-      "start": "2025-10-28T21:18:00.000Z",
-      "end": "2025-10-28T21:48:00.000Z",
+      "start": "2025-10-28T21:17:00.000Z",
+      "end": "2025-10-28T21:47:00.000Z",
       "reason": "intl_spread",
       "airline": "TUI",
       "aircraft": "(G-TUOB)",
       "pax_estimate": 166,
       "scheduled_local": "21:35",
-      "eta_local": "21:03",
-      "delay_min": -32,
+      "eta_local": "21:02",
+      "delay_min": -33,
       "ui_state": "upcoming",
-      "ui_age_min": -208
+      "ui_age_min": -206
     }
   ]
 }
