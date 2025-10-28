@@ -1,58 +1,168 @@
 ﻿<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>BRS — Arrivals Belt Timeline</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="stylesheet" href="timeline.css" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>BRS – Belt Timeline (debug view)</title>
+<style>
+  :root {
+    --bg: #0f1720;
+    --panel: #121a25;
+    --ink: #e7edf5;
+    --muted: #9fb1c5;
+    --grid: rgba(255,255,255,0.06);
+    --belt-row-h: 44px;
+    --lane-top-pad: 32px;
+    --px-per-min: 8; /* 8px = 1 minute */
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 13px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  }
+
+  header {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--grid);
+    color: var(--ink);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  h1 { margin: 0; font-size: 16px; font-weight: 600; }
+  .meta { font-size: 12px; color: var(--muted); }
+
+  /* layout frame */
+  .frame {
+    display: flex;
+    height: calc(100vh - 60px);
+    color: var(--ink);
+  }
+
+  /* left belt labels */
+  .belt-col {
+    width: 80px;
+    background: var(--panel);
+    border-right: 1px solid var(--grid);
+    font-size: 12px;
+    line-height: var(--belt-row-h);
+    position: relative;
+  }
+  .belt-label {
+    height: var(--belt-row-h);
+    padding-left: 8px;
+    border-bottom: 1px solid var(--grid);
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* right scrollable lane */
+  .lane-wrap {
+    flex: 1;
+    position: relative;
+    overflow-x: auto;
+    overflow-y: hidden;
+    background: var(--panel);
+  }
+
+  /* the giant inner timeline strip */
+  .lane-inner {
+    position: relative;
+    min-width: 2400px; /* we will extend this via JS anyway */
+    height: calc(var(--lane-top-pad) + (7 * var(--belt-row-h)));
+    border-bottom: 1px solid var(--grid);
+    color: var(--ink);
+  }
+
+  /* belt horizontal lines */
+  .belt-row-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: var(--belt-row-h);
+    border-bottom: 1px solid var(--grid);
+  }
+
+  /* minute grid lines */
+  .grid-line-hour {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    border-left: 1px solid rgba(255,255,255,0.18);
+    font-size: 10px;
+    color: var(--muted);
+    text-align: left;
+    padding-left: 2px;
+  }
+  .grid-line-10 {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    border-left: 1px solid rgba(255,255,255,0.07);
+    font-size: 9px;
+    color: rgba(255,255,255,0.4);
+    padding-left: 2px;
+  }
+
+  /* puck blocks */
+  .puck {
+    position: absolute;
+    height: 28px;
+    min-width: 40px;
+    border-radius: 4px;
+    font-size: 11px;
+    line-height: 1.2;
+    font-weight: 600;
+    color: #000;
+    background: #4ade80; /* green-ish default */
+    border: 1px solid rgba(0,0,0,0.4);
+    padding: 4px 6px;
+    display: flex;
+    align-items: flex-start; /* TOP ALIGN */
+    justify-content: flex-start;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .puck.past {
+    background: #777;
+    color: #000;
+    border-color: rgba(0,0,0,.6);
+    opacity: 0.6;
+  }
+
+  .puck .line1 {
+    font-weight: 600;
+  }
+  .puck .line2 {
+    font-weight: 400;
+    font-size: 10px;
+    opacity: .8;
+  }
+
+</style>
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand">BRS — Arrivals Belt Timeline</div>
-    <div class="meta" id="meta"></div>
-  </header>
+<header>
+  <h1>BRS – Belt Allocation Timeline</h1>
+  <div class="meta" id="metaText">loading…</div>
+</header>
 
-  <div class="controls">
-    <div class="chiprow" id="beltChips"></div>
+<div class="frame">
+  <!-- left side belts -->
+  <div class="belt-col" id="beltCol"></div>
 
-    <div class="right-controls">
-      <label class="lbl">Zoom:</label>
-      <select id="zoom">
-        <!-- min zoom is 8 px/min -->
-        <option value="8" selected>8 px/min (default)</option>
-        <option value="10">10 px/min</option>
-        <option value="12">12 px/min (wide)</option>
-      </select>
-      <button id="nowBtn" class="btn">Now</button>
-
-      <div class="legend">
-        <span class="dot dot-ok"></span> On time / small slip
-        <span class="dot dot-10"></span> +10–19
-        <span class="dot dot-20"></span> +20+
-        <span class="dot dot-early"></span> Early
-        <span class="dot dot-stale"></span> Completed (past)
-      </div>
+  <!-- right side scroll panel -->
+  <div class="lane-wrap">
+    <div class="lane-inner" id="laneInner">
+      <!-- grid + pucks injected by JS -->
     </div>
   </div>
+</div>
 
-  <div id="viewport" class="viewport">
-    <!-- Sticky belt column -->
-    <div class="belts-col" id="beltsCol"></div>
-
-    <!-- Scrollable content -->
-    <div class="scroll-outer" id="scrollOuter">
-      <div class="scroll-inner" id="scrollInner">
-        <canvas id="ruler" class="ruler"></canvas>
-        <div id="rows" class="rows"></div>
-        <div id="nowLine" class="now-line"></div>
-      </div>
-    </div>
-  </div>
-
-  <footer class="foot">
-    <div>Source: FR24 (screen-scrape) • Auto-refresh ~90s • 4-hour local history kept in your browser.</div>
-  </footer>
-
-  <script src="timeline.js"></script>
+<script src="timeline.js"></script>
 </body>
 </html>
