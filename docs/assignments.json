@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-28T17:00:00.029Z",
-  "generated_at_local": "2025-10-28T17:00:00",
+  "generated_at_utc": "2025-10-28T17:01:19.242Z",
+  "generated_at_local": "2025-10-28T17:01:19",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -22,7 +22,7 @@
       "eta_local": "17:02",
       "delay_min": -13,
       "ui_state": "upcoming",
-      "ui_age_min": -47
+      "ui_age_min": -46
     },
     {
       "flight": "U22802",
@@ -42,7 +42,7 @@
       "eta_local": "17:07",
       "delay_min": 7,
       "ui_state": "upcoming",
-      "ui_age_min": -52
+      "ui_age_min": -51
     },
     {
       "flight": "FR750",
@@ -62,45 +62,45 @@
       "eta_local": "17:15",
       "delay_min": 10,
       "ui_state": "upcoming",
-      "ui_age_min": -60
+      "ui_age_min": -59
     },
     {
       "flight": "FR5518",
       "origin": "(KRK)",
       "origin_iata": "KRK",
-      "eta": "2025-10-28T17:20:00.000Z",
-      "status": "delayed 17:20",
+      "eta": "2025-10-28T17:19:00.000Z",
+      "status": "delayed 17:19",
       "flow": "INTERNATIONAL",
       "belt": 3,
-      "start": "2025-10-28T17:35:00.000Z",
-      "end": "2025-10-28T18:05:00.000Z",
+      "start": "2025-10-28T17:34:00.000Z",
+      "end": "2025-10-28T18:04:00.000Z",
       "reason": "intl_spread",
       "airline": "Buzz",
       "aircraft": "(SP-RZH)",
       "pax_estimate": 166,
       "scheduled_local": "17:00",
-      "eta_local": "17:20",
-      "delay_min": 20,
+      "eta_local": "17:19",
+      "delay_min": 19,
       "ui_state": "upcoming",
-      "ui_age_min": -65
+      "ui_age_min": -63
     },
     {
       "flight": "UNK-VAF",
       "origin": "(VAF)",
       "origin_iata": "VAF",
-      "eta": "2025-10-28T17:28:00.000Z",
-      "status": "estimated 17:28",
+      "eta": "2025-10-28T17:29:00.000Z",
+      "status": "estimated 17:29",
       "flow": "INTERNATIONAL",
       "belt": 6,
-      "start": "2025-10-28T17:43:00.000Z",
-      "end": "2025-10-28T18:13:00.000Z",
+      "start": "2025-10-28T17:44:00.000Z",
+      "end": "2025-10-28T18:14:00.000Z",
       "reason": "last_resort→6",
       "airline": "",
       "aircraft": "(F-HNFC)",
       "pax_estimate": 166,
       "scheduled_local": "17:43",
-      "eta_local": "17:28",
-      "delay_min": -15,
+      "eta_local": "17:29",
+      "delay_min": -14,
       "ui_state": "upcoming",
       "ui_age_min": -73
     },
@@ -122,7 +122,7 @@
       "eta_local": "17:46",
       "delay_min": -9,
       "ui_state": "upcoming",
-      "ui_age_min": -91
+      "ui_age_min": -90
     },
     {
       "flight": "U22746",
@@ -142,7 +142,7 @@
       "eta_local": "17:57",
       "delay_min": -3,
       "ui_state": "upcoming",
-      "ui_age_min": -102
+      "ui_age_min": -101
     },
     {
       "flight": "U27509",
@@ -162,27 +162,27 @@
       "eta_local": "18:05",
       "delay_min": -15,
       "ui_state": "upcoming",
-      "ui_age_min": -110
+      "ui_age_min": -109
     },
     {
       "flight": "LS1884",
       "origin": "(TFS)",
       "origin_iata": "TFS",
-      "eta": "2025-10-28T18:46:00.000Z",
-      "status": "delayed 18:46",
+      "eta": "2025-10-28T18:48:00.000Z",
+      "status": "delayed 18:48",
       "flow": "INTERNATIONAL",
       "belt": 5,
-      "start": "2025-10-28T19:01:00.000Z",
-      "end": "2025-10-28T19:31:00.000Z",
+      "start": "2025-10-28T19:03:00.000Z",
+      "end": "2025-10-28T19:33:00.000Z",
       "reason": "density→belt5",
       "airline": "Jet2",
       "aircraft": "(G-JZDG)",
       "pax_estimate": 171,
       "scheduled_local": "18:20",
-      "eta_local": "18:46",
-      "delay_min": 26,
+      "eta_local": "18:48",
+      "delay_min": 28,
       "ui_state": "upcoming",
-      "ui_age_min": -151
+      "ui_age_min": -152
     },
     {
       "flight": "LS1804",
@@ -202,7 +202,7 @@
       "eta_local": "19:05",
       "delay_min": 20,
       "ui_state": "upcoming",
-      "ui_age_min": -170
+      "ui_age_min": -169
     },
     {
       "flight": "LS1850",
@@ -222,7 +222,7 @@
       "eta_local": "19:31",
       "delay_min": 106,
       "ui_state": "upcoming",
-      "ui_age_min": -196
+      "ui_age_min": -195
     }
   ]
 }
