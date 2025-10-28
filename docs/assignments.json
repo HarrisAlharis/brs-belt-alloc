@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2025-10-28T16:28:35.073Z",
-  "generated_at_local": "2025-10-28T16:28:35",
+  "generated_at_utc": "2025-10-28T16:29:59.824Z",
+  "generated_at_local": "2025-10-28T16:29:59",
   "source": "flightradar24.com (screen-scrape)",
   "horizon_minutes": 180,
   "rows": [
@@ -22,7 +22,7 @@
       "eta_local": "16:51",
       "delay_min": -4,
       "ui_state": "upcoming",
-      "ui_age_min": -67
+      "ui_age_min": -66
     },
     {
       "flight": "U2220",
@@ -42,7 +42,7 @@
       "eta_local": "16:53",
       "delay_min": -12,
       "ui_state": "upcoming",
-      "ui_age_min": -69
+      "ui_age_min": -68
     },
     {
       "flight": "U22936",
@@ -62,7 +62,7 @@
       "eta_local": "16:57",
       "delay_min": -18,
       "ui_state": "upcoming",
-      "ui_age_min": -73
+      "ui_age_min": -72
     },
     {
       "flight": "U22802",
@@ -82,7 +82,7 @@
       "eta_local": "17:04",
       "delay_min": 4,
       "ui_state": "upcoming",
-      "ui_age_min": -80
+      "ui_age_min": -79
     },
     {
       "flight": "UNK-VAF",
@@ -102,7 +102,7 @@
       "eta_local": "17:04",
       "delay_min": -39,
       "ui_state": "upcoming",
-      "ui_age_min": -80
+      "ui_age_min": -79
     },
     {
       "flight": "FR5518",
@@ -122,7 +122,7 @@
       "eta_local": "17:06",
       "delay_min": 6,
       "ui_state": "upcoming",
-      "ui_age_min": -82
+      "ui_age_min": -81
     },
     {
       "flight": "FR750",
@@ -142,7 +142,7 @@
       "eta_local": "17:06",
       "delay_min": 1,
       "ui_state": "upcoming",
-      "ui_age_min": -82
+      "ui_age_min": -81
     },
     {
       "flight": "U22964",
@@ -162,7 +162,7 @@
       "eta_local": "17:14",
       "delay_min": 49,
       "ui_state": "upcoming",
-      "ui_age_min": -90
+      "ui_age_min": -89
     },
     {
       "flight": "U22746",
@@ -182,7 +182,7 @@
       "eta_local": "17:55",
       "delay_min": -5,
       "ui_state": "upcoming",
-      "ui_age_min": -131
+      "ui_age_min": -130
     },
     {
       "flight": "U27509",
@@ -202,7 +202,7 @@
       "eta_local": "18:08",
       "delay_min": -12,
       "ui_state": "upcoming",
-      "ui_age_min": -144
+      "ui_age_min": -143
     },
     {
       "flight": "LS1884",
@@ -222,7 +222,7 @@
       "eta_local": "18:50",
       "delay_min": 30,
       "ui_state": "upcoming",
-      "ui_age_min": -186
+      "ui_age_min": -185
     },
     {
       "flight": "LS1804",
@@ -242,7 +242,7 @@
       "eta_local": "19:07",
       "delay_min": 22,
       "ui_state": "upcoming",
-      "ui_age_min": -203
+      "ui_age_min": -202
     }
   ]
 }
