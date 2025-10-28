@@ -1,20 +1,11 @@
-// timeline.js — fixed to include past 4h history safely
+﻿// timeline.js — original baseline (no history merge)
 
 const ASSIGN_URL = "assignments.json";
-const HIST_URL   = "alloc-log.json";
 
-// --- config
-const PX_PER_MIN         = 8;
-const LOOKBACK_MIN       = 4 * 60;   // 4h back
-const LOOKAHEAD_MIN      = 3 * 60;   // 3h forward
-const PAST_FADE_GRACE_MS = 2 * 60 * 1000;
+const PX_PER_MIN = 8;
 const BELTS = [1,2,3,4,5,6,7];
 const BELT_ROW_H = 44;
 const LANE_TOP_PAD = 32;
-
-// --- helpers
-function minsDiff(aMs, bMs) { return (aMs - bMs) / 60000; }
-function clamp(v,min,max){ return v<min?min:(v>max?max:v); }
 
 async function fetchJSON(url){
   const res = await fetch(url, {cache:"no-store"});
@@ -22,58 +13,6 @@ async function fetchJSON(url){
   return res.json();
 }
 
-// --- merge history + live, keep last 4h + future
-function buildUnifiedRows(historyArr, assignObj){
-  const nowMs = Date.now();
-  const cutoffPast = nowMs - LOOKBACK_MIN*60*1000;
-  const cutoffFuture = nowMs + LOOKAHEAD_MIN*60*1000;
-
-  const histRows = Array.isArray(historyArr)
-    ? historyArr.filter(r => {
-        const endMs = r.end ? Date.parse(r.end) : 0;
-        return endMs >= cutoffPast && endMs <= cutoffFuture;
-      })
-    : [];
-
-  const liveRows = Array.isArray(assignObj?.rows)
-    ? assignObj.rows
-    : [];
-
-  // merge, preferring latest duplicates
-  const index = new Map();
-  const keyFor = r => {
-    const flight = (r.flight||"").trim();
-    const startMinute = r.start ? new Date(r.start).toISOString().slice(0,16) : "";
-    return flight+"|"+startMinute;
-  };
-
-  for (const r of [...histRows, ...liveRows]) {
-    if (!r.start || !r.end) continue;
-    index.set(keyFor(r), r);
-  }
-
-  let merged = [...index.values()];
-
-  // mark past
-  merged = merged.map(r=>{
-    const endMs = Date.parse(r.end);
-    const isPast = (nowMs > (endMs + PAST_FADE_GRACE_MS));
-    return {...r, isPast};
-  });
-
-  merged.sort((a,b)=> Date.parse(a.start) - Date.parse(b.start));
-  return merged;
-}
-
-// --- timeline window
-function findTimeWindow(rows){
-  const now = Date.now();
-  const minMs = now - LOOKBACK_MIN*60*1000;
-  const maxMs = now + LOOKAHEAD_MIN*60*1000;
-  return [minMs, maxMs];
-}
-
-// --- render belt labels
 function renderBeltColumn(){
   const beltCol = document.getElementById("beltCol");
   beltCol.innerHTML = "";
@@ -85,10 +24,8 @@ function renderBeltColumn(){
   });
 }
 
-// --- render grid lines + labels
 function renderGrid(laneInner, startMs, endMs){
-  laneInner.style.height =
-    (LANE_TOP_PAD + BELTS.length * BELT_ROW_H) + "px";
+  laneInner.style.height = (LANE_TOP_PAD + BELTS.length * BELT_ROW_H) + "px";
 
   BELTS.forEach((belt, idx)=>{
     const y = LANE_TOP_PAD + idx*BELT_ROW_H;
@@ -121,10 +58,10 @@ function renderGrid(laneInner, startMs, endMs){
       laneInner.appendChild(gl10);
     }
   }
+
   laneInner.style.width = (totalMin*PX_PER_MIN + 200) + "px";
 }
 
-// --- render pucks
 function renderPucks(laneInner, rows, startMs){
   rows.forEach(r=>{
     if(!r.belt || r.belt === "") return;
@@ -135,15 +72,15 @@ function renderPucks(laneInner, rows, startMs){
     const eMs = Date.parse(r.end);
     const durMin = (eMs - sMs)/60000;
     if(durMin <= 0) return;
-    const offsetMin = (sMs - startMs)/60000;
 
+    const offsetMin = (sMs - startMs)/60000;
     const puck = document.createElement("div");
     puck.className = "puck";
-    if(r.isPast) puck.classList.add("past");
 
     const topPx  = LANE_TOP_PAD + beltIndex*BELT_ROW_H + 8;
     const leftPx = offsetMin * PX_PER_MIN;
     const widthPx= durMin * PX_PER_MIN;
+
     puck.style.top   = topPx+"px";
     puck.style.left  = leftPx+"px";
     puck.style.width = widthPx+"px";
@@ -156,6 +93,7 @@ function renderPucks(laneInner, rows, startMs){
     const line1 = document.createElement("div");
     line1.className="line1";
     line1.textContent = `${flightTxt} ${origTxt}`;
+
     const line2 = document.createElement("div");
     line2.className="line2";
     if(sched && eta) line2.textContent = `${sched} → ${eta}`;
@@ -167,39 +105,46 @@ function renderPucks(laneInner, rows, startMs){
   });
 }
 
-// --- init
 async function init(){
   const metaEl = document.getElementById("metaText");
   const laneInner = document.getElementById("laneInner");
   renderBeltColumn();
 
-  let histData = [];
-  let liveData = {rows:[]};
+  let data = {rows:[]};
   try {
-    const [h, a] = await Promise.all([
-      fetchJSON(HIST_URL),
-      fetchJSON(ASSIGN_URL)
-    ]);
-    histData = Array.isArray(h)?h:[];
-    liveData = a || {rows:[]};
+    data = await fetchJSON(ASSIGN_URL);
   } catch(err){
     console.error("fetch error:",err);
   }
 
-  const mergedRows = buildUnifiedRows(histData, liveData);
-  const [startMs, endMs] = findTimeWindow(mergedRows);
+  const rows = Array.isArray(data.rows) ? data.rows : [];
+  if(rows.length === 0) {
+    metaEl.textContent = "No rows";
+    return;
+  }
+
+  let minMs = Infinity, maxMs = -Infinity;
+  rows.forEach(r=>{
+    const s = Date.parse(r.start);
+    const e = Date.parse(r.end);
+    if(s<minMs) minMs=s;
+    if(e>maxMs) maxMs=e;
+  });
+  const pad = 30*60000;
+  const startMs = minMs - pad;
+  const endMs   = maxMs + pad;
 
   laneInner.innerHTML = "";
   renderGrid(laneInner, startMs, endMs);
-  renderPucks(laneInner, mergedRows, startMs);
+  renderPucks(laneInner, rows, startMs);
 
-  if(liveData.generated_at_local){
-    metaEl.textContent = `Updated ${liveData.generated_at_local} • Horizon ${liveData.horizon_minutes||""} min`;
+  if(data.generated_at_local){
+    metaEl.textContent = `Updated ${data.generated_at_local} • Horizon ${data.horizon_minutes||""} min`;
   } else {
     metaEl.textContent = `Updated just now`;
   }
 
-  console.log(`Rendered ${mergedRows.length} rows`);
+  console.log(`Rendered ${rows.length} rows`);
 }
 
 document.addEventListener("DOMContentLoaded", init);
