@@ -1,17 +1,18 @@
 /**
  * feeder/fr24_feeder.js
  *
- * BRS allocator
+ * BRS allocator runner
  * - No belt 4
  * - Auto belts: 1,2,3,5,6
- * - Keep 7 if it was set (domestic)
- * - If no belt passes spacing → force to the belt that will clear earliest
+ * - Keep 7 (domestic) as-is
+ * - If flight already has 1/2/3/5/6 but collides → reassign
+ * - If none fits → force to earliest-clearing belt
  */
-
 const fs = require('fs');
 const path = require('path');
 
 const ASSIGNMENTS_PATH = path.join(__dirname, '..', 'docs', 'assignments.json');
+
 const AUTO_BELTS = [1, 2, 3, 5, 6];
 const MIN_GAP_MIN = 1;
 
@@ -63,11 +64,13 @@ function pickEarliestClearingBelt(usage) {
 function canPlaceOnBeltStrict(flight, belt, usage) {
   const beltSlots = usage[belt] || [];
   for (const slot of beltSlots) {
-    if (overlapsOrTooClose(
-      { start: flight.start, end: flight.end },
-      { start: slot.flightRef.start, end: slot.flightRef.end },
-      MIN_GAP_MIN
-    )) {
+    if (
+      overlapsOrTooClose(
+        { start: flight.start, end: flight.end },
+        { start: slot.flightRef.start, end: slot.flightRef.end },
+        MIN_GAP_MIN
+      )
+    ) {
       return false;
     }
   }
@@ -88,7 +91,6 @@ function recordPlacement(flight, belt, usage) {
 function assignBelts(rowsIn) {
   const rows = rowsIn.map(r => ({ ...r }));
   rows.sort((a, b) => toMs(a.start) - toMs(b.start));
-
   const usage = initUsage();
   let fixed = 0;
 
@@ -96,15 +98,20 @@ function assignBelts(rowsIn) {
     const currentBelt = parseInt(flight.belt, 10);
 
     // 1) domestic stays 7
-    if (currentBelt === 7) continue;
-
-    // 2) valid belts stay + tracked
-    if (AUTO_BELTS.includes(currentBelt)) {
-      recordPlacement(flight, currentBelt, usage);
+    if (currentBelt === 7) {
       continue;
     }
 
-    // 3) need to place
+    // 2) if it has a valid belt, check collision
+    if (AUTO_BELTS.includes(currentBelt)) {
+      if (canPlaceOnBeltStrict(flight, currentBelt, usage)) {
+        recordPlacement(flight, currentBelt, usage);
+        continue;
+      }
+      // else: we must reassign → fall through
+    }
+
+    // 3) try all belts
     let placed = false;
     for (const b of AUTO_BELTS) {
       if (canPlaceOnBeltStrict(flight, b, usage)) {
@@ -114,7 +121,7 @@ function assignBelts(rowsIn) {
       }
     }
 
-    // 4) force to earliest-clearing belt
+    // 4) force
     if (!placed) {
       const fb = pickEarliestClearingBelt(usage);
       recordPlacement(flight, fb, usage);
@@ -159,7 +166,7 @@ function writeAssignments(meta, rows) {
 
 // ---------- main ----------
 async function run() {
-  console.log('[feeder] BRS run (earliest-clearing force)…');
+  console.log('[feeder] BRS run (collision-aware, earliest-clearing)…');
   const { meta, rows } = loadAssignments();
   const { rows: fixedRows, fixed } = assignBelts(rows);
   writeAssignments(meta, fixedRows);

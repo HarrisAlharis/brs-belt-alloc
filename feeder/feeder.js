@@ -1,9 +1,10 @@
 // feeder/feeder.js
 // BRS allocator, reusable
+// RULES:
 // - Auto belts: 1,2,3,5,6
-// - Keep 7
+// - Keep 7 (domestic) exactly as it came
+// - If flight has a valid belt but it collides → try other belts
 // - If none fits → force to earliest-clearing belt
-
 const AUTO_BELTS = [1, 2, 3, 5, 6];
 const MIN_GAP_MIN = 1;
 
@@ -17,8 +18,10 @@ function overlapsOrTooClose(f1, f2, minGapMin) {
   const s2 = toMs(f2.start);
   const e2 = toMs(f2.end);
 
+  // real overlap
   if (s1 < e2 && s2 < e1) return true;
 
+  // adjacency safety
   const gap1 = Math.abs(s2 - e1) / 60000;
   const gap2 = Math.abs(s1 - e2) / 60000;
   if (gap1 < minGapMin || gap2 < minGapMin) return true;
@@ -54,11 +57,13 @@ function pickEarliestClearingBelt(usage) {
 function canPlaceOnBeltStrict(flight, belt, usage) {
   const beltSlots = usage[belt] || [];
   for (const slot of beltSlots) {
-    if (overlapsOrTooClose(
-      { start: flight.start, end: flight.end },
-      { start: slot.flightRef.start, end: slot.flightRef.end },
-      MIN_GAP_MIN
-    )) {
+    if (
+      overlapsOrTooClose(
+        { start: flight.start, end: flight.end },
+        { start: slot.flightRef.start, end: slot.flightRef.end },
+        MIN_GAP_MIN
+      )
+    ) {
       return false;
     }
   }
@@ -76,7 +81,10 @@ function recordPlacement(flight, belt, usage) {
 }
 
 function assignBelts(rowsIn) {
+  // work on a copy
   const rows = rowsIn.map(r => ({ ...r }));
+
+  // process in time order so usage is realistic
   rows.sort((a, b) => toMs(a.start) - toMs(b.start));
 
   const usage = initUsage();
@@ -84,16 +92,23 @@ function assignBelts(rowsIn) {
   for (const flight of rows) {
     const currentBelt = parseInt(flight.belt, 10);
 
-    // keep domestic
-    if (currentBelt === 7) continue;
-
-    // keep valid and track
-    if (AUTO_BELTS.includes(currentBelt)) {
-      recordPlacement(flight, currentBelt, usage);
+    // 1) domestic stays on 7
+    if (currentBelt === 7) {
+      // we do NOT track 7 in usage, by design
       continue;
     }
 
-    // need to place
+    // 2) if it's a valid belt (1,2,3,5,6), we must check for collision
+    if (AUTO_BELTS.includes(currentBelt)) {
+      if (canPlaceOnBeltStrict(flight, currentBelt, usage)) {
+        // good, just record it
+        recordPlacement(flight, currentBelt, usage);
+        continue;
+      }
+      // else: fall through to reassign below
+    }
+
+    // 3) need to place or re-place: try all belts
     let placed = false;
     for (const b of AUTO_BELTS) {
       if (canPlaceOnBeltStrict(flight, b, usage)) {
@@ -103,11 +118,13 @@ function assignBelts(rowsIn) {
       }
     }
 
+    // 4) if none fit → force to earliest-clearing
     if (!placed) {
       const fb = pickEarliestClearingBelt(usage);
       recordPlacement(flight, fb, usage);
     }
 
+    // 5) normalise reason
     if (!flight.reason || flight.reason === 'no_slot_available') {
       flight.reason = 'auto-assign';
     }
