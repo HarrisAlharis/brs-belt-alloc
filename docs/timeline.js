@@ -1,12 +1,8 @@
 /* docs/timeline.js
  * BRS — Arrivals Belt Timeline
- * CLEAN VERSION
- * - fixed stray "function toggleFilter..." at top (that was breaking the script)
- * - still de-duplicates near-identical blocks on the same belt
- * - still packs vertically
- * - still honours 4h history
- * - still auto-refreshes ~90s
- * - uses .stale (CSS) for completed flights
+ * FIXES:
+ * 1. Normalise belt values from JSON (string → number), so "1" matches belt 1.
+ * 2. Keep dedupe, packing, 4h history, auto-refresh.
  */
 
 (function () {
@@ -14,15 +10,17 @@
   const $ = (s) => document.querySelector(s);
   const el = (tag, cls) => { const n = document.createElement(tag); if (cls) n.className = cls; return n; };
   const minute = 60 * 1000;
-  const dFmt = (d) => { const dt = new Date(d); return `${String(dt.getHours()).padStart(2,'0')}:${String(dt.getMinutes()).padStart(2,'0')}`; };
+  const dFmt = (d) => {
+    const dt = new Date(d);
+    return `${String(dt.getHours()).padStart(2,'0')}:${String(dt.getMinutes()).padStart(2,'0')}`;
+  };
 
-  // ------- DOM (matches timeline.html) -------
+  // ------- DOM -------
   const beltChips   = $('#beltChips');
   const zoomSel     = $('#zoom');
   const nowBtn      = $('#nowBtn');
   const meta        = $('#meta');
 
-  const viewport    = $('#viewport');
   const scrollOuter = $('#scrollOuter');
   const scrollInner = $('#scrollInner');
   const rowsHost    = $('#rows');
@@ -30,22 +28,18 @@
   const nowLine     = $('#nowLine');
 
   // ------- state -------
-  const BELTS_ORDER = [1,2,3,5,6,7];
+  const BELTS_ORDER = [1, 2, 3, 5, 6, 7];
   let assignments = null;
-  let flightsRaw = [];    // raw from assignments.json
-  let flights = [];       // deduped & filtered -> rendered
-  let pxPerMin = parseFloat(zoomSel?.value || '8'); // default zoom 8 px/min
+  let flightsRaw = [];
+  let flights = [];
+  let pxPerMin = parseFloat(zoomSel?.value || '8');
   let timeMin = null, timeMax = null;
-  let beltFilter = new Set(); // empty => show all
+  let beltFilter = new Set();
 
-  // de-dupe window
   const DEDUPE_START_WINDOW_MS = 5 * minute;
-
-  // history rules
   const HISTORY_WINDOW_MIN = 240;
   const COMPLETED_GRACE_MS = 2 * minute;
 
-  // CSS dimensions
   const getCssNum = (name, fallback) => {
     const v = parseInt(getComputedStyle(document.documentElement).getPropertyValue(name), 10);
     return Number.isFinite(v) ? v : fallback;
@@ -54,15 +48,33 @@
   const LANE_GAP = getCssNum('--lane-gap', 10);
   const BELT_PAD = getCssNum('--belt-pad-y', 18);
 
-  // fetch helper
   const fetchJSON = (u) => fetch(u, { cache: 'no-store' }).then(r => r.json());
 
-  // ------- de-dupe: same flight, same belt, start within 5 min -> keep first -------
+  // --- NEW: normalise a row coming from assignments.json ---
+  function normaliseRow(r) {
+    const out = { ...r };
+    // belt -> number if possible
+    if (out.belt !== undefined && out.belt !== null && out.belt !== '') {
+      const nb = Number(out.belt);
+      out.belt = Number.isFinite(nb) ? nb : out.belt;
+    }
+    // start/end: make sure they are ISO strings
+    if (!out.start && out.eta) out.start = out.eta;
+    if (!out.end && out.start) {
+      // default 30 min window if missing end
+      const s = new Date(out.start);
+      out.end = new Date(s.getTime() + 30*minute).toISOString();
+    }
+    return out;
+  }
+
+  // ------- de-dupe -------
   function dedupeFlights(rows) {
     const keep = [];
-    const seenMap = new Map(); // key: "<belt>|<flight>"
+    const seenMap = new Map(); // "<belt>|<flight>"
 
-    for (const r of rows) {
+    for (const r0 of rows) {
+      const r = normaliseRow(r0); // ensure belt is number here as well
       const belt = r.belt;
       if (belt == null || belt === '') {
         keep.push(r);
@@ -87,7 +99,6 @@
           break;
         }
       }
-
       if (!isDup) {
         arr.push({ startMs });
         keep.push(r);
@@ -97,7 +108,7 @@
     return keep;
   }
 
-  // ------- classify delay -> colour -------
+  // ------- delay → class -------
   function classByDelay(d) {
     if (d == null) return 'ok';
     if (d >= 20) return 'late';
@@ -106,13 +117,11 @@
     return 'ok';
   }
 
-  // ------- completed/past -> stale -------
-  function isCompletedPast(flightObj, nowMs) {
-    const endMs = +new Date(flightObj.end);
+  function isCompletedPast(f, nowMs) {
+    const endMs = +new Date(f.end);
     return nowMs > endMs + COMPLETED_GRACE_MS;
   }
 
-  // x helper
   const xForDate = (d) => ((+new Date(d)) - (+timeMin)) / 60000 * pxPerMin;
 
   // ------- build puck -------
@@ -120,9 +129,7 @@
     const nowMs = Date.now();
     const completed = isCompletedPast(f, nowMs);
     let cls = classByDelay(f.delay_min);
-    if (completed) {
-      cls = 'stale'; // match CSS: .puck.stale
-    }
+    if (completed) cls = 'stale';
 
     const p = el('div', `puck ${cls}`);
 
@@ -144,19 +151,16 @@
     p.appendChild(title);
     p.appendChild(sub);
 
-    // horizontal
     const left = xForDate(f.start);
     const right = xForDate(f.end);
     p.style.left  = `${left}px`;
     p.style.width = `${Math.max(120, right - left - 4)}px`;
-
-    // vertical lane placement
     p.style.top   = `${f._lane * (LANE_H + LANE_GAP)}px`;
 
     return p;
   }
 
-  // ------- lane pack per belt -------
+  // ------- pack lanes per belt -------
   function packLanes(items) {
     const sorted = items.slice().sort((a,b)=>+new Date(a.start) - +new Date(b.start));
     const lanesLastEnd = [];
@@ -231,8 +235,8 @@
   // ------- gridlines -------
   function addGridlines(totalHeight) {
     [...scrollInner.querySelectorAll('.gridline')].forEach(x => x.remove());
-
     const frag = document.createDocumentFragment();
+
     const startAligned = new Date(timeMin);
     startAligned.setMinutes(0,0,0);
     const endMs = +timeMax;
@@ -243,7 +247,7 @@
       const mm = dt.getMinutes();
       const isHour = (mm === 0);
 
-      const g = el('div','gridline');
+      const g = el('div', 'gridline');
       g.style.left = `${x}px`;
       g.style.height = `${totalHeight}px`;
       if (!isHour) g.classList.add('minor-tick');
@@ -266,7 +270,10 @@
     const frag = document.createDocumentFragment();
 
     let totalHeight = 0;
-    const beltsToShow = BELTS_ORDER.filter(b => beltFilter.size === 0 || beltFilter.has(b));
+    const beltsToShow =
+      beltFilter.size === 0 || beltFilter.has('__none__')
+        ? (beltFilter.has('__none__') ? [] : BELTS_ORDER)
+        : BELTS_ORDER.filter(b => beltFilter.has(b));
 
     for (const b of beltsToShow) {
       const beltRow = el('div','belt-row');
@@ -277,9 +284,10 @@
       beltRow.appendChild(beltName);
       beltRow.appendChild(inner);
 
+      // IMPORTANT: flights already normalised -> r.belt is number
       const items = flights.filter(r => r.belt === b);
-      const { lanes, items: packed } = packLanes(items);
 
+      const { lanes, items: packed } = packLanes(items);
       const contentH = lanes * (LANE_H + LANE_GAP) - LANE_GAP;
       beltRow.style.minHeight = `calc(${BELT_PAD}px * 2 + ${contentH}px)`;
 
@@ -288,7 +296,6 @@
       }
 
       frag.appendChild(beltRow);
-
       totalHeight += beltRow.getBoundingClientRect().height;
     }
 
@@ -301,7 +308,6 @@
     updateNowLine(totalHeight);
   }
 
-  // ------- full redraw -------
   function drawAll() {
     drawRuler();
     drawRows();
@@ -329,6 +335,7 @@
     const starts = visibleRows.map(r => +new Date(r.start || r.eta));
     const ends   = visibleRows.map(r => +new Date(r.end   || r.eta));
     const padMin = 45 * minute;
+
     const tMin = new Date(Math.min(...starts) - padMin);
     const tMax = new Date(Math.max(...ends)   + padMin);
 
@@ -366,7 +373,7 @@
     } else if (key === 'none') {
       beltFilter = new Set(['__none__']);
     } else {
-      const n = parseInt(key, 10);
+      const n = Number(key);
       if (Number.isFinite(n)) {
         if (beltFilter.has(n)) beltFilter.delete(n);
         else beltFilter.add(n);
@@ -378,25 +385,29 @@
       const on =
         (k === 'all'  && beltFilter.size === 0) ||
         (k === 'none' && beltFilter.has('__none__')) ||
-        (/^\d+$/.test(k) && beltFilter.has(parseInt(k,10)));
+        (/^\d+$/.test(k) && beltFilter.has(Number(k)));
       c.classList.toggle('on', on);
     });
 
     drawAll();
   }
 
-  // ------- load initial -------
+  // ------- load -------
   function load() {
     return fetchJSON('assignments.json').then(data => {
       assignments = data;
-      flightsRaw = (data.rows || []).slice();
 
-      const deduped = dedupeFlights(flightsRaw);
+      // normalise ALL rows right here
+      const normed = (data.rows || []).map(normaliseRow);
+
+      // de-dupe, then compute window
+      const deduped = dedupeFlights(normed);
       const { flightsFiltered, tMin, tMax } = computeTimeWindow(deduped);
 
-      flights = flightsFiltered;
-      timeMin = tMin;
-      timeMax = tMax;
+      flights  = flightsFiltered;
+      flightsRaw = normed;
+      timeMin  = tMin;
+      timeMax  = tMax;
 
       if (meta) {
         meta.textContent = `Generated ${assignments.generated_at_local} • Horizon ${assignments.horizon_minutes} min`;
@@ -407,28 +418,26 @@
     });
   }
 
-  // zoom
+  // interactions
   zoomSel?.addEventListener('change', () => {
     pxPerMin = parseFloat(zoomSel.value || '8');
     drawAll();
   });
 
-  // now button
   nowBtn?.addEventListener('click', () => {
     const nowX = xForDate(Date.now());
     const viewW = scrollOuter.clientWidth;
     scrollOuter.scrollLeft = Math.max(0, nowX - viewW/2);
   });
 
-  // resize
   window.addEventListener('resize', drawAll);
 
-  // periodic now-line update
+  // periodic now-line refresh
   setInterval(() => {
     updateNowLine(rowsHost.getBoundingClientRect().height || 0);
   }, 30 * 1000);
 
-  // live refresh ~90s
+  // live refresh (~90s)
   setInterval(() => {
     fetch('assignments.json', { cache: 'no-store' })
       .then(r => r.json())
@@ -436,14 +445,15 @@
         if (!data) return;
         const prevStamp = assignments?.generated_at_utc;
         assignments = data;
-        flightsRaw = (data.rows || []).slice();
 
-        const deduped = dedupeFlights(flightsRaw);
+        const normed = (data.rows || []).map(normaliseRow);
+        const deduped = dedupeFlights(normed);
         const { flightsFiltered, tMin, tMax } = computeTimeWindow(deduped);
 
-        flights = flightsFiltered;
-        timeMin = tMin;
-        timeMax = tMax;
+        flights  = flightsFiltered;
+        flightsRaw = normed;
+        timeMin  = tMin;
+        timeMax  = tMax;
 
         if (data.generated_at_utc !== prevStamp) {
           drawAll();
