@@ -2,34 +2,35 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>BRS — Arrivals Belt Timeline</title>
+  <title>BRS — Baggage Belt Timeline</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link rel="stylesheet" href="timeline.css" />
 </head>
 <body>
   <header class="topbar">
-    <div class="brand">BRS — Arrivals Belt Timeline</div>
+    <div class="brand">BRS Baggage Belt Timeline</div>
 
     <div class="chiprow" id="beltChips">
       <!-- belt filter chips will be injected -->
     </div>
 
     <div class="right-controls">
+      <div class="legend">
+        <span class="dot dot-ok"></span> On Time
+        <span class="dot dot-10"></span> +10-19min
+        <span class="dot dot-20"></span> +20+min
+        <span class="dot dot-early"></span> Early
+        <span class="dot dot-stale"></span> Completed
+      </div>
+
       <label class="lbl">Zoom:</label>
       <select id="zoom">
-        <option value="8" selected>8 px/min (default)</option>
         <option value="10">10 px/min</option>
-        <option value="12">12 px/min</option>
+        <option value="8" selected>8 px/min</option>
+        <option value="6">6 px/min</option>
       </select>
-      <button id="nowBtn" class="btn">Now</button>
-
-      <div class="legend">
-        <span class="dot dot-ok"></span> On time / small slip
-        <span class="dot dot-10"></span> +10–19
-        <span class="dot dot-20"></span> +20+
-        <span class="dot dot-early"></span> Early
-        <span class="dot dot-stale"></span> Completed (past)
-      </div>
+      
+      <button id="nowBtn" class="btn">Jump to Now</button>
 
       <div class="meta" id="meta"></div>
     </div>
@@ -51,7 +52,7 @@
   </div>
 
   <footer class="foot">
-    <div>Source: FR24 (screen-scrape) • Auto-refresh ~90s • 4-hour local history kept in your browser.</div>
+    <div>Bristol Airport Baggage Operations • Live FlightRadar24 Data • Auto-refresh every 90 seconds</div>
   </footer>
 
   <script src="timeline.js"></script>
