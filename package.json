@@ -1,11 +1,11 @@
 {
   "name": "brs-belt-alloc",
   "version": "1.0.0",
-  "type": "module",
   "description": "BRS baggage belt allocation feeder",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "feed": "node .\\feeder\\fr24_feeder.js"
   },
   "keywords": [],
   "author": "harrisalharis",
