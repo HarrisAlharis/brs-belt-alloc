@@ -1,16 +1,15 @@
 /* docs/timeline.js
- * BRS — Baggage Belt Timeline (Staff Operations Version)
- * Enhanced for clarity and usability
+ * BRS — Arrivals Belt Timeline
+ * FIXES:
+ * - Normalise belt values from JSON (string → number), so "1" matches belt 1.
+ * - If 4h-history filter yields 0 flights (e.g. file is old) → fall back to ALL rows.
+ * - Keep dedupe, packing, auto-refresh.
  */
 
 (function () {
   // ------- helpers -------
   const $ = (s) => document.querySelector(s);
-  const el = (tag, cls) => { 
-    const n = document.createElement(tag); 
-    if (cls) n.className = cls; 
-    return n; 
-  };
+  const el = (tag, cls) => { const n = document.createElement(tag); if (cls) n.className = cls; return n; };
   const minute = 60 * 1000;
   const dFmt = (d) => {
     const dt = new Date(d);
@@ -22,10 +21,11 @@
   const zoomSel     = $('#zoom');
   const nowBtn      = $('#nowBtn');
   const meta        = $('#meta');
+
   const scrollOuter = $('#scrollOuter');
   const scrollInner = $('#scrollInner');
   const rowsHost    = $('#rows');
-  const canvasRuler = $('#ruler');
+  const canvasRuler = /** @type {HTMLCanvasElement} */($('#ruler'));
   const nowLine     = $('#nowLine');
 
   // ------- state -------
@@ -38,20 +38,20 @@
   let beltFilter = new Set();
 
   const DEDUPE_START_WINDOW_MS = 5 * minute;
-  const HISTORY_WINDOW_MIN = 240;
+  const HISTORY_WINDOW_MIN = 240;   // 4h
   const COMPLETED_GRACE_MS = 2 * minute;
 
   const getCssNum = (name, fallback) => {
     const v = parseInt(getComputedStyle(document.documentElement).getPropertyValue(name), 10);
     return Number.isFinite(v) ? v : fallback;
   };
-  const LANE_H   = getCssNum('--lane-height', 68);
-  const LANE_GAP = getCssNum('--lane-gap', 8);
-  const BELT_PAD = getCssNum('--belt-pad-y', 20);
+  const LANE_H   = getCssNum('--lane-height', 58);
+  const LANE_GAP = getCssNum('--lane-gap', 10);
+  const BELT_PAD = getCssNum('--belt-pad-y', 18);
 
   const fetchJSON = (u) => fetch(u, { cache: 'no-store' }).then(r => r.json());
 
-  // ------- normalise row -------
+  // --- normalise row from JSON ---
   function normaliseRow(r) {
     const out = { ...r };
 
@@ -65,7 +65,7 @@
     if (!out.start && out.eta) out.start = out.eta;
     if (!out.end && out.start) {
       const s = new Date(out.start);
-      out.end = new Date(s.getTime() + 30 * minute).toISOString();
+      out.end = new Date(s.getTime() + 30*minute).toISOString();
     }
 
     return out;
@@ -74,12 +74,13 @@
   // ------- de-dupe -------
   function dedupeFlights(rows) {
     const keep = [];
-    const seenMap = new Map();
+    const seenMap = new Map(); // "<belt>|<flight>"
 
     for (const r0 of rows) {
       const r = normaliseRow(r0);
       const belt = r.belt;
 
+      // if no belt, just keep
       if (belt == null || belt === '') {
         keep.push(r);
         continue;
@@ -112,7 +113,7 @@
     return keep;
   }
 
-  // ------- delay classification -------
+  // ------- delay → class -------
   function classByDelay(d) {
     if (d == null) return 'ok';
     if (d >= 20) return 'late';
@@ -138,25 +139,17 @@
     const p = el('div', `puck ${cls}`);
 
     const title = el('div', 'title');
-    title.textContent = `${(f.flight || '').trim()} • ${(f.origin_iata || '').trim()}`;
-    
+    title.textContent = `${(f.flight||'').trim()} • ${(f.origin_iata||'').trim() || f.origin || ''}`.replace(/\s+/g,' ');
     const sub = el('div', 'sub');
-    const airline = f.airline || '';
-    const pax = f.pax_estimate ? ` • ${f.pax_estimate}pax` : '';
-    sub.textContent = `${airline}${pax}`;
+    sub.textContent = `${dFmt(f.start)} → ${dFmt(f.end)}`;
 
-    // Enhanced tooltip with more operational info
     const tipLines = [
-      `Flight: ${(f.flight || '').trim()}`,
-      `Origin: ${f.origin || f.origin_iata || 'Unknown'}`,
-      `Airline: ${f.airline || 'Unknown'}`,
-      `Aircraft: ${f.aircraft || 'Unknown'}`,
-      `Passengers: ${f.pax_estimate || 'Unknown'}`,
-      `Belt Window: ${dFmt(f.start)} - ${dFmt(f.end)}`,
-      `Status: ${f.status || 'Unknown'}`,
-      `Delay: ${f.delay_min !== null ? f.delay_min + ' min' : 'Unknown'}`,
-      `Flow: ${f.flow || 'Unknown'}`,
-      f.reason ? `Assignment: ${f.reason}` : ''
+      `${(f.flight||'').trim()} ${f.origin ? `• ${f.origin}` : ''}`,
+      `${dFmt(f.start)} → ${dFmt(f.end)}`,
+      f.flow,
+      f.airline,
+      f.aircraft,
+      f.reason ? `Reason: ${f.reason}` : ''
     ].filter(Boolean);
     p.setAttribute('data-tip', tipLines.join('\n'));
 
@@ -165,23 +158,23 @@
 
     const left = xForDate(f.start);
     const right = xForDate(f.end);
-    p.style.left = `${left}px`;
-    p.style.width = `${Math.max(140, right - left)}px`;
-    p.style.top = `${f._lane * (LANE_H + LANE_GAP)}px`;
+    p.style.left  = `${left}px`;
+    p.style.width = `${Math.max(120, right - left - 4)}px`;
+    p.style.top   = `${f._lane * (LANE_H + LANE_GAP)}px`;
 
     return p;
   }
 
-  // ------- pack lanes -------
+  // ------- pack lanes per belt -------
   function packLanes(items) {
-    const sorted = items.slice().sort((a, b) => +new Date(a.start) - +new Date(b.start));
+    const sorted = items.slice().sort((a,b)=>+new Date(a.start) - +new Date(b.start));
     const lanesLastEnd = [];
     const MIN_SEPARATION_MS = 1 * minute;
 
     for (const f of sorted) {
       const s = +new Date(f.start), e = +new Date(f.end);
       let lane = -1;
-      for (let i = 0; i < lanesLastEnd.length; i++) {
+      for (let i=0; i<lanesLastEnd.length; i++) {
         if (s >= (lanesLastEnd[i] + MIN_SEPARATION_MS)) {
           lane = i;
           break;
@@ -204,52 +197,42 @@
     if (!canvasRuler) return;
     const ctx = canvasRuler.getContext('2d');
     const width = Math.max(xForDate(timeMax) + 200, scrollOuter.clientWidth);
-    const height = 50;
+    const height = 44;
     const dpr = window.devicePixelRatio || 1;
 
-    canvasRuler.width = Math.floor(width * dpr);
+    canvasRuler.width  = Math.floor(width  * dpr);
     canvasRuler.height = Math.floor(height * dpr);
-    canvasRuler.style.width = `${width}px`;
+    canvasRuler.style.width  = `${width}px`;
     canvasRuler.style.height = `${height}px`;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
 
-    ctx.clearRect(0, 0, width, height);
-    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--panel') || '#1e293b';
-    ctx.fillRect(0, 0, width, height);
+    ctx.clearRect(0,0,width,height);
+    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--panel') || '#111b26';
+    ctx.fillRect(0,0,width,height);
 
-    // Draw subtle gradient for depth
-    const gradient = ctx.createLinearGradient(0, 0, 0, height);
-    gradient.addColorStop(0, 'rgba(255,255,255,0.05)');
-    gradient.addColorStop(1, 'rgba(255,255,255,0.02)');
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, width, height);
+    ctx.strokeStyle = '#1a2a3a';
+    ctx.beginPath(); ctx.moveTo(0,height-1); ctx.lineTo(width,height-1); ctx.stroke();
 
-    ctx.strokeStyle = '#334155';
-    ctx.beginPath();
-    ctx.moveTo(0, height - 1);
-    ctx.lineTo(width, height - 1);
-    ctx.stroke();
-
-    ctx.fillStyle = '#f1f5f9';
-    ctx.font = '600 15px -apple-system, BlinkMacSystemFont, sans-serif';
+    ctx.fillStyle = '#dce6f2';
+    ctx.font = '14px ui-sans-serif, system-ui, Segoe UI, Roboto, Arial';
     ctx.textBaseline = 'alphabetic';
 
     const startAligned = new Date(timeMin);
-    startAligned.setMinutes(0, 0, 0);
+    startAligned.setMinutes(0,0,0);
     const endMs = +timeMax;
 
-    for (let t = +startAligned; t <= endMs; t += 10 * minute) {
+    for (let t = +startAligned; t <= endMs; t += 10*minute) {
       const x = Math.floor(xForDate(t));
       const dt = new Date(t);
       const mm = dt.getMinutes();
       const isHour = (mm === 0);
 
-      ctx.fillStyle = isHour ? '#475569' : 'rgba(71, 85, 105, 0.4)';
+      ctx.fillStyle = isHour ? '#213043' : 'rgba(33,48,67,0.4)';
       ctx.fillRect(x, 0, 1, height);
 
       if (isHour) {
-        ctx.fillStyle = '#f1f5f9';
-        ctx.fillText(dFmt(t), x + 10, height - 15);
+        ctx.fillStyle = '#dce6f2';
+        ctx.fillText(dFmt(t), x + 8, height - 12);
       }
     }
   }
@@ -260,10 +243,10 @@
     const frag = document.createDocumentFragment();
 
     const startAligned = new Date(timeMin);
-    startAligned.setMinutes(0, 0, 0);
+    startAligned.setMinutes(0,0,0);
     const endMs = +timeMax;
 
-    for (let t = +startAligned; t <= endMs; t += 10 * minute) {
+    for (let t = +startAligned; t <= endMs; t += 10*minute) {
       const x = xForDate(t);
       const dt = new Date(t);
       const mm = dt.getMinutes();
@@ -272,7 +255,7 @@
       const g = el('div', 'gridline');
       g.style.left = `${x}px`;
       g.style.height = `${totalHeight}px`;
-      if (isHour) g.classList.add('hour');
+      if (!isHour) g.classList.add('minor-tick');
       frag.appendChild(g);
     }
 
@@ -298,10 +281,10 @@
         : BELTS_ORDER.filter(b => beltFilter.has(b));
 
     for (const b of beltsToShow) {
-      const beltRow = el('div', 'belt-row');
-      const beltName = el('div', 'belt-name');
+      const beltRow = el('div','belt-row');
+      const beltName = el('div','belt-name');
       beltName.textContent = `Belt ${b}`;
-      const inner = el('div', 'row-inner');
+      const inner = el('div','row-inner');
 
       beltRow.appendChild(beltName);
       beltRow.appendChild(inner);
@@ -339,6 +322,7 @@
     const nowMs = Date.now();
     const historyCutoff = nowMs - HISTORY_WINDOW_MIN * minute;
 
+    // 1) try 4h window
     const visibleRows = allRows.filter(r => {
       const endMs = +new Date(r.end);
       return endMs >= historyCutoff;
@@ -346,32 +330,33 @@
 
     if (visibleRows.length > 0) {
       const starts = visibleRows.map(r => +new Date(r.start || r.eta));
-      const ends = visibleRows.map(r => +new Date(r.end || r.eta));
+      const ends   = visibleRows.map(r => +new Date(r.end   || r.eta));
       const padMin = 45 * minute;
       return {
         flightsFiltered: visibleRows,
         tMin: new Date(Math.min(...starts) - padMin),
-        tMax: new Date(Math.max(...ends) + padMin),
+        tMax: new Date(Math.max(...ends)   + padMin),
       };
     }
 
-    // Fallback for old data
+    // 2) FALLBACK: file is old → show everything
     if (allRows.length > 0) {
       const starts = allRows.map(r => +new Date(r.start || r.eta));
-      const ends = allRows.map(r => +new Date(r.end || r.eta));
+      const ends   = allRows.map(r => +new Date(r.end   || r.eta));
       const padMin = 45 * minute;
       return {
         flightsFiltered: allRows,
         tMin: new Date(Math.min(...starts) - padMin),
-        tMax: new Date(Math.max(...ends) + padMin),
+        tMax: new Date(Math.max(...ends)   + padMin),
       };
     }
 
+    // 3) nothing at all
     const now = new Date();
     return {
       flightsFiltered: [],
-      tMin: new Date(+now - 90 * minute),
-      tMax: new Date(+now + 90 * minute),
+      tMin: new Date(+now - 90*minute),
+      tMax: new Date(+now + 90*minute),
     };
   }
 
@@ -389,14 +374,12 @@
       frag.appendChild(b);
     };
 
-    // Add "All" first for better UX
-    mkChip('All Belts', 'all');
     BELTS_ORDER.forEach(n => mkChip(`Belt ${n}`, String(n)));
-    mkChip('Hide All', 'none');
+    mkChip('All', 'all');
+    mkChip('None', 'none');
 
     beltChips.appendChild(frag);
 
-    // Set "All" as default active
     [...beltChips.querySelectorAll('.chip')].forEach(c =>
       c.classList.toggle('on', c.dataset.key === 'all')
     );
@@ -418,7 +401,7 @@
     [...beltChips.querySelectorAll('.chip')].forEach(c => {
       const k = c.dataset.key;
       const on =
-        (k === 'all' && beltFilter.size === 0) ||
+        (k === 'all'  && beltFilter.size === 0) ||
         (k === 'none' && beltFilter.has('__none__')) ||
         (/^\d+$/.test(k) && beltFilter.has(Number(k)));
       c.classList.toggle('on', on);
@@ -436,25 +419,21 @@
       const deduped = dedupeFlights(normed);
       const { flightsFiltered, tMin, tMax } = computeTimeWindow(deduped);
 
-      flights = flightsFiltered;
+      flights   = flightsFiltered;
       flightsRaw = normed;
-      timeMin = tMin;
-      timeMax = TMax;
+      timeMin   = tMin;
+      timeMax   = tMax;
 
       if (meta) {
-        const localTime = assignments.generated_at_local || assignments.generated_at_utc;
-        meta.textContent = `Updated: ${localTime} • Horizon: ${assignments.horizon_minutes}min`;
+        meta.textContent = `Generated ${assignments.generated_at_local} • Horizon ${assignments.horizon_minutes} min`;
       }
 
       buildBeltChips();
       drawAll();
-    }).catch(err => {
-      console.error('Failed to load assignments:', err);
-      meta.textContent = 'Unable to load flight data';
     });
   }
 
-  // ------- interactions -------
+  // interactions
   zoomSel?.addEventListener('change', () => {
     pxPerMin = parseFloat(zoomSel.value || '8');
     drawAll();
@@ -463,56 +442,43 @@
   nowBtn?.addEventListener('click', () => {
     const nowX = xForDate(Date.now());
     const viewW = scrollOuter.clientWidth;
-    scrollOuter.scrollLeft = Math.max(0, nowX - viewW / 2);
+    scrollOuter.scrollLeft = Math.max(0, nowX - viewW/2);
   });
 
   window.addEventListener('resize', drawAll);
 
-  // Update now line position regularly
   setInterval(() => {
     updateNowLine(rowsHost.getBoundingClientRect().height || 0);
   }, 30 * 1000);
 
-  // Auto-refresh data
+  // live refresh
   setInterval(() => {
     fetch('assignments.json', { cache: 'no-store' })
-      .then(r => {
-        if (!r.ok) throw new Error('Network error');
-        return r.json();
-      })
+      .then(r => r.json())
       .then(data => {
         if (!data) return;
+        const prevStamp = assignments?.generated_at_utc;
         assignments = data;
 
         const normed = (data.rows || []).map(normaliseRow);
         const deduped = dedupeFlights(normed);
         const { flightsFiltered, tMin, tMax } = computeTimeWindow(deduped);
 
-        flights = flightsFiltered;
+        flights   = flightsFiltered;
         flightsRaw = normed;
-        timeMin = tMin;
-        timeMax = tMax;
-
-        if (meta) {
-          const localTime = assignments.generated_at_local || assignments.generated_at_utc;
-          meta.textContent = `Updated: ${localTime} • Horizon: ${assignments.horizon_minutes}min`;
-        }
+        timeMin   = tMin;
+        timeMax   = tMax;
 
         drawAll();
       })
-      .catch(err => {
-        console.warn('Refresh failed:', err);
-      });
+      .catch(() => {});
   }, 90 * 1000);
 
-  // Initialize
+  // boot
   load().then(() => {
-    // Scroll to show current time
-    setTimeout(() => {
-      const nowX = xForDate(Date.now());
-      const viewW = scrollOuter.clientWidth;
-      scrollOuter.scrollLeft = Math.max(0, nowX - viewW / 3);
-    }, 100);
+    const nowX = xForDate(Date.now());
+    const viewW = scrollOuter.clientWidth;
+    scrollOuter.scrollLeft = Math.max(0, nowX - viewW/2);
   });
 
 })();
