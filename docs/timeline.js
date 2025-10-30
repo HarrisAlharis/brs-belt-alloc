@@ -1,8 +1,9 @@
 /* docs/timeline.js
  * BRS — Arrivals Belt Timeline
  * FIXES:
- * 1. Normalise belt values from JSON (string → number), so "1" matches belt 1.
- * 2. Keep dedupe, packing, 4h history, auto-refresh.
+ * - Normalise belt values from JSON (string → number), so "1" matches belt 1.
+ * - If 4h-history filter yields 0 flights (e.g. file is old) → fall back to ALL rows.
+ * - Keep dedupe, packing, auto-refresh.
  */
 
 (function () {
@@ -37,7 +38,7 @@
   let beltFilter = new Set();
 
   const DEDUPE_START_WINDOW_MS = 5 * minute;
-  const HISTORY_WINDOW_MIN = 240;
+  const HISTORY_WINDOW_MIN = 240;   // 4h
   const COMPLETED_GRACE_MS = 2 * minute;
 
   const getCssNum = (name, fallback) => {
@@ -50,21 +51,23 @@
 
   const fetchJSON = (u) => fetch(u, { cache: 'no-store' }).then(r => r.json());
 
-  // --- NEW: normalise a row coming from assignments.json ---
+  // --- normalise row from JSON ---
   function normaliseRow(r) {
     const out = { ...r };
-    // belt -> number if possible
+
+    // belt → number
     if (out.belt !== undefined && out.belt !== null && out.belt !== '') {
       const nb = Number(out.belt);
       out.belt = Number.isFinite(nb) ? nb : out.belt;
     }
-    // start/end: make sure they are ISO strings
+
+    // start/end defaults
     if (!out.start && out.eta) out.start = out.eta;
     if (!out.end && out.start) {
-      // default 30 min window if missing end
       const s = new Date(out.start);
       out.end = new Date(s.getTime() + 30*minute).toISOString();
     }
+
     return out;
   }
 
@@ -74,8 +77,10 @@
     const seenMap = new Map(); // "<belt>|<flight>"
 
     for (const r0 of rows) {
-      const r = normaliseRow(r0); // ensure belt is number here as well
+      const r = normaliseRow(r0);
       const belt = r.belt;
+
+      // if no belt, just keep
       if (belt == null || belt === '') {
         keep.push(r);
         continue;
@@ -284,7 +289,6 @@
       beltRow.appendChild(beltName);
       beltRow.appendChild(inner);
 
-      // IMPORTANT: flights already normalised -> r.belt is number
       const items = flights.filter(r => r.belt === b);
 
       const { lanes, items: packed } = packLanes(items);
@@ -318,28 +322,42 @@
     const nowMs = Date.now();
     const historyCutoff = nowMs - HISTORY_WINDOW_MIN * minute;
 
+    // 1) try 4h window
     const visibleRows = allRows.filter(r => {
       const endMs = +new Date(r.end);
       return endMs >= historyCutoff;
     });
 
-    if (!visibleRows.length) {
-      const now = new Date();
+    if (visibleRows.length > 0) {
+      const starts = visibleRows.map(r => +new Date(r.start || r.eta));
+      const ends   = visibleRows.map(r => +new Date(r.end   || r.eta));
+      const padMin = 45 * minute;
       return {
-        flightsFiltered: [],
-        tMin: new Date(+now - 90*minute),
-        tMax: new Date(+now + 90*minute),
+        flightsFiltered: visibleRows,
+        tMin: new Date(Math.min(...starts) - padMin),
+        tMax: new Date(Math.max(...ends)   + padMin),
       };
     }
 
-    const starts = visibleRows.map(r => +new Date(r.start || r.eta));
-    const ends   = visibleRows.map(r => +new Date(r.end   || r.eta));
-    const padMin = 45 * minute;
+    // 2) FALLBACK: file is old → show everything
+    if (allRows.length > 0) {
+      const starts = allRows.map(r => +new Date(r.start || r.eta));
+      const ends   = allRows.map(r => +new Date(r.end   || r.eta));
+      const padMin = 45 * minute;
+      return {
+        flightsFiltered: allRows,
+        tMin: new Date(Math.min(...starts) - padMin),
+        tMax: new Date(Math.max(...ends)   + padMin),
+      };
+    }
 
-    const tMin = new Date(Math.min(...starts) - padMin);
-    const tMax = new Date(Math.max(...ends)   + padMin);
-
-    return { flightsFiltered: visibleRows, tMin, tMax };
+    // 3) nothing at all
+    const now = new Date();
+    return {
+      flightsFiltered: [],
+      tMin: new Date(+now - 90*minute),
+      tMax: new Date(+now + 90*minute),
+    };
   }
 
   // ------- belt chips -------
@@ -397,17 +415,14 @@
     return fetchJSON('assignments.json').then(data => {
       assignments = data;
 
-      // normalise ALL rows right here
       const normed = (data.rows || []).map(normaliseRow);
-
-      // de-dupe, then compute window
       const deduped = dedupeFlights(normed);
       const { flightsFiltered, tMin, tMax } = computeTimeWindow(deduped);
 
-      flights  = flightsFiltered;
+      flights   = flightsFiltered;
       flightsRaw = normed;
-      timeMin  = tMin;
-      timeMax  = tMax;
+      timeMin   = tMin;
+      timeMax   = tMax;
 
       if (meta) {
         meta.textContent = `Generated ${assignments.generated_at_local} • Horizon ${assignments.horizon_minutes} min`;
@@ -432,12 +447,11 @@
 
   window.addEventListener('resize', drawAll);
 
-  // periodic now-line refresh
   setInterval(() => {
     updateNowLine(rowsHost.getBoundingClientRect().height || 0);
   }, 30 * 1000);
 
-  // live refresh (~90s)
+  // live refresh
   setInterval(() => {
     fetch('assignments.json', { cache: 'no-store' })
       .then(r => r.json())
@@ -450,16 +464,12 @@
         const deduped = dedupeFlights(normed);
         const { flightsFiltered, tMin, tMax } = computeTimeWindow(deduped);
 
-        flights  = flightsFiltered;
+        flights   = flightsFiltered;
         flightsRaw = normed;
-        timeMin  = tMin;
-        timeMax  = tMax;
+        timeMin   = tMin;
+        timeMax   = tMax;
 
-        if (data.generated_at_utc !== prevStamp) {
-          drawAll();
-        } else {
-          drawAll();
-        }
+        drawAll();
       })
       .catch(() => {});
   }, 90 * 1000);
