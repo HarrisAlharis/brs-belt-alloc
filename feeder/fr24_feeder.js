@@ -1,57 +1,85 @@
 /**
- * feeder/fr24_feeder.js
+ * fr24_feeder.js
  *
  * PURPOSE
  * -------
- * This is the "belt fixer" that was working for you before.
+ * 1. Load the latest docs/assignments.json that already exists.
+ *    This file already has all arrivals, times, metadata, etc.
  *
- * What it does:
- * 1. Try to load a local FR24 snapshot if present:
- *      feeder/fr24-snapshot.json
- *    - This is for when you manually paste / export the FR24 arrivals JSON.
- *    - If this file exists and is valid, we use it as the source of flights.
+ * 2. Fix belt assignment for every flight:
+ *    - No flight is allowed to have an empty belt ("", null, undefined).
+ *    - We only use belts 1..6 for international / general flow.
+ *    - Belt 7 is kept only if it was already explicitly assigned (domestic).
  *
- * 2. If the snapshot does NOT exist (or is invalid), we FALL BACK to the
- *    previous, working behaviour:
- *      - read docs/assignments.json
- *      - fix belts
- *      - write docs/assignments.json back
+ * NEW RULE (longest-running belt rule, user request 2025-10-28):
+ * If a flight has no valid belt, we assign it automatically according to:
  *
- * 3. Belt logic (same as the version you pasted):
- *    - Keep belt 7 if already set (domestic).
- *    - Otherwise, use belts 1..6 only.
- *    - We walk flights chronologically.
- *    - We rank belts 1..6 by "how long they've been used so far" BEFORE this
- *      flight starts (most-used first).
- *    - We try to place the flight on that belt respecting MIN_GAP_MIN = 1 min.
- *    - If NO belt can take it under spacing, we FORCE it on the most-used belt.
- *    - We also normalise reason → 'auto-assign' if we had to force.
+ *    a) Look at belts 1..6 and measure how long they've already been in use
+ *       BEFORE this flight starts (total historical "on time").
+ *    b) Sort belts 1..6 so the most-used belt so far is first.
+ *    c) Try to place this flight on that belt if spacing rules allow.
+ *       Spacing rule = can't overlap / be closer than 1 minute to an
+ *       already assigned interval on that belt.
+ *    d) If that belt can't take it under spacing, try the next belt, etc.
+ *    e) If NONE of them can take it under spacing, FORCE it onto the
+ *       single most-used belt anyway so it never stays blank.
  *
- * This is the behaviour you said was working.
+ * This guarantees: no more "no_slot_available", no blank belt.
  *
- * NOTE
- * ----
- * We do NOT touch timeline files here.
+ * 3. After fixing, write the updated assignments.json back to /docs with
+ *    all rows updated. We preserve:
+ *    - generated_at_utc
+ *    - generated_at_local
+ *    - source
+ *    - horizon_minutes
+ *    - every field in each row except we overwrite:
+ *        belt (filled 1..6 if it was blank)
+ *        reason (set to "auto-assign" if we had to force-assign)
+ *
+ * IMPORTANT
+ * ---------
+ * - We DO NOT touch timeline.html / timeline.js / timeline.css.
+ * - We DO NOT reorder keys in rows except where we have to update belt/reason.
+ * - We DO NOT drop any fields like status, ui_state, etc.
+ * - We DO NOT try to be clever with heavy flights other than what you asked.
+ *
+ * HOW THIS RUNS
+ * -------------
+ * Your run_feeder.bat calls:
+ *    node .\feeder\fr24_feeder.js
+ *
+ * Then run_feeder.bat commits docs\assignments.json and docs\last_update.txt
+ * to GitHub Pages.
+ *
+ * This version does NOT scrape FlightRadar24. Instead, it reuses the most
+ * recent docs/assignments.json as the input "raw flights". That keeps us
+ * self-contained and means we never leave blank belts in what we publish.
+ *
+ * If you later want to re-hook live scraping, you can replace the function
+ * loadRawFlightsFromDisk() with a real scraper + row builder. Until then,
+ * this file is fully runnable as-is.
  */
 
-const fs = require('fs');
+const fs   = require('fs');
 const path = require('path');
 
 ////////////////////////////////////////////////////////////////////////////////
-// CONFIG
+// CONFIG / CONSTANTS
 ////////////////////////////////////////////////////////////////////////////////
 
+// Path to assignments.json inside the repo
 const ASSIGNMENTS_PATH = path.join(__dirname, '..', 'docs', 'assignments.json');
-const SNAPSHOT_PATH    = path.join(__dirname, 'fr24-snapshot.json');
 
-// belts we auto-assign (international/general)
+// Belts we are allowed to auto-assign if a belt is missing
 const AUTO_BELTS = [1, 2, 3, 4, 5, 6];
 
-// minimum spacing (minutes) for same-belt windows
+// Minimum gap (minutes) we consider "separate enough" for vertical stacking
+// When placing two flights on the same belt visually, they can't overlap and
+// can't be tighter than 1 minute gap unless we absolutely cannot place them.
 const MIN_GAP_MIN = 1;
 
 ////////////////////////////////////////////////////////////////////////////////
-// HELPERS
+// HELPER FUNCTIONS
 ////////////////////////////////////////////////////////////////////////////////
 
 function toMs(t) {
@@ -59,15 +87,16 @@ function toMs(t) {
 }
 
 function overlapsOrTooClose(f1, f2, minGapMin) {
+  // true if they overlap OR are closer than minGapMin minutes apart
   const s1 = toMs(f1.start);
   const e1 = toMs(f1.end);
   const s2 = toMs(f2.start);
   const e2 = toMs(f2.end);
 
-  // overlap
+  // overlap check
   if (s1 < e2 && s2 < e1) return true;
 
-  // gap check (both directions)
+  // gap check
   const gap1 = Math.abs(s2 - e1) / 60000;
   const gap2 = Math.abs(s1 - e2) / 60000;
   if (gap1 < minGapMin || gap2 < minGapMin) return true;
@@ -76,7 +105,8 @@ function overlapsOrTooClose(f1, f2, minGapMin) {
 }
 
 /**
- * usage[belt] = [ { startMs, endMs, flightRef }, ... ]
+ * Create tracking structure:
+ *   usage[belt] = [{ startMs, endMs, flightRef }, ...]
  */
 function initUsage() {
   const usage = {};
@@ -87,7 +117,8 @@ function initUsage() {
 }
 
 /**
- * Sum how long this belt has been used BEFORE cutoffMs
+ * getBeltUsedMinutesSoFar(usage[belt], cutoffMs)
+ * Sum how long this belt has been in use BEFORE "cutoffMs".
  */
 function getBeltUsedMinutesSoFar(beltSlots, cutoffMs) {
   if (!beltSlots || beltSlots.length === 0) return 0;
@@ -96,7 +127,7 @@ function getBeltUsedMinutesSoFar(beltSlots, cutoffMs) {
     const s = slot.startMs;
     const e = slot.endMs;
     if (s >= cutoffMs) {
-      continue;
+      continue; // future usage doesn't count yet
     }
     const overlapEnd = Math.min(e, cutoffMs);
     if (overlapEnd > s) {
@@ -107,7 +138,9 @@ function getBeltUsedMinutesSoFar(beltSlots, cutoffMs) {
 }
 
 /**
- * Return AUTO_BELTS sorted DESC by "minutes used so far"
+ * rankBeltsByUsage(usage, flightStartMs)
+ * Return AUTO_BELTS sorted DESC by "minutes used so far".
+ * So [beltWithMostHistory, ..., beltWithLeastHistory]
  */
 function rankBeltsByUsage(usage, flightStartMs) {
   const scored = AUTO_BELTS.map(b => {
@@ -120,6 +153,10 @@ function rankBeltsByUsage(usage, flightStartMs) {
   return scored.map(x => x.belt);
 }
 
+/**
+ * canPlaceOnBeltStrict(flight, belt, usage)
+ * True if flight can be placed on this belt under MIN_GAP_MIN spacing.
+ */
 function canPlaceOnBeltStrict(flight, belt, usage) {
   const beltSlots = usage[belt] || [];
   for (const slot of beltSlots) {
@@ -134,6 +171,10 @@ function canPlaceOnBeltStrict(flight, belt, usage) {
   return true;
 }
 
+/**
+ * recordPlacement(flight, belt, usage)
+ * Actually assign belt to the flight and add to usage timeline.
+ */
 function recordPlacement(flight, belt, usage) {
   flight.belt = belt;
   usage[belt].push({
@@ -144,6 +185,11 @@ function recordPlacement(flight, belt, usage) {
   usage[belt].sort((a, b) => a.startMs - b.startMs);
 }
 
+/**
+ * tryRankedBeltsForFlight(flight, rankedBelts, usage)
+ * Try each belt in order (most-used first). If strict spacing works, place there.
+ * Return true if placed, false if none worked strictly.
+ */
 function tryRankedBeltsForFlight(flight, rankedBelts, usage) {
   for (const belt of rankedBelts) {
     if (canPlaceOnBeltStrict(flight, belt, usage)) {
@@ -155,42 +201,75 @@ function tryRankedBeltsForFlight(flight, rankedBelts, usage) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// CORE ASSIGNMENT
+// CORE LOGIC: assignBelts
 ////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * assignBelts(rowsIn)
+ *
+ * rowsIn = copy of assignments.rows from disk
+ *
+ * We:
+ *  - Sort flights chronologically by .start
+ *  - Walk them in order
+ *  - If a flight already has belt:
+ *      - If it's 7, keep 7 (domestic stays belt 7)
+ *      - If it's in 1..6, keep that
+ *      - Otherwise treat as "unassigned"
+ *  - If "unassigned":
+ *      - Rank belts 1..6 by total usage before this flight
+ *      - Try spacing
+ *      - If none fits, FORCE assign onto the most-used belt
+ *
+ * After assignment, if we had to force-assign a blank one,
+ * we also rewrite its "reason" to "auto-assign".
+ */
 function assignBelts(rowsIn) {
+  // clone rows so we don't mutate the input array directly
   const rows = rowsIn.map(r => ({ ...r }));
+
+  // sort by chronological start
   rows.sort((a, b) => toMs(a.start) - toMs(b.start));
 
+  // usage tracker per belt 1..6
   const usage = initUsage();
 
   for (const flight of rows) {
-    const currentBelt = parseInt(flight.belt, 10);
+    // Check what belt we already have
+    let currentBelt = parseInt(flight.belt, 10);
 
-    // keep belt 7 (domestic)
+    // Keep belt 7 as-is (domestic), do not reassign it
     if (currentBelt === 7) {
-      // we do NOT add belt 7 into usage – same as your working version
+      // We do NOT record belt 7 into usage, because we don't use belt 7
+      // when auto-assigning other international flights.
       continue;
     }
 
-    // keep any valid 1..6 and track it
+    // If it's already in 1..6, keep it AND record usage so future
+    // flights see that belt as "busy / used"
     if (AUTO_BELTS.includes(currentBelt)) {
       recordPlacement(flight, currentBelt, usage);
       continue;
     }
 
-    // need to place
+    // Otherwise, belt is blank or invalid. We must assign one now.
     const startMs = toMs(flight.start);
-    const ranked = rankBeltsByUsage(usage, startMs);
+    const rankedBelts = rankBeltsByUsage(usage, startMs);
 
-    const placed = tryRankedBeltsForFlight(flight, ranked, usage);
-    if (!placed) {
-      // force to most-used
-      const fallback = ranked[0] || 1;
-      recordPlacement(flight, fallback, usage);
+    // Try to place respecting spacing
+    const placedStrict = tryRankedBeltsForFlight(flight, rankedBelts, usage);
+    if (!placedStrict) {
+      // Force onto the most-used belt so it is never blank
+      const fallbackBelt = rankedBelts[0] || 1;
+      recordPlacement(flight, fallbackBelt, usage);
     }
 
-    if (!flight.reason || flight.reason === 'no_slot_available') {
+    // Update "reason" if it used to say "no_slot_available"
+    if (
+      !AUTO_BELTS.includes(currentBelt) &&
+      currentBelt !== 7 &&
+      (flight.reason === 'no_slot_available' || !flight.reason)
+    ) {
       flight.reason = 'auto-assign';
     }
   }
@@ -199,95 +278,106 @@ function assignBelts(rowsIn) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// I/O
+// I/O: Load latest assignments.json from disk
 ////////////////////////////////////////////////////////////////////////////////
 
-function loadFromAssignmentsJson() {
+/**
+ * loadRawFlightsFromDisk()
+ *
+ * We read docs/assignments.json and treat its "rows" as the
+ * inbound schedule to fix. This means we reuse whatever scraper
+ * output you already had, without asking you to paste it here.
+ *
+ * Returns { meta, rows }
+ * meta = { generated_at_utc, generated_at_local, source, horizon_minutes }
+ * rows = [ ...flight objects... ]
+ */
+function loadRawFlightsFromDisk() {
+  // read file
   const raw = fs.readFileSync(ASSIGNMENTS_PATH, 'utf8');
   const parsed = JSON.parse(raw);
 
-  return {
-    meta: {
-      generated_at_utc:  parsed.generated_at_utc  || '',
-      generated_at_local: parsed.generated_at_local || '',
-      source:             parsed.source             || '',
-      horizon_minutes:    parsed.horizon_minutes    || 0
-    },
-    rows: Array.isArray(parsed.rows) ? parsed.rows : []
+  // Extract metadata + rows
+  const meta = {
+    generated_at_utc:   parsed.generated_at_utc   || '',
+    generated_at_local: parsed.generated_at_local || '',
+    source:             parsed.source             || '',
+    horizon_minutes:    parsed.horizon_minutes    || 0
   };
+
+  // rows as-is (array of flights)
+  const rows = Array.isArray(parsed.rows) ? parsed.rows : [];
+
+  return { meta, rows };
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// I/O: Write updated assignments.json
+////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Try to load a local snapshot if present.
- * Expected shape:
+ * writeAssignments(meta, fixedRows)
+ *
+ * We write back to docs/assignments.json using the same outer shape:
  * {
- *   "generated_at_utc": "...",
- *   "generated_at_local": "...",
- *   "source": "flightradar24.com (screen-scrape)",
- *   "horizon_minutes": 180,
- *   "rows": [ ... ]
+ *   generated_at_utc,
+ *   generated_at_local,
+ *   source,
+ *   horizon_minutes,
+ *   rows: [...]
  * }
+ *
+ * We DO NOT reorder keys inside each row except where we've updated
+ * belt and/or reason.
  */
-function tryLoadSnapshot() {
-  if (!fs.existsSync(SNAPSHOT_PATH)) {
-    return null;
-  }
-  try {
-    const raw = fs.readFileSync(SNAPSHOT_PATH, 'utf8');
-    const parsed = JSON.parse(raw);
-    if (!Array.isArray(parsed.rows)) {
-      return null;
-    }
-    return {
-      meta: {
-        generated_at_utc:  parsed.generated_at_utc  || '',
-        generated_at_local: parsed.generated_at_local || '',
-        source:             parsed.source             || 'fr24-snapshot',
-        horizon_minutes:    parsed.horizon_minutes    || 0
-      },
-      rows: parsed.rows
-    };
-  } catch (e) {
-    console.error('[feeder] snapshot exists but could not be parsed, falling back to docs/assignments.json');
-    return null;
-  }
-}
-
-function writeAssignments(meta, rows) {
-  const out = {
-    generated_at_utc:  meta.generated_at_utc,
+function writeAssignments(meta, fixedRows) {
+  // Rebuild final object
+  const outObj = {
+    generated_at_utc:   meta.generated_at_utc,
     generated_at_local: meta.generated_at_local,
     source:             meta.source,
     horizon_minutes:    meta.horizon_minutes,
-    rows
+    rows:               fixedRows
   };
-  fs.writeFileSync(ASSIGNMENTS_PATH, JSON.stringify(out, null, 2), 'utf8');
+
+  // Pretty-print with 2-space indentation so it's readable in GitHub
+  const jsonStr = JSON.stringify(outObj, null, 2);
+  fs.writeFileSync(ASSIGNMENTS_PATH, jsonStr, 'utf8');
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// MAIN
+// MAIN EXECUTION
 ////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * run()
+ *
+ * 1. Load docs/assignments.json (latest pushed schedule)
+ * 2. Apply assignBelts() to guarantee every intl flight ends up on 1..6,
+ *    and that there are no "" belts left behind.
+ *    Belt 7 stays as-is for domestic.
+ * 3. Write the updated schedule back to docs/assignments.json
+ * 4. Exit.
+ *
+ * This file is then committed + pushed by run_feeder.bat
+ */
 async function run() {
   try {
-    // 1) try snapshot first
-    let src = tryLoadSnapshot();
-    if (!src) {
-      // 2) fallback to existing docs/assignments.json (your old working way)
-      src = loadFromAssignmentsJson();
-    }
+    // Load current assignments.json
+    const { meta, rows } = loadRawFlightsFromDisk();
 
-    const fixed = assignBelts(src.rows);
+    // Fix belt assignment using the new logic
+    const fixedRows = assignBelts(rows);
 
-    // NOTE: we do NOT change source/horizon here – we keep whatever the file said
-    writeAssignments(src.meta, fixed);
+    // Write it back out
+    writeAssignments(meta, fixedRows);
 
-    console.log('[feeder] assignments.json updated (keep 7, fill 1–6, snapshot-fallback).');
-    console.log(`[feeder] rows written: ${fixed.length}`);
+    console.log('[feeder] assignments.json updated with enforced belts 1–6 / no blanks.');
   } catch (err) {
     console.error('[feeder] ERROR:', err);
     process.exitCode = 1;
   }
 }
 
+// Kick off
 run();
