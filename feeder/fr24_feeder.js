@@ -1,5 +1,5 @@
 /**
- * fr24_feeder.js
+ * fr24_feeder.js (ESM version)
  *
  * PURPOSE
  * -------
@@ -45,23 +45,21 @@
  *
  * HOW THIS RUNS
  * -------------
- * Your run_feeder.bat calls:
+ * Your run_feeder.bat / PowerShell calls:
  *    node .\feeder\fr24_feeder.js
  *
- * Then run_feeder.bat commits docs\assignments.json and docs\last_update.txt
- * to GitHub Pages.
- *
- * This version does NOT scrape FlightRadar24. Instead, it reuses the most
- * recent docs/assignments.json as the input "raw flights". That keeps us
- * self-contained and means we never leave blank belts in what we publish.
- *
- * If you later want to re-hook live scraping, you can replace the function
- * loadRawFlightsFromDisk() with a real scraper + row builder. Until then,
- * this file is fully runnable as-is.
+ * This version is ESM because package.json has "type": "module".
  */
 
-const fs   = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+////////////////////////////////////////////////////////////////////////////////
+// ESM __dirname
+////////////////////////////////////////////////////////////////////////////////
+const __filename = fileURLToPath(import.meta.url);
+const __dirname  = path.dirname(__filename);
 
 ////////////////////////////////////////////////////////////////////////////////
 // CONFIG / CONSTANTS
@@ -285,19 +283,12 @@ function assignBelts(rowsIn) {
  * loadRawFlightsFromDisk()
  *
  * We read docs/assignments.json and treat its "rows" as the
- * inbound schedule to fix. This means we reuse whatever scraper
- * output you already had, without asking you to paste it here.
- *
- * Returns { meta, rows }
- * meta = { generated_at_utc, generated_at_local, source, horizon_minutes }
- * rows = [ ...flight objects... ]
+ * inbound schedule to fix.
  */
 function loadRawFlightsFromDisk() {
-  // read file
   const raw = fs.readFileSync(ASSIGNMENTS_PATH, 'utf8');
   const parsed = JSON.parse(raw);
 
-  // Extract metadata + rows
   const meta = {
     generated_at_utc:   parsed.generated_at_utc   || '',
     generated_at_local: parsed.generated_at_local || '',
@@ -305,7 +296,6 @@ function loadRawFlightsFromDisk() {
     horizon_minutes:    parsed.horizon_minutes    || 0
   };
 
-  // rows as-is (array of flights)
   const rows = Array.isArray(parsed.rows) ? parsed.rows : [];
 
   return { meta, rows };
@@ -315,23 +305,7 @@ function loadRawFlightsFromDisk() {
 // I/O: Write updated assignments.json
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * writeAssignments(meta, fixedRows)
- *
- * We write back to docs/assignments.json using the same outer shape:
- * {
- *   generated_at_utc,
- *   generated_at_local,
- *   source,
- *   horizon_minutes,
- *   rows: [...]
- * }
- *
- * We DO NOT reorder keys inside each row except where we've updated
- * belt and/or reason.
- */
 function writeAssignments(meta, fixedRows) {
-  // Rebuild final object
   const outObj = {
     generated_at_utc:   meta.generated_at_utc,
     generated_at_local: meta.generated_at_local,
@@ -339,8 +313,6 @@ function writeAssignments(meta, fixedRows) {
     horizon_minutes:    meta.horizon_minutes,
     rows:               fixedRows
   };
-
-  // Pretty-print with 2-space indentation so it's readable in GitHub
   const jsonStr = JSON.stringify(outObj, null, 2);
   fs.writeFileSync(ASSIGNMENTS_PATH, jsonStr, 'utf8');
 }
@@ -349,29 +321,11 @@ function writeAssignments(meta, fixedRows) {
 // MAIN EXECUTION
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * run()
- *
- * 1. Load docs/assignments.json (latest pushed schedule)
- * 2. Apply assignBelts() to guarantee every intl flight ends up on 1..6,
- *    and that there are no "" belts left behind.
- *    Belt 7 stays as-is for domestic.
- * 3. Write the updated schedule back to docs/assignments.json
- * 4. Exit.
- *
- * This file is then committed + pushed by run_feeder.bat
- */
 async function run() {
   try {
-    // Load current assignments.json
     const { meta, rows } = loadRawFlightsFromDisk();
-
-    // Fix belt assignment using the new logic
     const fixedRows = assignBelts(rows);
-
-    // Write it back out
     writeAssignments(meta, fixedRows);
-
     console.log('[feeder] assignments.json updated with enforced belts 1–6 / no blanks.');
   } catch (err) {
     console.error('[feeder] ERROR:', err);
