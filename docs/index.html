@@ -25,7 +25,7 @@
       margin: 0;
       background: var(--bg);
       color: var(--ink);
-      font: 14px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      font: 14px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial;
     }
     header {
       padding: 14px 16px;
@@ -74,17 +74,14 @@
       vertical-align: middle;
       font-size: 13.5px;
     }
-    tbody tr:last-child td {
-      border-bottom: 0;
-    }
-    .col-flight   { width: 8.5ch; font-weight: 600; }
-    .col-origin   { width: 19ch; }
-    .col-time     { width: 16ch; }
-    .col-status   { width: 10ch; }
-    .col-flow     { width: 9ch; }
-    .col-belt     { width: 6ch; }
-    .col-start,
-    .col-end      { width: 7ch; font-variant-numeric: tabular-nums; }
+    tbody tr:last-child td { border-bottom: 0; }
+    .col-flight { width: 8.5ch; font-weight: 600; }
+    .col-origin { width: 19ch; }
+    .col-time { width: 16ch; }
+    .col-status { width: 10ch; }
+    .col-flow { width: 9ch; }
+    .col-belt { width: 6ch; }
+    .col-start, .col-end { width: 7ch; font-variant-numeric: tabular-nums; }
     .origin-code {
       font-weight: 600;
       display: block;
@@ -104,15 +101,9 @@
       align-items: center;
       font-variant-numeric: tabular-nums;
     }
-    .time-sched {
-      opacity: .6;
-    }
-    .time-arrow {
-      opacity: .45;
-    }
-    .time-eta {
-      font-weight: 600;
-    }
+    .time-sched { opacity: .6; }
+    .time-arrow { opacity: .45; }
+    .time-eta { font-weight: 600; }
     .pill {
       display: inline-flex;
       align-items: center;
@@ -140,6 +131,11 @@
       padding: 12px !important;
       color: var(--muted);
       font-size: 13px;
+    }
+    .error {
+      color: #ffb3b8;
+      background: rgba(61,21,26,.4);
+      border: 1px solid rgba(255,179,184,.4);
     }
     @media (max-width: 980px) {
       .col-reason { display: none; }
@@ -179,24 +175,60 @@
     </table>
   </div>
   <script>
-    (async function(){
-      const qs = (s, el=document) => el.querySelector(s);
-      const meta = qs('#meta');
-      const tbody = qs('#tbody');
+    (async function () {
+      const meta = document.querySelector('#meta');
+      const tbody = document.querySelector('#tbody');
 
-      const res = await fetch(`assignments.json?v=${Date.now()}`);
-      const data = await res.json();
-      const rows = Array.isArray(data.rows) ? data.rows : [];
+      // try a couple of locations – GH Pages sometimes serves from root
+      const candidates = [
+        'assignments.json',
+        './assignments.json',
+        '/brs-belt-alloc/assignments.json'
+      ];
 
-      meta.textContent = `Generated ${data.generated_at_local || data.generated_at_utc || ''} • Horizon ${data.horizon_minutes || ''} min`;
+      let data = null;
+      let lastError = null;
 
-      if (!rows.length) {
-        tbody.innerHTML = `<tr><td colspan="9" class="empty">No arrivals found.</td></tr>`;
+      for (const url of candidates) {
+        try {
+          const res = await fetch(url + '?v=' + Date.now(), { cache: 'no-store' });
+          if (!res.ok) throw new Error('HTTP ' + res.status + ' on ' + url);
+          const text = await res.text();
+          data = JSON.parse(text);
+          break;
+        } catch (err) {
+          lastError = err;
+          // try next
+        }
+      }
+
+      if (!data) {
+        tbody.innerHTML = `<tr><td colspan="9" class="empty error">Could not load <code>assignments.json</code> from GitHub Pages. ${lastError ? lastError.message : ''}</td></tr>`;
+        meta.textContent = 'Load failed';
         return;
       }
 
+      const rows = Array.isArray(data.rows) ? data.rows : [];
+      meta.textContent = `Generated ${data.generated_at_local || data.generated_at_utc || ''} • Horizon ${data.horizon_minutes || ''} min`;
+
+      if (!rows.length) {
+        tbody.innerHTML = `<tr><td colspan="9" class="empty">No arrivals found (empty rows array).</td></tr>`;
+        return;
+      }
+
+      // sort by (start || eta || scheduled) ascending
+      rows.sort((a, b) => {
+        const ta = firstTime(a);
+        const tb = firstTime(b);
+        return ta - tb;
+      });
+
       tbody.innerHTML = rows.map(r => renderRow(r)).join('');
 
+      function firstTime(r) {
+        const t = r.start || r.eta;
+        return t ? new Date(t).getTime() : Number.MAX_SAFE_INTEGER;
+      }
       function pad(n){ return String(n).padStart(2,'0'); }
       function hhmm(iso){
         if(!iso) return '';
@@ -225,13 +257,13 @@
         }
         return `<div class="time"><span class="time-eta">${escapeHtml(etaLocal || '')}</span></div>`;
       }
-      // status colours (your rule):
+      // colour rules:
       // blue  = early (delay_min < 0)
       // green = on time / small slip (0–9 OR null)
       // orange= slightly delayed (10–19)
       // red   = very delayed (20+)
       function statusPill(r){
-        const text = (r && r.status) ? r.status : (r && r.eta_local ? `Estimated ${r.eta_local}` : '—');
+        const text = r?.status ? r.status : (r?.eta_local ? `Estimated ${r.eta_local}` : '—');
         const d = (typeof r.delay_min === 'number') ? r.delay_min : null;
         let cls = 'pill-green';
         if (d !== null) {
