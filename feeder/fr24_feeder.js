@@ -1,185 +1,93 @@
 /**
  * feeder/fr24_feeder.js
  *
- * BRS allocator pipeline
- * - Step 1 (upstream): feeder/scrape_from_fr24_snapshot.js
- *      → writes feeder/source_fr24.json
- * - Step 2 (this file): read source_fr24.json
- *      → apply BRS belt rules
- *      → write docs/assignments.json
- *
- * Rules:
- * - No belt 4
- * - Auto belts: 1,2,3,5,6
- * - Keep 7 if it was set (domestic)
- * - If no belt passes spacing → force to earliest-clearing belt
+ * BRS allocator pipeline:
+ * 1. read docs/assignments.json (raw from fr24_snap.js)
+ * 2. normalise rows (set start/end if missing)
+ * 3. apply BRS belt logic (no 4, keep 7, 1/2/3/5/6, force earliest-clearing)
+ * 4. write docs/assignments.json back (now with belts)
  */
 
 const fs = require('fs');
 const path = require('path');
+const { assignBelts } = require('./feeder');
 
-const SOURCE_SNAPSHOT_PATH = path.join(__dirname, 'source_fr24.json');  // NEW
-const ASSIGNMENTS_PATH     = path.join(__dirname, '..', 'docs', 'assignments.json');
+const ASSIGNMENTS_PATH = path.join(__dirname, '..', 'docs', 'assignments.json');
 
 const AUTO_BELTS = [1, 2, 3, 5, 6];
-const MIN_GAP_MIN = 1;
+const DOMESTIC_BELT = 7;
 
-// ---------- helpers ----------
-function toMs(t) {
-  return (t instanceof Date) ? +t : +new Date(t);
-}
-function overlapsOrTooClose(f1, f2, minGapMin) {
-  const s1 = toMs(f1.start);
-  const e1 = toMs(f1.end);
-  const s2 = toMs(f2.start);
-  const e2 = toMs(f2.end);
-  if (s1 < e2 && s2 < e1) return true;
-  const gap1 = Math.abs(s2 - e1) / 60000;
-  const gap2 = Math.abs(s1 - e2) / 60000;
-  if (gap1 < minGapMin || gap2 < minGapMin) return true;
-  return false;
-}
-function initUsage() {
-  const usage = {};
-  for (const b of AUTO_BELTS) usage[b] = [];
-  return usage;
-}
-function getBeltFreeTime(beltSlots) {
-  if (!beltSlots || beltSlots.length === 0) return 0;
-  const last = beltSlots[beltSlots.length - 1];
-  return last.endMs;
-}
-function pickEarliestClearingBelt(usage) {
-  let bestBelt = null;
-  let bestEnd = Infinity;
-  for (const b of AUTO_BELTS) {
-    const end = getBeltFreeTime(usage[b]);
-    if (end < bestEnd) {
-      bestEnd = end;
-      bestBelt = b;
-    }
-  }
-  return bestBelt || AUTO_BELTS[0];
-}
-function canPlaceOnBeltStrict(flight, belt, usage) {
-  const beltSlots = usage[belt] || [];
-  for (const slot of beltSlots) {
-    if (overlapsOrTooClose(
-      { start: flight.start, end: flight.end },
-      { start: slot.flightRef.start, end: slot.flightRef.end },
-      MIN_GAP_MIN
-    )) {
-      return false;
-    }
-  }
-  return true;
-}
-function recordPlacement(flight, belt, usage) {
-  flight.belt = belt;
-  usage[belt].push({
-    startMs: toMs(flight.start),
-    endMs: toMs(flight.end),
-    flightRef: flight
-  });
-  usage[belt].sort((a, b) => a.startMs - b.startMs);
-}
-function assignBelts(rowsIn) {
-  const rows = rowsIn.map(r => ({ ...r }));
-  rows.sort((a, b) => toMs(a.start) - toMs(b.start));
-  const usage = initUsage();
-  let fixed = 0;
+// make a belt window if missing
+function ensureWindow(row) {
+  const minute = 60 * 1000;
+  const now = Date.now();
+  const start = row.start
+    ? new Date(row.start)
+    : row.eta
+      ? new Date(row.eta)
+      : new Date(now);
 
-  for (const flight of rows) {
-    const currentBelt = parseInt(flight.belt, 10);
+  // 30 min default window
+  const end = row.end
+    ? new Date(row.end)
+    : new Date(start.getTime() + 30 * minute);
 
-    // domestic stays 7
-    if (currentBelt === 7) continue;
-
-    // valid belts stay + tracked
-    if (AUTO_BELTS.includes(currentBelt)) {
-      recordPlacement(flight, currentBelt, usage);
-      continue;
-    }
-
-    // we need to place
-    let placed = false;
-    for (const b of AUTO_BELTS) {
-      if (canPlaceOnBeltStrict(flight, b, usage)) {
-        recordPlacement(flight, b, usage);
-        placed = true;
-        break;
-      }
-    }
-
-    // force to earliest-clearing belt
-    if (!placed) {
-      const fb = pickEarliestClearingBelt(usage);
-      recordPlacement(flight, fb, usage);
-    }
-
-    if (!flight.reason || flight.reason === 'no_slot_available') {
-      flight.reason = 'auto-assign';
-    }
-
-    fixed++;
-  }
-
-  return { rows, fixed };
+  row.start = start.toISOString();
+  row.end = end.toISOString();
 }
 
-// ---------- I/O ----------
-function loadSource() {
-  // prefer fresh source from snapshot
-  if (fs.existsSync(SOURCE_SNAPSHOT_PATH)) {
-    const raw = fs.readFileSync(SOURCE_SNAPSHOT_PATH, 'utf8');
-    const parsed = JSON.parse(raw);
-    return {
-      meta: {
-        generated_at_utc: parsed.generated_at_utc || new Date().toISOString(),
-        generated_at_local: parsed.generated_at_local || new Date().toISOString().slice(0,19),
-        source: parsed.source || 'fr24 (snapshot)',
-        horizon_minutes: parsed.horizon_minutes || 180
-      },
-      rows: Array.isArray(parsed.rows) ? parsed.rows : []
-    };
-  }
+function isDomestic(row) {
+  // your earlier JSON already had flow="DOMESTIC" — keep that rule
+  return (row.flow && row.flow.toUpperCase() === 'DOMESTIC');
+}
 
-  // fallback: current assignments.json
+function loadAssignments() {
   const raw = fs.readFileSync(ASSIGNMENTS_PATH, 'utf8');
-  const parsed = JSON.parse(raw);
-  return {
-    meta: {
-      generated_at_utc: parsed.generated_at_utc || '',
-      generated_at_local: parsed.generated_at_local || '',
-      source: parsed.source || '',
-      horizon_minutes: parsed.horizon_minutes || 0
-    },
-    rows: Array.isArray(parsed.rows) ? parsed.rows : []
-  };
+  return JSON.parse(raw);
 }
 
 function writeAssignments(meta, rows) {
   const out = {
-    generated_at_utc: meta.generated_at_utc,
-    generated_at_local: meta.generated_at_local,
-    source: meta.source,
-    horizon_minutes: meta.horizon_minutes,
+    generated_at_utc: new Date().toISOString(),
+    generated_at_local: new Date().toISOString(),
+    source: meta?.source || 'flightradar24.com (screen-scrape)',
+    horizon_minutes: meta?.horizon_minutes || 180,
     rows
   };
   fs.writeFileSync(ASSIGNMENTS_PATH, JSON.stringify(out, null, 2), 'utf8');
 }
 
-// ---------- main ----------
 async function run() {
-  console.log('[feeder] BRS run (snapshot → assign)…');
-  const { meta, rows } = loadSource();
-  const { rows: fixedRows, fixed } = assignBelts(rows);
-  writeAssignments(meta, fixedRows);
-  console.log(`[feeder] fixed flights: ${fixed}`);
-  console.log('[feeder] wrote docs/assignments.json');
+  console.log('[fr24_feeder] starting…');
+  const data = loadAssignments();
+  const rows = Array.isArray(data.rows) ? data.rows.slice() : [];
+
+  // normalise each row
+  for (const r of rows) {
+    ensureWindow(r);
+
+    // detect domestic and hard-set belt
+    if (isDomestic(r)) {
+      r.belt = DOMESTIC_BELT;
+      r.reason = 'domestic→7';
+    }
+
+    // ensure belt is number or empty
+    if (r.belt !== undefined && r.belt !== null && r.belt !== '') {
+      const nb = Number(r.belt);
+      if (Number.isFinite(nb)) r.belt = nb;
+    }
+  }
+
+  // run allocator
+  const fixedRows = assignBelts(rows);
+
+  // write back
+  writeAssignments(data, fixedRows);
+  console.log(`[fr24_feeder] wrote ${fixedRows.length} rows to assignments.json`);
 }
 
 run().catch(err => {
-  console.error('[feeder] ERROR:', err);
-  process.exitCode = 1;
+  console.error('[fr24_feeder] ERROR:', err);
+  process.exit(1);
 });
