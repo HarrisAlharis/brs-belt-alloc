@@ -1,6 +1,6 @@
-// feeder/fr24_snap.js
+﻿// feeder/fr24_snap.js
 //
-// STEP 1: scrape live FR24 → rough arrivals list for BRS
+// STEP 1: scrape live FR24 â†’ rough arrivals list for BRS
 // OUTPUT: docs/assignments.json (raw arrivals, BEFORE belt allocation)
 //
 // This script:
@@ -241,7 +241,7 @@ function parsePatternB(lines) {
 }
 
 async function main() {
-  console.log("[fr24_snap] start scrape…");
+  console.log("[fr24_snap] start scrapeâ€¦");
 
   const browser = await puppeteer.launch({
     headless: "new",
@@ -381,3 +381,4 @@ main().catch((err) => {
   console.error("[fr24_snap] ERROR:", err);
   process.exit(1);
 });
+
