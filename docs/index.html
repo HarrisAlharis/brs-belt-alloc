@@ -1,127 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>BRS – Arrivals Belt Plan</title>
+<meta id="meta" content="" />
+
+<style>
+    :root {
+        --bg-main:#1a222b;
+        --bg-card:#1f2a37;
+        --text-main:#cfd8e3;
+        --text-dim:#8a94a7;
+        --line:#2a3544;
+        --chip-border:#4b5563;
+        --pill-grey-bg:#374151;
+        --pill-grey-text:#d1d5db;
+        --pill-green-bg:#0f2f1a;
+        --pill-green-border:#3ba66a;
+        --pill-green-text:#8bffb9;
+        --pill-yellow-bg:#3a2f12;
+        --pill-yellow-border:#d4b94a;
+        --pill-yellow-text:#ffeea3;
+        --pill-red-bg:#3a0f0f;
+        --pill-red-border:#b43c3c;
+        --pill-red-text:#ffb2b2;
+        --pill-gold-bg:#3a2d10;
+        --pill-gold-border:#ffdf6a;
+        --pill-gold-text:#ffdf6a;
+    }
+
+    body {
+        background-color:var(--bg-main);
+        color:var(--text-main);
+        font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+        font-size:14px;
+        line-height:1.4;
+        margin:0;
+        padding:12px;
+    }
+
+    .page-header {
+        display:flex;
+        flex-wrap:wrap;
+        align-items:flex-start;
+        justify-content:space-between;
+        margin-bottom:8px;
+    }
+
+    .title {
+        font-size:14px;
+        font-weight:600;
+        color:var(--text-main);
+        margin:0 0 8px 0;
+    }
+
+    .meta-block {
+        font-size:11px;
+        color:var(--text-dim);
+        text-align:right;
+        min-width:180px;
+    }
+
+    .filter-bar {
+        display:flex;
+        flex-wrap:wrap;
+        gap:6px;
+        margin-bottom:10px;
+        justify-content:center;
+    }
+
+    .filter-chip {
+        background:var(--bg-card);
+        color:var(--text-main);
+        border:1px solid var(--chip-border);
+        border-radius:16px;
+        padding:4px 8px;
+        font-size:11px;
+        line-height:1.2;
+        cursor:pointer;
+        user-select:none;
+    }
+    .filter-chip.off {
+        opacity:.3;
+        filter:grayscale(1);
+    }
+
+    table {
+        width:100%;
+        border-collapse:collapse;
+        table-layout:auto;
+        color:var(--text-main);
+        font-size:12px;
+        min-width:900px;
+    }
+
+    thead th {
+        text-align:left;
+        font-size:10px;
+        font-weight:500;
+        color:var(--text-dim);
+        padding:6px 8px;
+        border-bottom:1px solid rgba(255,255,255,.08);
+        white-space:nowrap;
+    }
+
+    tbody td {
+        padding:6px 8px;
+        border-bottom:1px solid rgba(255,255,255,.05);
+        white-space:nowrap;
+        vertical-align:top;
+        font-size:12px;
+        color:var(--text-main);
+    }
+
+    .td-flight .flight-code {
+        color:#93c5fd;
+        text-decoration:none;
+        cursor:default;
+    }
+
+    .pill {
+        display:inline-block;
+        min-width:60px;
+        padding:2px 6px;
+        border-radius:4px;
+        font-size:11px;
+        font-weight:500;
+        line-height:1.2;
+        border:1px solid transparent;
+        white-space:nowrap;
+    }
+
+    .pill-grey {
+        background-color:var(--pill-grey-bg);
+        border-color:var(--pill-grey-border,var(--pill-grey-bg));
+        color:var(--pill-grey-text);
+    }
+
+    .pill-green {
+        background-color:var(--pill-green-bg);
+        border-color:var(--pill-green-border);
+        color:var(--pill-green-text);
+    }
+
+    .pill-yellow {
+        background-color:var(--pill-yellow-bg);
+        border-color:var(--pill-yellow-border);
+        color:var(--pill-yellow-text);
+    }
+
+    .pill-red {
+        background-color:var(--pill-red-bg);
+        border-color:var(--pill-red-border);
+        color:var(--pill-red-text);
+    }
+
+    .pill-gold {
+        background-color:var(--pill-gold-bg);
+        border-color:var(--pill-gold-border);
+        color:var(--pill-gold-text);
+        box-shadow:0 0 4px 1px rgba(255,223,106,.6);
+    }
+
+    @keyframes pulseBorder {
+        0%   { box-shadow:0 0 4px 1px rgba(255,223,106,.6); }
+        50%  { box-shadow:0 0 8px 3px rgba(255,223,106,.15); }
+        100% { box-shadow:0 0 4px 1px rgba(255,223,106,.6); }
+    }
+    .pulse {
+        animation:pulseBorder 1.5s infinite;
+    }
+
+    .source-line {
+        font-size:10px;
+        color:var(--text-dim);
+        margin-top:6px;
+        line-height:1.4;
+    }
+
+    /* simple responsive wrapper so table can scroll horizontally if phone */
+    .table-wrap {
+        width:100%;
+        overflow-x:auto;
+    }
+</style>
+</head>
+
+<body id="body">
+    <div class="page-header">
+        <h1 class="title">BRS – Arrivals Belt Plan</h1>
+        <div class="meta-block" id="meta-line">Loading…</div>
+    </div>
+
+    <div class="filter-bar">
+        <div class="filter-chip" data-cat="early">Early &gt;5m</div>
+        <div class="filter-chip" data-cat="ontime">Estimated / On-time</div>
+        <div class="filter-chip" data-cat="delayed">Delayed</div>
+        <div class="filter-chip" data-cat="scheduled">Scheduled only</div>
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>FLIGHT</th>
+                    <th>ORIGIN</th>
+                    <th>TIME</th>
+                    <th>STATUS</th>
+                    <th>FLOW</th>
+                    <th>BELT</th>
+                    <th>START</th>
+                    <th>END</th>
+                    <th>REASON</th>
+                </tr>
+            </thead>
+            <tbody id="tbl-body">
+                <tr><td colspan="9" style="padding:12px;color:#9ca3af;">Loading…</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="source-line">
+        Source: FR24 (screen-scrape) • Allocated 15+30 mins per belt. CTA →6 / Domestic →7 / Heavy →5.
+    </div>
+
+    <script type="module">
     (async function () {
-      const meta = document.querySelector('#meta');
-      const tbody = document.querySelector('#tbody');
+        const metaEl  = document.querySelector('#meta-line');
+        const tbody   = document.querySelector('#tbl-body');
 
-      // try a couple of locations – GH Pages sometimes serves from root
-      const candidates = [
-        'assignments.json',
-        './assignments.json',
-        '/brs-belt-alloc/assignments.json'
-      ];
+        // try a couple of possible URLs for assignments.json (GH Pages path quirks)
+        const candidates = [
+            'assignments.json',
+            './assignments.json',
+            '/assignments.json',
+            '/brs-belt-alloc/assignments.json'
+        ];
 
-      let data = null;
-      let lastError = null;
-
-      for (const url of candidates) {
-        try {
-          const res = await fetch(url + '?v=' + Date.now(), { cache: 'no-store' });
-          if (!res.ok) throw new Error('HTTP ' + res.status + ' on ' + url);
-          const text = await res.text();
-          data = JSON.parse(text);
-          break;
-        } catch (err) {
-          lastError = err;
-        }
-      }
-
-      if (!data) {
-        tbody.innerHTML = `<tr><td colspan="9" class="empty error">Could not load <code>assignments.json</code> from GitHub Pages. ${lastError ? lastError.message : ''}</td></tr>`;
-        meta.textContent = 'Load failed';
-        return;
-      }
-
-      // ---- NEW: keep all rows, filter/sort client-side
-      let ALL_ROWS = Array.isArray(data.rows) ? data.rows : [];
-
-      // chip state: true = visible
-      const filtersState = {
-        early: true,        // Early >5m
-        ontime: true,       // Estimated / On-time window
-        delayed: true,      // Delayed >5m
-        scheduled: true     // Scheduled only (no ETA yet)
-      };
-
-      // work out which bucket a row belongs to
-      function categoryOf(r){
-        const statusLower = String(r.status || '').toLowerCase();
-        const hasEta = !!(r.eta_local && r.eta_local.trim());
-
-        // "scheduled only" = no live ETA yet / pure scheduled row
-        if (!hasEta || statusLower.startsWith('scheduled')) {
-          return 'scheduled';
+        let data = null;
+        for (const url of candidates) {
+            try {
+                const res = await fetch(url + '?v=' + Date.now(), { cache:'no-store' });
+                if (!res.ok) continue;
+                const json = await res.json();
+                // we consider "good" if json.rows exists
+                if (json && Array.isArray(json.rows)) {
+                    data = json;
+                    break;
+                }
+            } catch (_) {}
         }
 
-        // delay_min tells us early/on-time/delayed
-        const d = (typeof r.delay_min === 'number') ? r.delay_min : null;
-        if (d !== null) {
-          if (d < -5) return 'early';   // more than 5 min early
-          if (d > 5)  return 'delayed'; // more than 5 min late
-          return 'ontime';              // within ±5 min window
+        if (!data) {
+            tbody.innerHTML =
+              '<tr><td colspan="9" style="padding:12px;color:#f87171;">Could not load assignments.json from GitHub Pages.</td></tr>';
+            metaEl.textContent = 'Load failed';
+            return;
         }
 
-        // landed / estimated but no numeric delay_min -> treat as on-time bucket
-        return 'ontime';
-      }
+        // ----- constants / helpers -----
 
-      // convert row's timing into a sortable ms timestamp:
-      // 1) ETA ISO
-      // 2) start ISO
-      // 3) scheduled_local "HH:MM" today
-      function rowTimeMs(r){
-        if (r.eta) {
-          const d = new Date(r.eta);
-          if (!isNaN(+d)) return +d;
-        }
-        if (r.start) {
-          const d = new Date(r.start);
-          if (!isNaN(+d)) return +d;
-        }
-        if (r.scheduled_local) {
-          const m = r.scheduled_local.match(/^(\d{1,2}):(\d{2})$/);
-          if (m) {
-            const nowD = new Date();
-            const hh = parseInt(m[1],10);
-            const mm = parseInt(m[2],10);
-            return +new Date(
-              nowD.getFullYear(),
-              nowD.getMonth(),
-              nowD.getDate(),
-              hh, mm, 0, 0
-            );
-          }
-        }
-        return Number.MAX_SAFE_INTEGER;
-      }
+        const ALL_ROWS = Array.isArray(data.rows) ? data.rows : [];
 
-      // render table for current filter state
-      function renderTable(){
-        const shown = ALL_ROWS.filter(r => {
-          const cat = categoryOf(r);
-          return !!filtersState[cat];
+        // chip state: true = visible
+        const filtersState = {
+            early:      true, // Early >5m (row.delay_min < -5)
+            ontime:     true, // Estimated / on-time (abs(delay) <=4 etc, incl FINALS, Landed)
+            delayed:    true, // >5m late
+            scheduled:  true  // Scheduled only (no ETA yet)
+        };
+
+        // minutes from "now" until ETA, used for FINALS
+        function minsToETA(row) {
+            if (!row.eta) return null;
+            const etaMs = Date.parse(row.eta);
+            if (isNaN(etaMs)) return null;
+            const diffMin = (etaMs - Date.now()) / 60000;
+            return diffMin;
+        }
+
+        function isLanded(row) {
+            const st = (row.status || '').toLowerCase();
+            return st.startsWith('landed');
+        }
+
+        // FINALS = arriving within next 10 min, not already landed
+        function isFinals(row) {
+            const m = minsToETA(row);
+            if (m === null) return false;
+            return m >= 0 && m <= 10 && !isLanded(row);
+        }
+
+        // scheduled-only = status starts "scheduled" AND there's no eta_local/ETA yet
+        function isScheduledOnly(row) {
+            const st = (row.status || '').toLowerCase();
+            const hasETA = row.eta_local && row.eta_local.trim() !== '';
+            return st.startsWith('scheduled') && !hasETA;
+        }
+
+        // early if >5 min early
+        function isEarly(row) {
+            if (typeof row.delay_min !== 'number') return false;
+            return row.delay_min < -5;
+        }
+
+        // delayed if >5 min late
+        function isDelayed(row) {
+            if (typeof row.delay_min !== 'number') return false;
+            return row.delay_min > 5;
+        }
+
+        // everything else that isn't scheduled-only / early / delayed counts as on-time
+        function categoryOf(row) {
+            if (isScheduledOnly(row)) return 'scheduled';
+            if (isEarly(row))        return 'early';
+            if (isDelayed(row))      return 'delayed';
+            return 'ontime';
+        }
+
+        // Build text that shows under STATUS column
+        function statusText(row) {
+            if (isFinals(row)) {
+                return 'FINALS ' + (row.eta_local || '').trim();
+            }
+            if (isLanded(row)) {
+                // e.g. "landed 00:34" -> "Landed 00:34"
+                return (row.status || '').replace(/^./, c => c.toUpperCase());
+            }
+            if (isScheduledOnly(row)) {
+                return 'Scheduled';
+            }
+
+            if (row.status) {
+                const lower = row.status.toLowerCase();
+                if (lower.startsWith('estimated')) {
+                    return 'Estimated ' + (row.eta_local || '').trim();
+                }
+                if (lower.startsWith('landed')) {
+                    return (row.status || '').replace(/^./, c => c.toUpperCase());
+                }
+            }
+            return row.status || '';
+        }
+
+        // Pick pill class (colour) based on timing rules
+        // Rules:
+        // - FINALS (ETA within 10 min, not landed) -> gold pulse
+        // - Landed -> grey
+        // - Scheduled only (no ETA yet) -> grey
+        // - abs(delay_min) <= 4 min  -> green
+        // - abs(delay_min) 5..15 min -> yellow
+        // - abs(delay_min) > 15 min  -> red
+        function statusClass(row) {
+            if (isFinals(row)) return 'pill pill-gold pulse';
+            if (isLanded(row)) return 'pill pill-grey';
+            if (isScheduledOnly(row)) return 'pill pill-grey';
+
+            if (typeof row.delay_min === 'number') {
+                const d = Math.abs(row.delay_min);
+                if (d <= 4) {
+                    return 'pill pill-green';
+                } else if (d <= 15) {
+                    return 'pill pill-yellow';
+                } else {
+                    return 'pill pill-red';
+                }
+            }
+            return 'pill pill-grey';
+        }
+
+        // parse time to ms for sorting: prefer ETA, else scheduled_local
+        function rowTimeMs(row) {
+            if (row.eta) {
+                const ms = Date.parse(row.eta);
+                if (!isNaN(ms)) return ms;
+            }
+            if (row.scheduled_local) {
+                const m = row.scheduled_local.match(/^(\d{1,2}):(\d{2})$/);
+                if (m) {
+                    const now = new Date();
+                    const hh = parseInt(m[1],10);
+                    const mm = parseInt(m[2],10);
+                    const dt = new Date(
+                        now.getFullYear(),
+                        now.getMonth(),
+                        now.getDate(),
+                        hh, mm, 0, 0
+                    );
+                    return dt.getTime();
+                }
+            }
+            return Number.MAX_SAFE_INTEGER;
+        }
+
+        // helper to render start/end belt window to HH:MM local
+        function timeLocalHM(iso) {
+            if (!iso) return '';
+            const d = new Date(iso);
+            if (isNaN(d)) return '';
+            const hh = String(d.getHours()).padStart(2,'0');
+            const mm = String(d.getMinutes()).padStart(2,'0');
+            return hh + ':' + mm;
+        }
+
+        // Render table rows subject to current filters
+        function renderTable() {
+            const shown = ALL_ROWS
+                .filter(r => {
+                    const cat = categoryOf(r);
+                    if (cat === 'early'     && !filtersState.early)     return false;
+                    if (cat === 'ontime'    && !filtersState.ontime)    return false;
+                    if (cat === 'delayed'   && !filtersState.delayed)   return false;
+                    if (cat === 'scheduled' && !filtersState.scheduled) return false;
+                    return true;
+                })
+                .sort((a,b) => rowTimeMs(a) - rowTimeMs(b));
+
+            if (shown.length === 0) {
+                tbody.innerHTML =
+                  '<tr><td colspan="9" style="padding:12px;color:#9ca3af;">No arrivals match current filters.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = shown.map(r => {
+                // origin cell: "AYT Antalya"
+                let originCity = (r.origin || '').replace(/\(.+\)/,'').trim();
+                let originCell = r.origin_iata
+                    ? (r.origin_iata + ' ' + originCity)
+                    : (r.origin || '');
+
+                // TIME col -> "STA → ETA" if ETA exists
+                const timeCol = (r.scheduled_local || '') +
+                                (r.eta_local ? (' → ' + r.eta_local) : '');
+
+                // tooltip on flight code
+                const tipParts = [];
+                if (r.airline)               tipParts.push(r.airline.trim());
+                if (r.aircraft)              tipParts.push(r.aircraft.trim());
+                if (typeof r.pax_estimate === 'number')
+                                             tipParts.push('~' + r.pax_estimate + ' pax');
+                const tipText = tipParts.join(' • ');
+
+                return `
+                <tr>
+                    <td class="td-flight">
+                        <span class="flight-code" title="${tipText}">${r.flight || ''}</span>
+                    </td>
+                    <td>${originCell}</td>
+                    <td>${timeCol}</td>
+                    <td><span class="${statusClass(r)}">${statusText(r)}</span></td>
+                    <td>${r.flow || ''}</td>
+                    <td>${r.belt == null ? '' : r.belt}</td>
+                    <td>${r.start ? timeLocalHM(r.start) : ''}</td>
+                    <td>${r.end   ? timeLocalHM(r.end)   : ''}</td>
+                    <td>${r.reason || ''}</td>
+                </tr>`;
+            }).join('');
+        }
+
+        // hook up the chips
+        document.querySelectorAll('.filter-chip').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const cat = btn.getAttribute('data-cat'); // early / ontime / delayed / scheduled
+                if (!cat) return;
+                filtersState[cat] = !filtersState[cat];
+                btn.classList.toggle('off', !filtersState[cat]);
+                renderTable();
+            });
         });
 
-        shown.sort((a,b) => rowTimeMs(a) - rowTimeMs(b));
+        // fill meta block
+        const metaTxt = `Generated ${data.generated_at_local || data.generated_at_utc || ''} | Horizon ${data.horizon_minutes || ''} min`;
+        metaEl.textContent = metaTxt;
 
-        if (!shown.length) {
-          tbody.innerHTML = `<tr><td colspan="9" class="empty">No arrivals match current filters.</td></tr>`;
-          return;
-        }
-
-        tbody.innerHTML = shown.map(r => renderRow(r)).join('');
-      }
-
-      // hook up the chips (must already exist in the HTML with .filter-chip and data-cat="early"/"ontime"/"delayed"/"scheduled")
-      document.querySelectorAll('.filter-chip').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const cat = btn.getAttribute('data-cat');
-          if (!cat) return;
-          filtersState[cat] = !filtersState[cat];
-          btn.classList.toggle('off', !filtersState[cat]); // relies on existing .off styling to dim inactive chip
-          renderTable();
-        });
-      });
-
-      // update header meta text and then draw initial table
-      meta.textContent = `Generated ${data.generated_at_local || data.generated_at_utc || ''} • Horizon ${data.horizon_minutes || ''} min`;
-      renderTable();
+        // initial table
+        renderTable();
     })();
+    </script>
+</body>
+</html>
