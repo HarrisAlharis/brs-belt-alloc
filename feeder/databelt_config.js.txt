@@ -1,0 +1,10 @@
+// data/belt_config.js
+{
+  "DELAY_MIN": 15,
+  "DWELL_MIN": 30,
+  "HEAVY_PAX_THRESHOLD": 185,
+  "AIRLINE_BIAS": { "Jet2": 1.08, "easyJet": 0.97, "Ryanair": 1.00, "TUI": 1.02 },
+  "OCT_ROUTE_BONUS_IATA": ["ACE","TFS","FUE","PMI","AGP","FAO","MAD","BCN","HER","RHO"],
+  "BELTS_INTL_ORDER": [1,2,3,5,6],
+  "USE_BELT6_FOR_INTL_LAST_RESORT": true
+}

@@ -5,39 +5,42 @@
   <title>BRS – Arrivals Belt Plan</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    :root{
-      --bg:#0f1720;--panel:#111923;--ink:#e7edf5;--muted:#9fb1c5;--grid:rgba(255,255,255,.05);
-      --green:#b7f3c8;--green-bg:#133d29;--blue:#a8d8ff;--blue-bg:#10314a;
-      --orange:#ffd49a;--orange-bg:#3e2a13;--red:#ffb3b8;--red-bg:#3d151a;
-      --btn:#162233;--btn-border:rgba(255,255,255,.12);--btn-active:#1c2a40;
+    :root {
+      --bg: #0f1720; --panel: #111923; --ink: #e7edf5; --muted: #9fb1c5; --grid: rgba(255,255,255,0.05);
+      --green: #b7f3c8; --green-bg: #133d29; --blue: #a8d8ff; --blue-bg: #10314a;
+      --orange: #ffd49a; --orange-bg: #3e2a13; --red: #ffb3b8; --red-bg: #3d151a;
+      --chip-bg: rgba(255,255,255,.05); --chip-brd: rgba(255,255,255,.12); --chip-on: #0ea5e9;
     }
     *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial}
-    header{padding:14px 16px;border-bottom:1px solid var(--grid);display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center}
+    body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial}
+    header{padding:14px 16px;border-bottom:1px solid var(--grid);display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
     h1{margin:0;font-size:18px;font-weight:700}
     .meta{color:var(--muted);font-size:12px;white-space:nowrap}
-    .filters{display:inline-flex;background:var(--panel);border:1px solid var(--btn-border);border-radius:12px;overflow:hidden}
-    .filters button{appearance:none;background:var(--btn);color:var(--ink);border:0;padding:6px 10px;font-size:12.5px;cursor:pointer;border-right:1px solid var(--btn-border)}
-    .filters button:last-child{border-right:0}
-    .filters button.active{background:var(--btn-active);font-weight:700}
+    .toolbar{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+    .chip{
+      appearance:none;border:1px solid var(--chip-brd);background:var(--chip-bg);color:var(--ink);
+      padding:.4rem .65rem;border-radius:999px;font-size:12.5px;cursor:pointer;user-select:none
+    }
+    .chip[data-on="true"]{outline:0;border-color:var(--chip-on);box-shadow:0 0 0 1px var(--chip-on) inset}
     .wrap{padding:10px 14px 26px}
-    table{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid rgba(255,255,255,.04);border-radius:8px;overflow:hidden}
-    thead th{text-align:left;font-weight:600;color:var(--muted);font-size:11px;letter-spacing:.25px;text-transform:uppercase;padding:9px 10px;border-bottom:1px solid rgba(255,255,255,.03);background:rgba(0,0,0,.05);white-space:nowrap}
-    tbody td{padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.02);vertical-align:middle;font-size:13.5px}
+    table{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid rgba(255,255,255,0.04);border-radius:8px;overflow:hidden}
+    thead th{ text-align:left;font-weight:600;color:var(--muted);font-size:11px;letter-spacing:.25px;text-transform:uppercase;padding:9px 10px;border-bottom:1px solid rgba(255,255,255,0.03);background:rgba(0,0,0,0.05);white-space:nowrap}
+    tbody td{padding:7px 10px;border-bottom:1px solid rgba(255,255,255,0.02);vertical-align:middle;font-size:13.5px}
     tbody tr:last-child td{border-bottom:0}
-    .col-flight{width:9ch;font-weight:600}
+    .col-flight{width:10ch;font-weight:600}
     .col-origin{width:20ch}
-    .col-time{width:16ch}
-    .col-status{width:16ch}
+    .col-time{width:20ch}
+    .col-status{width:12ch}
     .col-flow{width:10ch}
     .col-belt{width:6ch}
     .col-start,.col-end{width:7ch;font-variant-numeric:tabular-nums}
-    .col-reason{width:16ch}
     .origin-code{font-weight:600;display:block}
     .origin-name{font-size:12px;color:var(--muted);display:block;max-width:16ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .time{display:flex;gap:.35rem;align-items:center;font-variant-numeric:tabular-nums}
-    .time-sched{opacity:.6}.time-arrow{opacity:.45}.time-eta{font-weight:600}
-    .pill{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:.15rem .55rem;font-size:12.5px;line-height:1.3;white-space:nowrap;border:1px solid rgba(255,255,255,.09)}
+    .time-sched{opacity:.6}
+    .time-arrow{opacity:.45}
+    .time-eta{font-weight:600}
+    .pill{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:.15rem .55rem;font-size:12.5px;white-space:nowrap;border:1px solid rgba(255,255,255,.09)}
     .pill-green{background:var(--green-bg);color:var(--green);border-color:rgba(183,243,200,.4)}
     .pill-blue{background:var(--blue-bg);color:var(--blue);border-color:rgba(168,216,255,.35)}
     .pill-orange{background:var(--orange-bg);color:var(--orange);border-color:rgba(255,212,154,.4)}
@@ -46,21 +49,17 @@
     .pill-belt{background:rgba(19,22,30,.3);color:#e7edf5}
     .empty{text-align:center;padding:12px!important;color:var(--muted);font-size:13px}
     .error{color:#ffb3b8;background:rgba(61,21,26,.4);border:1px solid rgba(255,179,184,.4)}
-    .flight-wrap{position:relative;display:inline-block}
-    .tooltip{display:none;position:absolute;top:100%;left:0;margin-top:4px;min-width:160px;max-width:240px;background:#1e293b;color:var(--ink);border:1px solid rgba(255,255,255,.1);border-radius:6px;box-shadow:0 20px 40px rgba(0,0,0,.6);padding:8px 10px;font-size:12px;line-height:1.4;white-space:nowrap;z-index:5}
-    .flight-wrap:hover .tooltip{display:block}
-    tfoot td{color:var(--muted);font-size:12px;padding:6px 10px;text-align:right}
-    @media (max-width:980px){.col-reason,.col-start,.col-end{display:none}header{grid-template-columns:1fr auto;grid-auto-flow:row}}
+    @media (max-width:980px){.col-reason{display:none}.col-start,.col-end{display:none}header{flex-wrap:wrap}}
   </style>
 </head>
 <body>
   <header>
     <h1>BRS – Arrivals Belt Plan</h1>
-    <div class="filters" id="filters">
-      <button type="button" data-key="estimated" class="active">Estimated</button>
-      <button type="button" data-key="delayed" class="active">Delayed</button>
-      <button type="button" data-key="early" class="active">Early (&gt;5m)</button>
-      <button type="button" data-key="scheduled" class="active">Scheduled</button>
+    <div class="toolbar">
+      <button class="chip" data-key="EARLY"      data-on="true">Early &gt;5m</button>
+      <button class="chip" data-key="ESTIMATED"  data-on="true">Estimated / On-time</button>
+      <button class="chip" data-key="DELAYED"    data-on="true">Delayed</button>
+      <button class="chip" data-key="SCHEDULED"  data-on="true">Scheduled only</button>
     </div>
     <div class="meta" id="meta">Loading…</div>
   </header>
@@ -85,164 +84,172 @@
       </tbody>
       <tfoot>
         <tr>
-          <td colspan="9">Source: FR24 (screen-scrape) • Allocation 15→45m • CTA→6 / Domestic→7 / Heavy→5 • No belt 4.</td>
+          <td colspan="9" id="footnote">Source: FR24 (screen-scrape) • Allocated 15+30 mins per belt. CTA →6 / Domestic →7 / Heavy →5.</td>
         </tr>
       </tfoot>
     </table>
   </div>
 
   <script>
-  (async function(){
-    const qs = (s,el=document)=>el.querySelector(s);
-    const meta = qs('#meta'); const tbody = qs('#tbody'); const filtersBox = qs('#filters');
+  (async function () {
+    const meta   = document.querySelector('#meta');
+    const tbody  = document.querySelector('#tbody');
+    const chips  = [...document.querySelectorAll('.chip')];
 
-    const urls = ['assignments.json','./assignments.json','/brs-belt-alloc/assignments.json'];
-    let data=null,lastErr=null;
-    for (const u of urls){
-      try{const res=await fetch(u+'?v='+Date.now(),{cache:'no-store'}); if(!res.ok) throw new Error('HTTP '+res.status); data=await res.json(); break;}
-      catch(e){lastErr=e}
+    // ---- Load JSON (try multiple paths for GH Pages) -----------------
+    const candidates = ['assignments.json', './assignments.json', '/brs-belt-alloc/assignments.json'];
+    let data = null, lastError = null;
+    for (const url of candidates) {
+      try {
+        const res = await fetch(url + '?v=' + Date.now(), { cache: 'no-store' });
+        if (!res.ok) throw new Error('HTTP ' + res.status + ' on ' + url);
+        data = await res.json();
+        break;
+      } catch (e) { lastError = e; }
     }
-    if(!data){tbody.innerHTML=`<tr><td colspan="9" class="empty error">Could not load assignments.json. ${lastErr?lastErr.message:''}</td></tr>`; meta.textContent='Load failed'; return;}
-
-    const allRows = Array.isArray(data.rows)?data.rows.slice():[];
-
-    // selection state (multi-toggle). All ON by default.
-    const on = { estimated:true, delayed:true, early:true, scheduled:true };
-
-    filtersBox.addEventListener('click',e=>{
-      const btn=e.target.closest('button[data-key]'); if(!btn) return;
-      const k=btn.dataset.key; on[k]=!on[k]; btn.classList.toggle('active',on[k]); render();
-    });
-
-    render();
-
-    // ---------- helpers ----------
-    function pad(n){ return String(n).padStart(2,'0'); }
-    function hhmm(iso){ if(!iso) return ''; const d=new Date(iso); return pad(d.getHours())+':'+pad(d.getMinutes()); }
-    function escapeHtml(s){ return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-    function todayIsoFromHHMM(hhmm){
-      if(!hhmm) return null; const now=new Date(); const [h,m]=(hhmm||'').split(':').map(Number);
-      return new Date(now.getFullYear(),now.getMonth(),now.getDate(),h||0,m||0,0,0).toISOString();
-    }
-    function computeDelayMin(r){
-      if (typeof r.delay_min === 'number') return r.delay_min;
-      const s = r.scheduled_local; const e = r.eta_local;
-      if (!s || !e) return null;
-      const sIso=todayIsoFromHHMM(s), eIso=todayIsoFromHHMM(e);
-      if(!sIso||!eIso) return null;
-      return Math.round((new Date(eIso)-new Date(sIso))/60000);
-    }
-    function firstTimeMs(r){
-      if(r.start) return +new Date(r.start);
-      if(r.eta) return +new Date(r.eta);
-      if(r.scheduled_local){ const iso=todayIsoFromHHMM(r.scheduled_local); if(iso) return +new Date(iso); }
-      return Number.MAX_SAFE_INTEGER;
+    if (!data) {
+      tbody.innerHTML = `<tr><td colspan="9" class="empty error">Could not load <code>assignments.json</code>. ${lastError ? lastError.message : ''}</td></tr>`;
+      meta.textContent = 'Load failed';
+      return;
     }
 
-    // Category predicates
-    function catFlags(r){
-      const status=(r.status||'').toLowerCase();
-      const d = computeDelayMin(r);
-      const isScheduled = status.includes('scheduled') && !status.includes('estimated');
-      const isEstimated = status.includes('estimated') || (!!r.eta || !!r.eta_local);
-      const isDelayed   = (typeof d==='number') && d>=6;     // >5 mins late
-      const isEarly     = (typeof d==='number') && d<=-6;    // >5 mins early
-      return {isScheduled,isEstimated,isDelayed,isEarly,delay:d};
-    }
+    const rows = Array.isArray(data.rows) ? data.rows : [];
+    meta.textContent = `Generated ${data.generated_at_local || data.generated_at_utc || ''} • Horizon ${data.horizon_minutes || ''} min`;
 
-    function render(){
-      // filter by selected categories (union of ON toggles)
-      const filtered = allRows.filter(r=>{
-        const f = catFlags(r);
-        return (on.estimated && f.isEstimated) ||
-               (on.delayed   && f.isDelayed)   ||
-               (on.early     && f.isEarly)     ||
-               (on.scheduled && f.isScheduled);
-      }).sort((a,b)=>firstTimeMs(a)-firstTimeMs(b));
+    // ---- Helpers ------------------------------------------------------
+    const pad = n => String(n).padStart(2,'0');
+    const hhmm = iso => {
+      if (!iso) return '';
+      const d = new Date(iso);
+      return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    };
+    const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]);
 
-      if(!filtered.length){
-        tbody.innerHTML = `<tr><td colspan="9" class="empty">No flights match current filters.</td></tr>`;
-      }else{
-        tbody.innerHTML = filtered.map(r=>renderRow(r)).join('');
-      }
-      meta.textContent = `Updated ${hhmm(data.generated_at_local||data.generated_at_utc)} • Showing ${filtered.length}`;
-    }
-
-    function timeCell(r){
-      const sched = r.scheduled_local||'';
-      const eta   = r.eta_local || hhmm(r.eta);
-      if(sched && eta && sched!==eta){
-        return `<div class="time"><span class="time-sched">${escapeHtml(sched)}</span><span class="time-arrow">→</span><span class="time-eta">${escapeHtml(eta)}</span></div>`;
-      }
-      return `<div class="time"><span class="time-eta">${escapeHtml(eta||sched)}</span></div>`;
-    }
-
-    // Colour rules (unchanged from previous brief):
-    // Early ≤ -16 min: RED
-    // Early -15..-6  : BLUE
-    // On-time -5..+5 : GREEN
-    // Late  +6..+14  : GREEN (near on-time)
-    // Late  +15..+20 : ORANGE
-    // Late  ≥ +21    : RED
-    function statusPill(r){
-      const d = computeDelayMin(r);
-      const text = r.status || (r.eta_local ? `estimated ${r.eta_local}` : 'scheduled');
+    // Colour rules:
+    //  - Early <= -16 min  -> RED
+    //  - Early -6..-15     -> BLUE
+    //  - On-time within ±5 -> GREEN
+    //  - Late  15..20      -> ORANGE
+    //  - Late  >=21        -> RED
+    //  - Late   6..14      -> GREEN  (small slip)
+    function statusPill(r) {
+      const text = r?.status ? r.status : (r?.eta_local ? `Estimated ${r.eta_local}` : '—');
+      const d = (typeof r.delay_min === 'number') ? r.delay_min : null;
       let cls = 'pill-green';
-      if (typeof d === 'number'){
-        if (d <= -16) cls='pill-red';
-        else if (d <= -6) cls='pill-blue';
-        else if (d <= 5) cls='pill-green';
-        else if (d <= 14) cls='pill-green';
-        else if (d <= 20) cls='pill-orange';
-        else cls='pill-red';
-      }else{
-        const s=text.toLowerCase();
-        if (s.includes('early')) cls='pill-blue';
-        else if (s.includes('delayed')) cls='pill-orange';
+      if (d !== null) {
+        if (d <= -16) cls = 'pill-red';
+        else if (d <= -6) cls = 'pill-blue';
+        else if (Math.abs(d) <= 5) cls = 'pill-green';
+        else if (d >= 21) cls = 'pill-red';
+        else if (d >= 15) cls = 'pill-orange';
+        else cls = 'pill-green';
+      } else {
+        const s = String(text).toLowerCase();
+        if (s.includes('early')) cls = 'pill-blue';
+        else if (s.includes('delayed')) cls = 'pill-orange';
+        else if (s.includes('cancel')) cls = 'pill-red';
       }
-      return `<span class="pill ${cls}">${escapeHtml(text)}</span>`;
+      return `<span class="pill ${cls}">${esc(text)}</span>`;
     }
 
-    function splitOrigin(r){
-      let code=(r.origin_iata||'').toUpperCase(); let name=r.origin||'';
-      const m = (r.origin||'').match(/^(.+?)\s*\(([A-Za-z0-9]{2,5})\)/);
-      if(m){ if(!code) code=m[2].toUpperCase(); name=m[1].trim(); }
-      else{ const m2=(r.origin||'').trim().match(/^\(([A-Za-z0-9]{2,5})\)$/); if(m2){ code=m2[1].toUpperCase(); name=''; } }
-      return {code,name:name.trim()};
+    // Category for FILTERING (not display)
+    // Keys: EARLY, ESTIMATED (incl on-time & small slips), DELAYED, SCHEDULED
+    function filterCategory(r) {
+      const s = String(r.status || '').toLowerCase();
+      const d = (typeof r.delay_min === 'number') ? r.delay_min : null;
+
+      if (/scheduled/.test(s)) return 'SCHEDULED';
+      if (d !== null) {
+        if (d <= -6) return 'EARLY';
+        if (d >= 15) return 'DELAYED';
+        // within ±5, or 6..14 late -> treat as ESTIMATED / on-time band
+        return 'ESTIMATED';
+      }
+      if (/delayed/.test(s))   return 'DELAYED';
+      if (/estimated/.test(s)) return 'ESTIMATED';
+      return 'ESTIMATED';
     }
 
-    function tooltipContent(r){
-      const bits=[];
-      if(r.airline) bits.push(`<div><strong>${escapeHtml(r.airline)}</strong></div>`);
-      if(r.aircraft) bits.push(`<div>${escapeHtml(r.aircraft)}</div>`);
-      if(r.pax_estimate!=null) bits.push(`<div>pax ~${escapeHtml(r.pax_estimate)}</div>`);
-      if(r.reason) bits.push(`<div>reason: ${escapeHtml(r.reason)}</div>`);
-      return bits.join('');
+    function beltBadge(b){
+      const v = (b===undefined || b==="" || b===null) ? '?' : b;
+      return `<span class="pill pill-belt">${v}</span>`;
+    }
+    function flowBadge(flow){
+      return `<span class="pill pill-flow">${esc((flow||'').toUpperCase())}</span>`;
+    }
+    function timeCell(r){
+      const etaLocal = r.eta_local || hhmm(r.eta);
+      const schedLocal = r.scheduled_local || '';
+      if (schedLocal) {
+        return `<div class="time"><span class="time-sched">${esc(schedLocal)}</span><span class="time-arrow">→</span><span class="time-eta">${esc(etaLocal||'')}</span></div>`;
+      }
+      return `<div class="time"><span class="time-eta">${esc(etaLocal||'')}</span></div>`;
+    }
+
+    function tooltipFor(r){
+      const bits = [];
+      if (r.airline)  bits.push(`Airline: ${r.airline}`);
+      if (r.aircraft) bits.push(`Aircraft: ${r.aircraft}`);
+      if (r.pax_estimate!=null) bits.push(`Pax est: ${r.pax_estimate}`);
+      if (r.origin)   bits.push(`From: ${r.origin}`);
+      return bits.join(' • ');
     }
 
     function renderRow(r){
-      const o=splitOrigin(r);
+      const tip = esc(tooltipFor(r));
+      const flightCode = esc(r.flight || '');
       return `
-        <tr>
-          <td class="col-flight">
-            <div class="flight-wrap">
-              <span>${escapeHtml(r.flight||'')}</span>
-              <div class="tooltip">${tooltipContent(r)}</div>
-            </div>
-          </td>
+        <tr data-cat="${filterCategory(r)}">
+          <td class="col-flight"><span title="${tip}">${flightCode}</span></td>
           <td class="col-origin">
-            <span class="origin-code">${escapeHtml(o.code)}</span>
-            <span class="origin-name">${escapeHtml(o.name)}</span>
+            <span class="origin-code">${esc((r.origin_iata || '').toUpperCase())}</span>
+            <span class="origin-name">${esc(r.origin || '')}</span>
           </td>
           <td class="col-time">${timeCell(r)}</td>
           <td class="col-status">${statusPill(r)}</td>
-          <td class="col-flow"><span class="pill pill-flow">${escapeHtml((r.flow||'').toUpperCase())}</span></td>
-          <td class="col-belt"><span class="pill pill-belt">${escapeHtml(r.belt ?? '?')}</span></td>
-          <td class="col-start">${escapeHtml(hhmm(r.start))}</td>
-          <td class="col-end">${escapeHtml(hhmm(r.end))}</td>
-          <td class="col-reason">${escapeHtml(r.reason||'')}</td>
-        </tr>`;
+          <td class="col-flow">${flowBadge(r.flow || '')}</td>
+          <td class="col-belt">${beltBadge(r.belt)}</td>
+          <td class="col-start">${hhmm(r.start)}</td>
+          <td class="col-end">${hhmm(r.end)}</td>
+          <td class="col-reason">${esc(r.reason || '')}</td>
+        </tr>
+      `;
     }
+
+    // Sort by first usable time before first render
+    rows.sort((a,b)=>{
+      const ta = a.start || a.eta || a.scheduled_local;
+      const tb = b.start || b.eta || b.scheduled_local;
+      const va = ta ? new Date(ta).getTime() : Number.MAX_SAFE_INTEGER;
+      const vb = tb ? new Date(tb).getTime() : Number.MAX_SAFE_INTEGER;
+      return va - vb;
+    });
+
+    // Active filter toggles
+    const active = new Set(['EARLY','ESTIMATED','DELAYED','SCHEDULED']);
+
+    function applyFiltersAndRender(){
+      const filtered = rows.filter(r => active.has(filterCategory(r)));
+      if (!filtered.length) {
+        tbody.innerHTML = `<tr><td colspan="9" class="empty">No flights match current filters.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = filtered.map(renderRow).join('');
+    }
+
+    // Wire chips
+    chips.forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const k = btn.dataset.key;
+        const on = btn.getAttribute('data-on') === 'true';
+        if (on) { active.delete(k); btn.setAttribute('data-on','false'); }
+        else    { active.add(k);    btn.setAttribute('data-on','true');  }
+        applyFiltersAndRender();
+      });
+    });
+
+    // Initial paint
+    applyFiltersAndRender();
   })();
   </script>
 </body>

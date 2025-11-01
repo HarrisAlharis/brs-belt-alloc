@@ -1,0 +1,2082 @@
+[
+  {
+    "kind": "table",
+    "text": " Loading..."
+  },
+  {
+    "kind": "table",
+    "text": "Sorry, we don't have any information about flights for this airport"
+  },
+  {
+    "kind": "table",
+    "text": "Estimated 21:35\n 21:30\n U22848\n Milan(MXP)\n A320\nG-EZUC\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Landed 21:23\n 21:35\n X36533\n Zakynthos(ZTH)\n B738\nG-TAWH\nTUI"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 21:40\n FR513\n Dublin(DUB)\n B38M\nEI-IJP\nRyanair"
+  },
+  {
+    "kind": "table",
+    "text": "Estimated 21:45\n 21:40\n U22860\n Istanbul(IST)\n A20N\nG-UZLD\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Delayed 22:05\n 21:45\n FR1667\n Fuerteventura(FUE)\n B38M\nSP-RZT\nRyanair"
+  },
+  {
+    "kind": "table",
+    "text": "Estimated 21:39\n 21:45\n U2246\n Inverness(INV)\n A20N\nG-UZHK\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Estimated 21:37\n 21:45\n U22924\n Amsterdam(AMS)\n A20N\nG-UZEG\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 21:50\n U2216\n Edinburgh(EDI)\n A320\nG-EZUI\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Delayed 22:18\n 21:55\n U22776\n Paris(CDG)\n A320\nG-EZTH\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Estimated 22:02\n 22:10\n KL1083\n Amsterdam(AMS)\n E75L\nPH-EXS\nKLM"
+  },
+  {
+    "kind": "table",
+    "text": "Estimated 22:19\n 22:10\n U22812\n Corfu(CFU)\n A320\nG-EZTC\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 22:20\n U2240\n Newcastle(NCL)\n A20N\nG-UZHE\neasyJet (NEO Livery)"
+  },
+  {
+    "kind": "table",
+    "text": "Estimated 22:15\n 22:20\n U22706\n Barcelona(BCN)\n A320\nG-EZTZ\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 22:23\n Edinburgh(EDI)\n A20N\nG-UZHU\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Estimated 22:06\n 22:25\n U2208\n Glasgow(GLA)\n A320\nG-EZUK\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 22:25\n U2228\n Belfast(BFS)\n A320\nG-EZUA\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Estimated 22:28\n 22:25\n U22852\n Dalaman(DLM)\n A320\nG-EZOF\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 22:27\n Edinburgh(EDI)\n A20N\nG-UZHU\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Estimated 22:15\n 22:30\n U2220\n Edinburgh(EDI)\n A320\nG-EZTL\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Delayed 23:42\n 22:45\n LS1832\n Heraklion(HER)\n B738\nG-DRTX\nJet2"
+  },
+  {
+    "kind": "table",
+    "text": "Estimated 22:41\n 22:45\n U22874\n Faro(FAO)\n A20N\nG-UZHH\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Estimated 23:02\n 23:10\n LS1900\n Palma de Mallorca(PMI)\n B738\nG-JZBW\nJet2"
+  },
+  {
+    "kind": "table",
+    "text": "Estimated 23:10\n 23:10\n LS3424\n Larnaca(LCA)\n B738\nG-JZBC\nJet2"
+  },
+  {
+    "kind": "table",
+    "text": "Estimated 23:15\n 23:10\n U22732\n Tenerife(TFS)\n A21N\nG-UZMI\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Estimated 23:25\n 23:20\n LS1850\n Dalaman(DLM)\n B738\nG-DRTP\nJet2"
+  },
+  {
+    "kind": "table",
+    "text": "Delayed 00:06\n 23:25\n LS1846\n Antalya(AYT)\n B738\nG-JZBV\nJet2"
+  },
+  {
+    "kind": "table",
+    "text": "Estimated 23:19\n 23:25\n LS1882\n Rhodes(RHO)\n B738\nG-JZDH\nJet2"
+  },
+  {
+    "kind": "table",
+    "text": "Estimated 23:14\n 23:25\n X36505\n Ibiza(IBZ)\n B38M\nG-TUMG\nTUI"
+  },
+  {
+    "kind": "table",
+    "text": "Estimated 22:58\n 23:35\n FR4754\n Tenerife(TFS)\n B38M\n9H-VUT\nRyanair"
+  },
+  {
+    "kind": "table",
+    "text": "Estimated 23:32\n 23:45\n U22734\n Lanzarote(ACE)\n A20N\nG-UZHR\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 23:59\n FR9175\n Barcelona(BCN)\n B738\n9H-QCP\nRyanair"
+  },
+  {
+    "kind": "table",
+    "text": "Estimated 00:25\n 00:20\n U22916\n Hurghada(HRG)\n A20N\nG-UZLZ\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 00:55\n BY781\n Marrakesh(RAK)\n B38M\nG-TUMN\nTUI"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 01:10\n LS1804\n Lanzarote(ACE)\n B738\nG-JZBO\nJet2"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 03:05\n BY383\n Antalya(AYT)\n B38M\nG-TUML\nTUI"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 03:35\n BY649\n Sharm el-Sheikh(SSH)\n B38M\nG-TUMC\nTUI"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 06:55\n FR1362\n Venice(VCE)\n 73H\nRyanair"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 07:10\n FR3160\n Barcelona(BCN)\n 73H\nRyanair"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 07:25\n FR504\n Dublin(DUB)\n 73H\nRyanair"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 07:44\n Dublin(DUB)\n AT76\nEI-FAV\nAer Lingus Regional"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 07:55\n EI3280\n Dublin(DUB)\n AT7\nAer Lingus"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 08:05\n U27367\n Palma de Mallorca(PMI)\n A319\nOE-LQL\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 08:25\n KL1075\n Amsterdam(AMS)\n E75L\nPH-EXX\nKLM"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 08:45\n U27507\n Faro(FAO)\n A319\nOE-LKX\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 09:00\n U25527\n Alicante(ALC)\n A319\nOE-LQB\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 09:30\n XQ584\n Antalya(AYT)\n A320\nLY-NVM\nSunExpress"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 09:35\n U2224\n Belfast(BFS)\n A20N\nG-UZHK\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 09:50\n FR8203\n Knock(NOC)\n 7M8\nRyanair"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 10:15\n U2214\n Edinburgh(EDI)\n A20N\nG-UZHE\neasyJet (NEO Livery)"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 10:15\n U2238\n Newcastle(NCL)\n A320\nG-EZUC\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 10:45\n LS1830\n Girona(GRO)\n 73H\nJet2"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 10:50\n U2208\n Glasgow(GLA)\n A20N\nG-UZHH\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 10:55\n U22896\n Zurich(ZRH)\n A20N\nG-UZLZ\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 11:00\n PC1196\n Istanbul(SAW)\n 321\nPegasus"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 11:10\n FR8255\n Gdansk(GDN)\n 73H\nRyanair"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 11:20\n BY6673\n Reus(REU)\n B38M\nG-TUML\nTUI"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 11:30\n U22748\n Ibiza(IBZ)\n A320\nG-EZUI\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 11:32\n Cork(ORK)\n AT76\nEI-FAV\nAer Lingus Regional"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 11:45\n LS1860\n Mahon(MAH)\n 73H\nJet2"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 11:45\n BY6681\n Mahon(MAH)\n B38M\nG-TUMN\nTUI"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 11:45\n U22722\n Alicante(ALC)\n A320\nG-EZUK\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 11:50\n EI3840\n Cork(ORK)\n AT7\nAer Lingus"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 11:50\n U22766\n Nice(NCE)\n 320\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 12:05\n U2105\n Belfast(BFS)\n A319\nG-EZGE\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 12:10\n U22842\n Olbia(OLB)\n 320\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 12:15\n LS1822\n Faro(FAO)\n 73H\nJet2"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 12:20\n U22704\n Barcelona(BCN)\n A20N\nG-UZEG\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 12:20\n U22714\n Malaga(AGP)\n 321\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 12:30\n U22718\n Almeria(LEI)\n 320\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 12:35\n U22838\n Rome(FCO)\n A21N\nG-UZMI\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 12:45\n FR1332\n Porto(OPO)\n 73H\nRyanair"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 12:50\n U25531\n Amsterdam(AMS)\n A319\nOE-LQB\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 13:05\n LS1806\n Alicante(ALC)\n 73H\nJet2"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 13:05\n LS1872\n Palma de Mallorca(PMI)\n 73H\nJet2"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 13:10\n KL1079\n Amsterdam(AMS)\n E7W\nKLM"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 13:10\n LS1808\n Malaga(AGP)\n B738\nG-JZBO\nJet2"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 13:30\n U22746\n Mahon(MAH)\n 320\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 13:35\n FR4130\n Sofia(SOF)\n 7M8\nRyanair"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 13:40\n U22774\n Paris(CDG)\n 320\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 13:50\n BY6661\n Palma de Mallorca(PMI)\n 737\nTUI Airways"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 14:05\n U2216\n Edinburgh(EDI)\n 320\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 14:13\n Riga(RIX)\n E35L\n9H-WFC\nAirX"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 14:55\n FR8225\n Rzeszow(RZE)\n 7M8\nRyanair"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 15:20\n LS1828\n Fuerteventura(FUE)\n 73H\nJet2"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 15:45\n U22720\n Fuerteventura(FUE)\n 320\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 15:45\n U22734\n Lanzarote(ACE)\n 320\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 15:45\n U27003\n Malaga(AGP)\n 319\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 15:50\n FR508\n Dublin(DUB)\n 73H\nRyanair"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 15:55\n FR6220\n Krakow(KRK)\n 7M8\nRyanair"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 16:05\n U22814\n Heraklion(HER)\n 320\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 16:40\n XQ540\n Antalya(AYT)\n 73H\nSunExpress"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 16:45\n LS1880\n Reus(REU)\n 73H\nJet2"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 16:50\n FR3559\n Milan(BGY)\n 73H\nRyanair"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 16:50\n U22938\n Krakow(KRK)\n 320\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 16:55\n KL1081\n Amsterdam(AMS)\n E7W\nKLM"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 17:40\n LS1892\n Tenerife(TFS)\n 73H\nJet2"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 17:40\n U22904\n Larnaca(LCA)\n 320\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 17:55\n FR8682\n Kaunas(KUN)\n 73H\nRyanair"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 18:25\n FR5342\n Bucharest(OTP)\n 73H\nRyanair"
+  },
+  {
+    "kind": "table",
+    "text": "Scheduled\n 18:55\n U22868\n Lisbon(LIS)\n 320\neasyJet"
+  },
+  {
+    "kind": "table",
+    "text": "Friday, Oct 31"
+  },
+  {
+    "kind": "table",
+    "text": "21:30 U22848Milan (MXP)-easyJet -A320 (G-EZUC) Estimated 21:35"
+  },
+  {
+    "kind": "table",
+    "text": "21:35 X36533Zakynthos (ZTH)-TUI -B738 (G-TAWH) Landed 21:23"
+  },
+  {
+    "kind": "table",
+    "text": "21:40 FR513Dublin (DUB)-Ryanair -B38M (EI-IJP) Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "21:40 U22860Istanbul (IST)-easyJet -A20N (G-UZLD) Estimated 21:45"
+  },
+  {
+    "kind": "table",
+    "text": "21:45 FR1667Fuerteventura (FUE)-Ryanair -B38M (SP-RZT) Delayed 22:05"
+  },
+  {
+    "kind": "table",
+    "text": "21:45 U2246Inverness (INV)-easyJet -A20N (G-UZHK) Estimated 21:39"
+  },
+  {
+    "kind": "table",
+    "text": "21:45 U22924Amsterdam (AMS)-easyJet -A20N (G-UZEG) Estimated 21:37"
+  },
+  {
+    "kind": "table",
+    "text": "21:50 U2216Edinburgh (EDI)-easyJet -A320 (G-EZUI) Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "21:55 U22776Paris (CDG)-easyJet -A320 (G-EZTH) Delayed 22:18"
+  },
+  {
+    "kind": "table",
+    "text": "22:10 KL1083Amsterdam (AMS)-KLM -E75L (PH-EXS) Estimated 22:02"
+  },
+  {
+    "kind": "table",
+    "text": "22:10 U22812Corfu (CFU)-easyJet -A320 (G-EZTC) Estimated 22:19"
+  },
+  {
+    "kind": "table",
+    "text": "22:20 U2240Newcastle (NCL)-easyJet (NEO Livery) -A20N (G-UZHE) Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "22:20 U22706Barcelona (BCN)-easyJet -A320 (G-EZTZ) Estimated 22:15"
+  },
+  {
+    "kind": "table",
+    "text": "22:23 Edinburgh (EDI)-easyJet -A20N (G-UZHU) Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "22:25 U2208Glasgow (GLA)-easyJet -A320 (G-EZUK) Estimated 22:06"
+  },
+  {
+    "kind": "table",
+    "text": "22:25 U2228Belfast (BFS)-easyJet -A320 (G-EZUA) Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "22:25 U22852Dalaman (DLM)-easyJet -A320 (G-EZOF) Estimated 22:28"
+  },
+  {
+    "kind": "table",
+    "text": "22:27 Edinburgh (EDI)-easyJet -A20N (G-UZHU) Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "22:30 U2220Edinburgh (EDI)-easyJet -A320 (G-EZTL) Estimated 22:15"
+  },
+  {
+    "kind": "table",
+    "text": "22:45 LS1832Heraklion (HER)-Jet2 -B738 (G-DRTX) Delayed 23:42"
+  },
+  {
+    "kind": "table",
+    "text": "22:45 U22874Faro (FAO)-easyJet -A20N (G-UZHH) Estimated 22:41"
+  },
+  {
+    "kind": "table",
+    "text": "23:10 LS1900Palma de Mallorca (PMI)-Jet2 -B738 (G-JZBW) Estimated 23:02"
+  },
+  {
+    "kind": "table",
+    "text": "23:10 LS3424Larnaca (LCA)-Jet2 -B738 (G-JZBC) Estimated 23:10"
+  },
+  {
+    "kind": "table",
+    "text": "23:10 U22732Tenerife (TFS)-easyJet -A21N (G-UZMI) Estimated 23:15"
+  },
+  {
+    "kind": "table",
+    "text": "23:20 LS1850Dalaman (DLM)-Jet2 -B738 (G-DRTP) Estimated 23:25"
+  },
+  {
+    "kind": "table",
+    "text": "23:25 LS1846Antalya (AYT)-Jet2 -B738 (G-JZBV) Delayed 00:06"
+  },
+  {
+    "kind": "table",
+    "text": "23:25 LS1882Rhodes (RHO)-Jet2 -B738 (G-JZDH) Estimated 23:19"
+  },
+  {
+    "kind": "table",
+    "text": "23:25 X36505Ibiza (IBZ)-TUI -B38M (G-TUMG) Estimated 23:14"
+  },
+  {
+    "kind": "table",
+    "text": "23:35 FR4754Tenerife (TFS)-Ryanair -B38M (9H-VUT) Estimated 22:58"
+  },
+  {
+    "kind": "table",
+    "text": "23:45 U22734Lanzarote (ACE)-easyJet -A20N (G-UZHR) Estimated 23:32"
+  },
+  {
+    "kind": "table",
+    "text": "23:59 FR9175Barcelona (BCN)-Ryanair -B738 (9H-QCP) Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "Saturday, Nov 01"
+  },
+  {
+    "kind": "table",
+    "text": "00:20 U22916Hurghada (HRG)-easyJet -A20N (G-UZLZ) Estimated 00:25"
+  },
+  {
+    "kind": "table",
+    "text": "00:55 BY781Marrakesh (RAK)-TUI -B38M (G-TUMN) Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "01:10 LS1804Lanzarote (ACE)-Jet2 -B738 (G-JZBO) Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "03:05 BY383Antalya (AYT)-TUI -B38M (G-TUML) Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "03:35 BY649Sharm el-Sheikh (SSH)-TUI -B38M (G-TUMC) Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "06:55 FR1362Venice (VCE)-Ryanair -73H () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "07:10 FR3160Barcelona (BCN)-Ryanair -73H () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "07:25 FR504Dublin (DUB)-Ryanair -73H () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "07:44 Dublin (DUB)-Aer Lingus Regional -AT76 (EI-FAV) Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "07:55 EI3280Dublin (DUB)-Aer Lingus -AT7 () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "08:05 U27367Palma de Mallorca (PMI)-easyJet -A319 (OE-LQL) Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "08:25 KL1075Amsterdam (AMS)-KLM -E75L (PH-EXX) Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "08:45 U27507Faro (FAO)-easyJet -A319 (OE-LKX) Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "09:00 U25527Alicante (ALC)-easyJet -A319 (OE-LQB) Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "09:30 XQ584Antalya (AYT)-SunExpress -A320 (LY-NVM) Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "09:35 U2224Belfast (BFS)-easyJet -A20N (G-UZHK) Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "09:50 FR8203Knock (NOC)-Ryanair -7M8 () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "10:15 U2214Edinburgh (EDI)-easyJet (NEO Livery) -A20N (G-UZHE) Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "10:15 U2238Newcastle (NCL)-easyJet -A320 (G-EZUC) Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "10:45 LS1830Girona (GRO)-Jet2 -73H () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "10:50 U2208Glasgow (GLA)-easyJet -A20N (G-UZHH) Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "10:55 U22896Zurich (ZRH)-easyJet -A20N (G-UZLZ) Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "11:00 PC1196Istanbul (SAW)-Pegasus -321 () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "11:10 FR8255Gdansk (GDN)-Ryanair -73H () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "11:20 BY6673Reus (REU)-TUI -B38M (G-TUML) Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "11:30 U22748Ibiza (IBZ)-easyJet -A320 (G-EZUI) Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "11:32 Cork (ORK)-Aer Lingus Regional -AT76 (EI-FAV) Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "11:45 LS1860Mahon (MAH)-Jet2 -73H () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "11:45 BY6681Mahon (MAH)-TUI -B38M (G-TUMN) Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "11:45 U22722Alicante (ALC)-easyJet -A320 (G-EZUK) Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "11:50 EI3840Cork (ORK)-Aer Lingus -AT7 () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "11:50 U22766Nice (NCE)-easyJet -320 () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "12:05 U2105Belfast (BFS)-easyJet -A319 (G-EZGE) Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "12:10 U22842Olbia (OLB)-easyJet -320 () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "12:15 LS1822Faro (FAO)-Jet2 -73H () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "12:20 U22704Barcelona (BCN)-easyJet -A20N (G-UZEG) Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "12:20 U22714Malaga (AGP)-easyJet -321 () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "12:30 U22718Almeria (LEI)-easyJet -320 () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "12:35 U22838Rome (FCO)-easyJet -A21N (G-UZMI) Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "12:45 FR1332Porto (OPO)-Ryanair -73H () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "12:50 U25531Amsterdam (AMS)-easyJet -A319 (OE-LQB) Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "13:05 LS1806Alicante (ALC)-Jet2 -73H () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "13:05 LS1872Palma de Mallorca (PMI)-Jet2 -73H () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "13:10 KL1079Amsterdam (AMS)-KLM -E7W () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "13:10 LS1808Malaga (AGP)-Jet2 -B738 (G-JZBO) Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "13:30 U22746Mahon (MAH)-easyJet -320 () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "13:35 FR4130Sofia (SOF)-Ryanair -7M8 () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "13:40 U22774Paris (CDG)-easyJet -320 () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "13:50 BY6661Palma de Mallorca (PMI)-TUI Airways -737 () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "14:05 U2216Edinburgh (EDI)-easyJet -320 () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "14:13 Riga (RIX)-AirX -E35L (9H-WFC) Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "14:55 FR8225Rzeszow (RZE)-Ryanair -7M8 () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "15:20 LS1828Fuerteventura (FUE)-Jet2 -73H () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "15:45 U22720Fuerteventura (FUE)-easyJet -320 () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "15:45 U22734Lanzarote (ACE)-easyJet -320 () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "15:45 U27003Malaga (AGP)-easyJet -319 () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "15:50 FR508Dublin (DUB)-Ryanair -73H () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "15:55 FR6220Krakow (KRK)-Ryanair -7M8 () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "16:05 U22814Heraklion (HER)-easyJet -320 () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "16:40 XQ540Antalya (AYT)-SunExpress -73H () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "16:45 LS1880Reus (REU)-Jet2 -73H () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "16:50 FR3559Milan (BGY)-Ryanair -73H () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "16:50 U22938Krakow (KRK)-easyJet -320 () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "16:55 KL1081Amsterdam (AMS)-KLM -E7W () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "17:40 LS1892Tenerife (TFS)-Jet2 -73H () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "17:40 U22904Larnaca (LCA)-easyJet -320 () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "17:55 FR8682Kaunas (KUN)-Ryanair -73H () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "18:25 FR5342Bucharest (OTP)-Ryanair -73H () Scheduled "
+  },
+  {
+    "kind": "table",
+    "text": "18:55 U22868Lisbon (LIS)-easyJet -320 () Scheduled "
+  },
+  {
+    "kind": "card",
+    "text": ".check-green{fill:#75bc77}.check-gray{fill:#bdbdbd}.toggle-circle{fill:#327db6}#icon-fr24-toggle-up .toggle-circle{fill:#64bef1!important}.toggle-inner{fill:none;stroke:#fff;stroke-width:10.2057;stroke-miterlimit:10}.separator1{fill:#a4a1a0}.separator2{fill:#d1d0d0}.mobile-info-fill{fill:#fff}.close-bg{fill:#327db7}.close-inner{fill:#fff}.fill-white{fill:#fff}.fill-yellow{fill:#f8c024}.xfill-gray{fill:#6d6d6d}.xfill-lightgray{fill:#a4a1a0}.fill-orange{fill:#e3b021}.fill-none{fill:none}.stroke-orange{stoke:#e3b021}.stroke-thin-1{stroke-width:8.2099;fill:none;stroke:#fff;stroke-miterlimit:10}.stroke-thin-2{stroke-width:8.3709;fill:none;stroke:#fff;stroke-miterlimit:10}.stroke-thin-3{stroke:#fff;stroke-miterlimit:10}.stroke-thin-4{fill:none;stroke:#fff;stroke-width:3.1776;stroke-miterlimit:10}.stroke-thin-5{stroke:#f8c023;stroke-miterlimit:10}.stroke-thin-6{fill:none;stroke:#f8c023;stroke-width:3.1776;stroke-miterlimit:10}.stroke-thin-7{stroke:#999;stroke-miterlimit:10}.stroke-thin-8{fill:none;stroke:#999;stroke-width:3.1776;stroke-miterlimit:10}.stroke-thin-cl-3{stroke-miterlimit:10}.stroke-thin-cl-4{fill:none;stroke-width:3.1776;stroke-miterlimit:10}.stroke-med-1{stroke-width:15.5538;stroke-miterlimit:10}.stroke-med-2{stroke-width:14.2565;stroke-miterlimit:10}.stroke-med-3{fill:none;stroke-width:16.1096;stroke-miterlimit:10}.stroke-med-4{stroke-width:16.635;stroke:#fff;stroke-miterlimit:10}.stroke-med-5{stroke-width:16.5784;stroke:#fff;stroke-miterlimit:10}.stroke-med-6{fill:none;stroke:#fff;stroke-width:8.2099;stroke-miterlimit:10}.stroke-med-7{fill:none;stroke:#f8c023;stroke-width:8.3709;stroke-miterlimit:10}.stroke-arrow{stroke-width:3.5557;stroke-miterlimit:10}.stroke-arrow-round{fill:none;stroke:#fff;stroke-width:3.1662;stroke-miterlimit:10}.side-yellow{fill:#f8c024}.side-white{fill:#fff}.addyellow-0{fill:#f8c023}.addyellow-1{fill:#fff}.stroke-lock-bg{fill:none;stroke:#fff;stroke-width:2.9472;stroke-miterlimit:10}.stroke-lock{fill:none;stroke:#e3b021;stroke-width:12.895;stroke-miterlimit:10}.livelist-0{stroke-width:8.3664;stroke-miterlimit:10}.livelist-1{stroke-width:1.4209;stroke-miterlimit:10}.livelist-2{stroke-width:1.7956;stroke-miterlimit:10}.live{stroke-width:.6639;stroke-miterlimit:10}.timeline-point-0{fill-rule:evenodd;clip-rule:evenodd;fill:none;stroke:#f8c024;stroke-width:8.3258;stroke-miterlimit:10}.timeline-point-1{fill-rule:evenodd;clip-rule:evenodd;fill:#f8c024}.arrival-0{fill:none;stroke:#317eb7;stroke-width:8.5898;stroke-miterlimit:10}.arrival-1{fill:#317eb7}.arrival-0-white{fill:none;stroke:#fff;stroke-width:8.5898;stroke-miterlimit:10}.arrival-1-white{fill:#fff}.departure-0{fill:none;stroke:#317eb7;stroke-width:8.6363;stroke-miterlimit:10}.departure-1{fill:#317eb7}.departure-0-white{fill:none;stroke:#fff;stroke-width:8.6363;stroke-miterlimit:10}.departure-1-white{fill:#fff}.onground-0{fill:none;stroke:currentColor;stroke-width:8.612;stroke-miterlimit:10}.onground-1{fill:currentColor}.info-boarder-0{fill:#317eb7}.info-boarder-1{fill:none;stroke:#317eb7;stroke-width:7.5424;stroke-miterlimit:10}.info-boarder-0-white{fill:#fff}.info-boarder-1-white{fill:none;stroke:#fff;stroke-width:7.5424;stroke-miterlimit:10}.plane-boarder-0{fill:none;stroke:#317eb7;stroke-width:7.5443;stroke-miterlimit:10}.plane-boarder-1{fill-rule:evenodd;clip-rule:evenodd;fill:#317eb7}.plane-boarder-0-white{fill:none;stroke:#fff;stroke-width:7.5443;stroke-miterlimit:10}.plane-boarder-1-white{fill-rule:evenodd;clip-rule:evenodd;fill:#fff}.speed{fill:none;stroke-width:2.4392;stroke-miterlimit:10}.arr-dep-1{stroke-width:8.6363;stroke-miterlimit:10}.logo-payoff-0{fill:#fff}.logo-payoff-1{fill:#f8c024}.hide{display:none}.inline{display:inline}.currentColor{fill:currentColor}.exclam-weather0{fill:#f8c024}.exclam-weather1{fill:none;stroke:#f8c024;stroke-width:3.0404;stroke-miterlimit:10}.fullscreen-lock{fill:#f8c024}.color_blue_mid{fill:#327db6}.fr24-error-cloud-style{fill:#d73737}.exclamation-hide{fill:#f8c024}.exclamation-inline{fill:none;stroke:#f8c024;stroke-width:3.1776;stroke-miterlimit:10}.b-cls-1{fill:#e3b021}.b-cls-2{fill:#fff}.icon-fr24-live-flight-0{fill:#6e6e6d}.icon-fr24-live-flight-1{fill:#fff}.icon-fr24-live-flight-2{fill-rule:evenodd;clip-rule:evenodd;fill:#fff}.icon-aircraft-info-0{fill:none}.icon-aircraft-info-1{fill:#317fb7}.icon-aircraft-info-2{fill:#317fb9}.icon-aircraft-info-3{fill:#fff;stroke:#317fb7;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:10}.icon-aircraft-info-4{fill-rule:evenodd;clip-rule:evenodd;fill:#fff}.icon-aircraft-info-5{fill:#fff}.icon-aircraft-info-6{fill-rule:evenodd;clip-rule:evenodd;fill:#fff;stroke:#317fb9;stroke-width:2;stroke-miterlimit:10}.icon-flight-info-0{fill:#317fb7}.icon-flight-info-1{fill:#327eb8}.wind-0:hover{fill:#f8c023}"
+  },
+  {
+    "kind": "card",
+    "text": "BRS/EGGD\nBristol Airport\nUnited Kingdom\n14 °C\nWEATHER\n13 kts\nWIND\n180 °\nDIRECTION\n77%\nMY FLIGHTRADAR24\nRATING \n1.0\nARRIVAL\nDELAY INDEX \n1.5\nDEPARTURE\nDELAY INDEX \nGeneral\nArrivals\nDepartures\nOn Ground\nReviews\nRoutes\nWeather\nStatistics"
+  },
+  {
+    "kind": "card",
+    "text": "BRS/EGGD\nBristol Airport\nUnited Kingdom\n14 °C\nWEATHER\n13 kts\nWIND\n180 °\nDIRECTION\n77%\nMY FLIGHTRADAR24\nRATING \n1.0\nARRIVAL\nDELAY INDEX \n1.5\nDEPARTURE\nDELAY INDEX "
+  },
+  {
+    "kind": "card",
+    "text": "BRS/EGGD"
+  },
+  {
+    "kind": "card",
+    "text": "Bristol Airport"
+  },
+  {
+    "kind": "card",
+    "text": "United Kingdom"
+  },
+  {
+    "kind": "card",
+    "text": "14 °C\nWEATHER\n13 kts\nWIND\n180 °\nDIRECTION\n77%\nMY FLIGHTRADAR24\nRATING \n1.0\nARRIVAL\nDELAY INDEX \n1.5\nDEPARTURE\nDELAY INDEX "
+  },
+  {
+    "kind": "card",
+    "text": "14 °C\nWEATHER\n13 kts\nWIND\n180 °\nDIRECTION"
+  },
+  {
+    "kind": "card",
+    "text": "LOCAL TIME: --:--"
+  },
+  {
+    "kind": "card",
+    "text": "77%\nMY FLIGHTRADAR24\nRATING \n1.0\nARRIVAL\nDELAY INDEX \n1.5\nDEPARTURE\nDELAY INDEX "
+  },
+  {
+    "kind": "card",
+    "text": "     \n        \n\n        \n            window?.tude?.cmd?.push(() => {\n                window?.tude?.refreshAdsViaDivMappings([{\n                    divId: \"pb-slot-fr24-pan\",\n                    baseDivId: \"pb-slot-fr24-pan\",\n                    targeting: {\n                        position: \"data/airports/brs/arrivals\",\n                    }\n                }, ]);\n            });\n\n            window?.tude?.cmd?.push(function() {\n                tude.interstitial('pb-slot-fr24-data-anchor', 'BOTTOM_ANCHOR');\n            });\n        \n     "
+  },
+  {
+    "kind": "card",
+    "text": "Arrivals\nLoad earlier flights\n\nEstimated 21:35\n 21:30\n U22848\n Milan(MXP)\n A320\nG-EZUC\neasyJet\n\n\nLanded 21:23\n 21:35\n X36533\n Zakynthos(ZTH)\n B738\nG-TAWH\nTUI\n\n\nScheduled\n 21:40\n FR513\n Dublin(DUB)\n B38M\nEI-IJP\nRyanair\n\n\nEstimated 21:45\n 21:40\n U22860\n Istanbul(IST)\n A20N\nG-UZLD\neasyJet\n\n\nDelayed 22:05\n 21:45\n FR1667\n Fuerteventura(FUE)\n B38M\nSP-RZT\nRyanair\n\n\nEstimated 21:39\n 21:45\n U2246\n Inverness(INV)\n A20N\nG-UZHK\neasyJet\n\n\nEstimated 21:37\n 21:45\n U22924\n Amsterdam(AMS)\n A20N\nG-UZEG\neasyJet\n\n\nScheduled\n 21:50\n U2216\n Edinburgh(EDI)\n A320\nG-EZUI\neasyJet\n\n\nDelayed 22:18\n 21:55\n U22776\n Paris(CDG)\n A320\nG-EZTH\neasyJet\n\n\nEstimated 22:02\n 22:10\n KL1083\n Amsterdam(AMS)\n E75L\nPH-EXS\nKLM\n\n\nEstimated 22:19\n 22:10\n U22812\n Corfu(CFU)\n A320\nG-EZTC\neasyJet\n\n\nScheduled\n 22:20\n U2240\n Newcastle(NCL)\n A20N\nG-UZHE\neasyJet (NEO Livery)\n\n\nEstimated 22:15\n 22:20\n U22706\n Barcelona(BCN)\n A320\nG-EZTZ\neasyJet\n\n\nScheduled\n 22:23\n Edinburgh(EDI)\n A20N\nG-UZHU\neasyJet\n\n\nEstimated 22:06\n 22:25\n U2208\n Glasgow(GLA)\n A320\nG-EZUK\neasyJet\n\n\nScheduled\n 22:25\n U2228\n Belfast(BFS)\n A320\nG-EZUA\neasyJet\n\n\nEstimated 22:28\n 22:25\n U22852\n Dalaman(DLM)\n A320\nG-EZOF\neasyJet\n\n\nScheduled\n 22:27\n Edinburgh(EDI)\n A20N\nG-UZHU\neasyJet\n\n\nEstimated 22:15\n 22:30\n U2220\n Edinburgh(EDI)\n A320\nG-EZTL\neasyJet\n\n\nDelayed 23:42\n 22:45\n LS1832\n Heraklion(HER)\n B738\nG-DRTX\nJet2\n\n\nEstimated 22:41\n 22:45\n U22874\n Faro(FAO)\n A20N\nG-UZHH\neasyJet\n\n\nEstimated 23:02\n 23:10\n LS1900\n Palma de Mallorca(PMI)\n B738\nG-JZBW\nJet2\n\n\nEstimated 23:10\n 23:10\n LS3424\n Larnaca(LCA)\n B738\nG-JZBC\nJet2\n\n\nEstimated 23:15\n 23:10\n U22732\n Tenerife(TFS)\n A21N\nG-UZMI\neasyJet\n\n\nEstimated 23:25\n 23:20\n LS1850\n Dalaman(DLM)\n B738\nG-DRTP\nJet2\n\n\nDelayed 00:06\n 23:25\n LS1846\n Antalya(AYT)\n B738\nG-JZBV\nJet2\n\n\nEstimated 23:19\n 23:25\n LS1882\n Rhodes(RHO)\n B738\nG-JZDH\nJet2\n\n\nEstimated 23:14\n 23:25\n X36505\n Ibiza(IBZ)\n B38M\nG-TUMG\nTUI\n\n\nEstimated 22:58\n 23:35\n FR4754\n Tenerife(TFS)\n B38M\n9H-VUT\nRyanair\n\n\nEstimated 23:32\n 23:45\n U22734\n Lanzarote(ACE)\n A20N\nG-UZHR\neasyJet\n\n\nScheduled\n 23:59\n FR9175\n Barcelona(BCN)\n B738\n9H-QCP\nRyanair\n\n\nEstimated 00:25\n 00:20\n U22916\n Hurghada(HRG)\n A20N\nG-UZLZ\neasyJet\n\n\nScheduled\n 00:55\n BY781\n Marrakesh(RAK)\n B38M\nG-TUMN\nTUI\n\n\nScheduled\n 01:10\n LS1804\n Lanzarote(ACE)\n B738\nG-JZBO\nJet2\n\n\nScheduled\n 03:05\n BY383\n Antalya(AYT)\n B38M\nG-TUML\nTUI\n\n\nScheduled\n 03:35\n BY649\n Sharm el-Sheikh(SSH)\n B38M\nG-TUMC\nTUI\n\n\nScheduled\n 06:55\n FR1362\n Venice(VCE)\n 73H\nRyanair\n\n\nScheduled\n 07:10\n FR3160\n Barcelona(BCN)\n 73H\nRyanair\n\n\nScheduled\n 07:25\n FR504\n Dublin(DUB)\n 73H\nRyanair\n\n\nScheduled\n 07:44\n Dublin(DUB)\n AT76\nEI-FAV\nAer Lingus Regional\n\n\nScheduled\n 07:55\n EI3280\n Dublin(DUB)\n AT7\nAer Lingus\n\n\nScheduled\n 08:05\n U27367\n Palma de Mallorca(PMI)\n A319\nOE-LQL\neasyJet\n\n\nScheduled\n 08:25\n KL1075\n Amsterdam(AMS)\n E75L\nPH-EXX\nKLM\n\n\nScheduled\n 08:45\n U27507\n Faro(FAO)\n A319\nOE-LKX\neasyJet\n\n\nScheduled\n 09:00\n U25527\n Alicante(ALC)\n A319\nOE-LQB\neasyJet\n\n\nScheduled\n 09:30\n XQ584\n Antalya(AYT)\n A320\nLY-NVM\nSunExpress\n\n\nScheduled\n 09:35\n U2224\n Belfast(BFS)\n A20N\nG-UZHK\neasyJet\n\n\nScheduled\n 09:50\n FR8203\n Knock(NOC)\n 7M8\nRyanair\n\n\nScheduled\n 10:15\n U2214\n Edinburgh(EDI)\n A20N\nG-UZHE\neasyJet (NEO Livery)\n\n\nScheduled\n 10:15\n U2238\n Newcastle(NCL)\n A320\nG-EZUC\neasyJet\n\n\nScheduled\n 10:45\n LS1830\n Girona(GRO)\n 73H\nJet2\n\n\nScheduled\n 10:50\n U2208\n Glasgow(GLA)\n A20N\nG-UZHH\neasyJet\n\n\nScheduled\n 10:55\n U22896\n Zurich(ZRH)\n A20N\nG-UZLZ\neasyJet\n\n\nScheduled\n 11:00\n PC1196\n Istanbul(SAW)\n 321\nPegasus\n\n\nScheduled\n 11:10\n FR8255\n Gdansk(GDN)\n 73H\nRyanair\n\n\nScheduled\n 11:20\n BY6673\n Reus(REU)\n B38M\nG-TUML\nTUI\n\n\nScheduled\n 11:30\n U22748\n Ibiza(IBZ)\n A320\nG-EZUI\neasyJet\n\n\nScheduled\n 11:32\n Cork(ORK)\n AT76\nEI-FAV\nAer Lingus Regional\n\n\nScheduled\n 11:45\n LS1860\n Mahon(MAH)\n 73H\nJet2\n\n\nScheduled\n 11:45\n BY6681\n Mahon(MAH)\n B38M\nG-TUMN\nTUI\n\n\nScheduled\n 11:45\n U22722\n Alicante(ALC)\n A320\nG-EZUK\neasyJet\n\n\nScheduled\n 11:50\n EI3840\n Cork(ORK)\n AT7\nAer Lingus\n\n\nScheduled\n 11:50\n U22766\n Nice(NCE)\n 320\neasyJet\n\n\nScheduled\n 12:05\n U2105\n Belfast(BFS)\n A319\nG-EZGE\neasyJet\n\n\nScheduled\n 12:10\n U22842\n Olbia(OLB)\n 320\neasyJet\n\n\nScheduled\n 12:15\n LS1822\n Faro(FAO)\n 73H\nJet2\n\n\nScheduled\n 12:20\n U22704\n Barcelona(BCN)\n A20N\nG-UZEG\neasyJet\n\n\nScheduled\n 12:20\n U22714\n Malaga(AGP)\n 321\neasyJet\n\n\nScheduled\n 12:30\n U22718\n Almeria(LEI)\n 320\neasyJet\n\n\nScheduled\n 12:35\n U22838\n Rome(FCO)\n A21N\nG-UZMI\neasyJet\n\n\nScheduled\n 12:45\n FR1332\n Porto(OPO)\n 73H\nRyanair\n\n\nScheduled\n 12:50\n U25531\n Amsterdam(AMS)\n A319\nOE-LQB\neasyJet\n\n\nScheduled\n 13:05\n LS1806\n Alicante(ALC)\n 73H\nJet2\n\n\nScheduled\n 13:05\n LS1872\n Palma de Mallorca(PMI)\n 73H\nJet2\n\n\nScheduled\n 13:10\n KL1079\n Amsterdam(AMS)\n E7W\nKLM\n\n\nScheduled\n 13:10\n LS1808\n Malaga(AGP)\n B738\nG-JZBO\nJet2\n\n\nScheduled\n 13:30\n U22746\n Mahon(MAH)\n 320\neasyJet\n\n\nScheduled\n 13:35\n FR4130\n Sofia(SOF)\n 7M8\nRyanair\n\n\nScheduled\n 13:40\n U22774\n Paris(CDG)\n 320\neasyJet\n\n\nScheduled\n 13:50\n BY6661\n Palma de Mallorca(PMI)\n 737\nTUI Airways\n\n\nScheduled\n 14:05\n U2216\n Edinburgh(EDI)\n 320\neasyJet\n\n\nScheduled\n 14:13\n Riga(RIX)\n E35L\n9H-WFC\nAirX\n\n\nScheduled\n 14:55\n FR8225\n Rzeszow(RZE)\n 7M8\nRyanair\n\n\nScheduled\n 15:20\n LS1828\n Fuerteventura(FUE)\n 73H\nJet2\n\n\nScheduled\n 15:45\n U22720\n Fuerteventura(FUE)\n 320\neasyJet\n\n\nScheduled\n 15:45\n U22734\n Lanzarote(ACE)\n 320\neasyJet\n\n\nScheduled\n 15:45\n U27003\n Malaga(AGP)\n 319\neasyJet\n\n\nScheduled\n 15:50\n FR508\n Dublin(DUB)\n 73H\nRyanair\n\n\nScheduled\n 15:55\n FR6220\n Krakow(KRK)\n 7M8\nRyanair\n\n\nScheduled\n 16:05\n U22814\n Heraklion(HER)\n 320\neasyJet\n\n\nScheduled\n 16:40\n XQ540\n Antalya(AYT)\n 73H\nSunExpress\n\n\nScheduled\n 16:45\n LS1880\n Reus(REU)\n 73H\nJet2\n\n\nScheduled\n 16:50\n FR3559\n Milan(BGY)\n 73H\nRyanair\n\n\nScheduled\n 16:50\n U22938\n Krakow(KRK)\n 320\neasyJet\n\n\nScheduled\n 16:55\n KL1081\n Amsterdam(AMS)\n E7W\nKLM\n\n\nScheduled\n 17:40\n LS1892\n Tenerife(TFS)\n 73H\nJet2\n\n\nScheduled\n 17:40\n U22904\n Larnaca(LCA)\n 320\neasyJet\n\n\nScheduled\n 17:55\n FR8682\n Kaunas(KUN)\n 73H\nRyanair\n\n\nScheduled\n 18:25\n FR5342\n Bucharest(OTP)\n 73H\nRyanair\n\n\nScheduled\n 18:55\n U22868\n Lisbon(LIS)\n 320\neasyJet\n\nLoad later flights\n* All times are in UTC timezone\nArrival delay statistics\n1.0\nArrival delay index\n5\nMIN\nAverage arrival delay\n0%\nDelayed arrivals\n13%\nCanceled arrivals\nDecreasing\nArrivals delay trend\n Disclaimer: The information provided on this page is a compilation of data from many different sources including flight scheduling systems, airline booking systems, airports, airlines and other third-party data providers. The data is provided as is, there are no guarantees that the information is fully correct or up to date. Changes and errors may occur. Therefore Flightradar24 cannot be held liable either for the accuracy of the information or for ensuring that the information is up to date at all times. Some of the flights presented may be charter, cargo, ambulance or other types of flights not available for passenger travel."
+  },
+  {
+    "kind": "card",
+    "text": "Arrivals\nLoad earlier flights\n\nEstimated 21:35\n 21:30\n U22848\n Milan(MXP)\n A320\nG-EZUC\neasyJet\n\n\nLanded 21:23\n 21:35\n X36533\n Zakynthos(ZTH)\n B738\nG-TAWH\nTUI\n\n\nScheduled\n 21:40\n FR513\n Dublin(DUB)\n B38M\nEI-IJP\nRyanair\n\n\nEstimated 21:45\n 21:40\n U22860\n Istanbul(IST)\n A20N\nG-UZLD\neasyJet\n\n\nDelayed 22:05\n 21:45\n FR1667\n Fuerteventura(FUE)\n B38M\nSP-RZT\nRyanair\n\n\nEstimated 21:39\n 21:45\n U2246\n Inverness(INV)\n A20N\nG-UZHK\neasyJet\n\n\nEstimated 21:37\n 21:45\n U22924\n Amsterdam(AMS)\n A20N\nG-UZEG\neasyJet\n\n\nScheduled\n 21:50\n U2216\n Edinburgh(EDI)\n A320\nG-EZUI\neasyJet\n\n\nDelayed 22:18\n 21:55\n U22776\n Paris(CDG)\n A320\nG-EZTH\neasyJet\n\n\nEstimated 22:02\n 22:10\n KL1083\n Amsterdam(AMS)\n E75L\nPH-EXS\nKLM\n\n\nEstimated 22:19\n 22:10\n U22812\n Corfu(CFU)\n A320\nG-EZTC\neasyJet\n\n\nScheduled\n 22:20\n U2240\n Newcastle(NCL)\n A20N\nG-UZHE\neasyJet (NEO Livery)\n\n\nEstimated 22:15\n 22:20\n U22706\n Barcelona(BCN)\n A320\nG-EZTZ\neasyJet\n\n\nScheduled\n 22:23\n Edinburgh(EDI)\n A20N\nG-UZHU\neasyJet\n\n\nEstimated 22:06\n 22:25\n U2208\n Glasgow(GLA)\n A320\nG-EZUK\neasyJet\n\n\nScheduled\n 22:25\n U2228\n Belfast(BFS)\n A320\nG-EZUA\neasyJet\n\n\nEstimated 22:28\n 22:25\n U22852\n Dalaman(DLM)\n A320\nG-EZOF\neasyJet\n\n\nScheduled\n 22:27\n Edinburgh(EDI)\n A20N\nG-UZHU\neasyJet\n\n\nEstimated 22:15\n 22:30\n U2220\n Edinburgh(EDI)\n A320\nG-EZTL\neasyJet\n\n\nDelayed 23:42\n 22:45\n LS1832\n Heraklion(HER)\n B738\nG-DRTX\nJet2\n\n\nEstimated 22:41\n 22:45\n U22874\n Faro(FAO)\n A20N\nG-UZHH\neasyJet\n\n\nEstimated 23:02\n 23:10\n LS1900\n Palma de Mallorca(PMI)\n B738\nG-JZBW\nJet2\n\n\nEstimated 23:10\n 23:10\n LS3424\n Larnaca(LCA)\n B738\nG-JZBC\nJet2\n\n\nEstimated 23:15\n 23:10\n U22732\n Tenerife(TFS)\n A21N\nG-UZMI\neasyJet\n\n\nEstimated 23:25\n 23:20\n LS1850\n Dalaman(DLM)\n B738\nG-DRTP\nJet2\n\n\nDelayed 00:06\n 23:25\n LS1846\n Antalya(AYT)\n B738\nG-JZBV\nJet2\n\n\nEstimated 23:19\n 23:25\n LS1882\n Rhodes(RHO)\n B738\nG-JZDH\nJet2\n\n\nEstimated 23:14\n 23:25\n X36505\n Ibiza(IBZ)\n B38M\nG-TUMG\nTUI\n\n\nEstimated 22:58\n 23:35\n FR4754\n Tenerife(TFS)\n B38M\n9H-VUT\nRyanair\n\n\nEstimated 23:32\n 23:45\n U22734\n Lanzarote(ACE)\n A20N\nG-UZHR\neasyJet\n\n\nScheduled\n 23:59\n FR9175\n Barcelona(BCN)\n B738\n9H-QCP\nRyanair\n\n\nEstimated 00:25\n 00:20\n U22916\n Hurghada(HRG)\n A20N\nG-UZLZ\neasyJet\n\n\nScheduled\n 00:55\n BY781\n Marrakesh(RAK)\n B38M\nG-TUMN\nTUI\n\n\nScheduled\n 01:10\n LS1804\n Lanzarote(ACE)\n B738\nG-JZBO\nJet2\n\n\nScheduled\n 03:05\n BY383\n Antalya(AYT)\n B38M\nG-TUML\nTUI\n\n\nScheduled\n 03:35\n BY649\n Sharm el-Sheikh(SSH)\n B38M\nG-TUMC\nTUI\n\n\nScheduled\n 06:55\n FR1362\n Venice(VCE)\n 73H\nRyanair\n\n\nScheduled\n 07:10\n FR3160\n Barcelona(BCN)\n 73H\nRyanair\n\n\nScheduled\n 07:25\n FR504\n Dublin(DUB)\n 73H\nRyanair\n\n\nScheduled\n 07:44\n Dublin(DUB)\n AT76\nEI-FAV\nAer Lingus Regional\n\n\nScheduled\n 07:55\n EI3280\n Dublin(DUB)\n AT7\nAer Lingus\n\n\nScheduled\n 08:05\n U27367\n Palma de Mallorca(PMI)\n A319\nOE-LQL\neasyJet\n\n\nScheduled\n 08:25\n KL1075\n Amsterdam(AMS)\n E75L\nPH-EXX\nKLM\n\n\nScheduled\n 08:45\n U27507\n Faro(FAO)\n A319\nOE-LKX\neasyJet\n\n\nScheduled\n 09:00\n U25527\n Alicante(ALC)\n A319\nOE-LQB\neasyJet\n\n\nScheduled\n 09:30\n XQ584\n Antalya(AYT)\n A320\nLY-NVM\nSunExpress\n\n\nScheduled\n 09:35\n U2224\n Belfast(BFS)\n A20N\nG-UZHK\neasyJet\n\n\nScheduled\n 09:50\n FR8203\n Knock(NOC)\n 7M8\nRyanair\n\n\nScheduled\n 10:15\n U2214\n Edinburgh(EDI)\n A20N\nG-UZHE\neasyJet (NEO Livery)\n\n\nScheduled\n 10:15\n U2238\n Newcastle(NCL)\n A320\nG-EZUC\neasyJet\n\n\nScheduled\n 10:45\n LS1830\n Girona(GRO)\n 73H\nJet2\n\n\nScheduled\n 10:50\n U2208\n Glasgow(GLA)\n A20N\nG-UZHH\neasyJet\n\n\nScheduled\n 10:55\n U22896\n Zurich(ZRH)\n A20N\nG-UZLZ\neasyJet\n\n\nScheduled\n 11:00\n PC1196\n Istanbul(SAW)\n 321\nPegasus\n\n\nScheduled\n 11:10\n FR8255\n Gdansk(GDN)\n 73H\nRyanair\n\n\nScheduled\n 11:20\n BY6673\n Reus(REU)\n B38M\nG-TUML\nTUI\n\n\nScheduled\n 11:30\n U22748\n Ibiza(IBZ)\n A320\nG-EZUI\neasyJet\n\n\nScheduled\n 11:32\n Cork(ORK)\n AT76\nEI-FAV\nAer Lingus Regional\n\n\nScheduled\n 11:45\n LS1860\n Mahon(MAH)\n 73H\nJet2\n\n\nScheduled\n 11:45\n BY6681\n Mahon(MAH)\n B38M\nG-TUMN\nTUI\n\n\nScheduled\n 11:45\n U22722\n Alicante(ALC)\n A320\nG-EZUK\neasyJet\n\n\nScheduled\n 11:50\n EI3840\n Cork(ORK)\n AT7\nAer Lingus\n\n\nScheduled\n 11:50\n U22766\n Nice(NCE)\n 320\neasyJet\n\n\nScheduled\n 12:05\n U2105\n Belfast(BFS)\n A319\nG-EZGE\neasyJet\n\n\nScheduled\n 12:10\n U22842\n Olbia(OLB)\n 320\neasyJet\n\n\nScheduled\n 12:15\n LS1822\n Faro(FAO)\n 73H\nJet2\n\n\nScheduled\n 12:20\n U22704\n Barcelona(BCN)\n A20N\nG-UZEG\neasyJet\n\n\nScheduled\n 12:20\n U22714\n Malaga(AGP)\n 321\neasyJet\n\n\nScheduled\n 12:30\n U22718\n Almeria(LEI)\n 320\neasyJet\n\n\nScheduled\n 12:35\n U22838\n Rome(FCO)\n A21N\nG-UZMI\neasyJet\n\n\nScheduled\n 12:45\n FR1332\n Porto(OPO)\n 73H\nRyanair\n\n\nScheduled\n 12:50\n U25531\n Amsterdam(AMS)\n A319\nOE-LQB\neasyJet\n\n\nScheduled\n 13:05\n LS1806\n Alicante(ALC)\n 73H\nJet2\n\n\nScheduled\n 13:05\n LS1872\n Palma de Mallorca(PMI)\n 73H\nJet2\n\n\nScheduled\n 13:10\n KL1079\n Amsterdam(AMS)\n E7W\nKLM\n\n\nScheduled\n 13:10\n LS1808\n Malaga(AGP)\n B738\nG-JZBO\nJet2\n\n\nScheduled\n 13:30\n U22746\n Mahon(MAH)\n 320\neasyJet\n\n\nScheduled\n 13:35\n FR4130\n Sofia(SOF)\n 7M8\nRyanair\n\n\nScheduled\n 13:40\n U22774\n Paris(CDG)\n 320\neasyJet\n\n\nScheduled\n 13:50\n BY6661\n Palma de Mallorca(PMI)\n 737\nTUI Airways\n\n\nScheduled\n 14:05\n U2216\n Edinburgh(EDI)\n 320\neasyJet\n\n\nScheduled\n 14:13\n Riga(RIX)\n E35L\n9H-WFC\nAirX\n\n\nScheduled\n 14:55\n FR8225\n Rzeszow(RZE)\n 7M8\nRyanair\n\n\nScheduled\n 15:20\n LS1828\n Fuerteventura(FUE)\n 73H\nJet2\n\n\nScheduled\n 15:45\n U22720\n Fuerteventura(FUE)\n 320\neasyJet\n\n\nScheduled\n 15:45\n U22734\n Lanzarote(ACE)\n 320\neasyJet\n\n\nScheduled\n 15:45\n U27003\n Malaga(AGP)\n 319\neasyJet\n\n\nScheduled\n 15:50\n FR508\n Dublin(DUB)\n 73H\nRyanair\n\n\nScheduled\n 15:55\n FR6220\n Krakow(KRK)\n 7M8\nRyanair\n\n\nScheduled\n 16:05\n U22814\n Heraklion(HER)\n 320\neasyJet\n\n\nScheduled\n 16:40\n XQ540\n Antalya(AYT)\n 73H\nSunExpress\n\n\nScheduled\n 16:45\n LS1880\n Reus(REU)\n 73H\nJet2\n\n\nScheduled\n 16:50\n FR3559\n Milan(BGY)\n 73H\nRyanair\n\n\nScheduled\n 16:50\n U22938\n Krakow(KRK)\n 320\neasyJet\n\n\nScheduled\n 16:55\n KL1081\n Amsterdam(AMS)\n E7W\nKLM\n\n\nScheduled\n 17:40\n LS1892\n Tenerife(TFS)\n 73H\nJet2\n\n\nScheduled\n 17:40\n U22904\n Larnaca(LCA)\n 320\neasyJet\n\n\nScheduled\n 17:55\n FR8682\n Kaunas(KUN)\n 73H\nRyanair\n\n\nScheduled\n 18:25\n FR5342\n Bucharest(OTP)\n 73H\nRyanair\n\n\nScheduled\n 18:55\n U22868\n Lisbon(LIS)\n 320\neasyJet\n\nLoad later flights\n* All times are in UTC timezone"
+  },
+  {
+    "kind": "card",
+    "text": "Estimated 21:35"
+  },
+  {
+    "kind": "card",
+    "text": " 21:30\n U22848\n Milan(MXP)"
+  },
+  {
+    "kind": "card",
+    "text": " A320\nG-EZUC\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Landed 21:23"
+  },
+  {
+    "kind": "card",
+    "text": " 21:35\n X36533\n Zakynthos(ZTH)"
+  },
+  {
+    "kind": "card",
+    "text": " B738\nG-TAWH\nTUI"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 21:40\n FR513\n Dublin(DUB)"
+  },
+  {
+    "kind": "card",
+    "text": " B38M\nEI-IJP\nRyanair"
+  },
+  {
+    "kind": "card",
+    "text": "Estimated 21:45"
+  },
+  {
+    "kind": "card",
+    "text": " 21:40\n U22860\n Istanbul(IST)"
+  },
+  {
+    "kind": "card",
+    "text": " A20N\nG-UZLD\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Delayed 22:05"
+  },
+  {
+    "kind": "card",
+    "text": " 21:45\n FR1667\n Fuerteventura(FUE)"
+  },
+  {
+    "kind": "card",
+    "text": " B38M\nSP-RZT\nRyanair"
+  },
+  {
+    "kind": "card",
+    "text": "Estimated 21:39"
+  },
+  {
+    "kind": "card",
+    "text": " 21:45\n U2246\n Inverness(INV)"
+  },
+  {
+    "kind": "card",
+    "text": " A20N\nG-UZHK\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Estimated 21:37"
+  },
+  {
+    "kind": "card",
+    "text": " 21:45\n U22924\n Amsterdam(AMS)"
+  },
+  {
+    "kind": "card",
+    "text": " A20N\nG-UZEG\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 21:50\n U2216\n Edinburgh(EDI)"
+  },
+  {
+    "kind": "card",
+    "text": " A320\nG-EZUI\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Delayed 22:18"
+  },
+  {
+    "kind": "card",
+    "text": " 21:55\n U22776\n Paris(CDG)"
+  },
+  {
+    "kind": "card",
+    "text": " A320\nG-EZTH\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Estimated 22:02"
+  },
+  {
+    "kind": "card",
+    "text": " 22:10\n KL1083\n Amsterdam(AMS)"
+  },
+  {
+    "kind": "card",
+    "text": " E75L\nPH-EXS\nKLM"
+  },
+  {
+    "kind": "card",
+    "text": "Estimated 22:19"
+  },
+  {
+    "kind": "card",
+    "text": " 22:10\n U22812\n Corfu(CFU)"
+  },
+  {
+    "kind": "card",
+    "text": " A320\nG-EZTC\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 22:20\n U2240\n Newcastle(NCL)"
+  },
+  {
+    "kind": "card",
+    "text": " A20N\nG-UZHE\neasyJet (NEO Livery)"
+  },
+  {
+    "kind": "card",
+    "text": "Estimated 22:15"
+  },
+  {
+    "kind": "card",
+    "text": " 22:20\n U22706\n Barcelona(BCN)"
+  },
+  {
+    "kind": "card",
+    "text": " A320\nG-EZTZ\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 22:23\n Edinburgh(EDI)"
+  },
+  {
+    "kind": "card",
+    "text": " A20N\nG-UZHU\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Estimated 22:06"
+  },
+  {
+    "kind": "card",
+    "text": " 22:25\n U2208\n Glasgow(GLA)"
+  },
+  {
+    "kind": "card",
+    "text": " A320\nG-EZUK\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 22:25\n U2228\n Belfast(BFS)"
+  },
+  {
+    "kind": "card",
+    "text": " A320\nG-EZUA\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Estimated 22:28"
+  },
+  {
+    "kind": "card",
+    "text": " 22:25\n U22852\n Dalaman(DLM)"
+  },
+  {
+    "kind": "card",
+    "text": " A320\nG-EZOF\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 22:27\n Edinburgh(EDI)"
+  },
+  {
+    "kind": "card",
+    "text": " A20N\nG-UZHU\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Estimated 22:15"
+  },
+  {
+    "kind": "card",
+    "text": " 22:30\n U2220\n Edinburgh(EDI)"
+  },
+  {
+    "kind": "card",
+    "text": " A320\nG-EZTL\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Delayed 23:42"
+  },
+  {
+    "kind": "card",
+    "text": " 22:45\n LS1832\n Heraklion(HER)"
+  },
+  {
+    "kind": "card",
+    "text": " B738\nG-DRTX\nJet2"
+  },
+  {
+    "kind": "card",
+    "text": "Estimated 22:41"
+  },
+  {
+    "kind": "card",
+    "text": " 22:45\n U22874\n Faro(FAO)"
+  },
+  {
+    "kind": "card",
+    "text": " A20N\nG-UZHH\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Estimated 23:02"
+  },
+  {
+    "kind": "card",
+    "text": " 23:10\n LS1900\n Palma de Mallorca(PMI)"
+  },
+  {
+    "kind": "card",
+    "text": " B738\nG-JZBW\nJet2"
+  },
+  {
+    "kind": "card",
+    "text": "Estimated 23:10"
+  },
+  {
+    "kind": "card",
+    "text": " 23:10\n LS3424\n Larnaca(LCA)"
+  },
+  {
+    "kind": "card",
+    "text": " B738\nG-JZBC\nJet2"
+  },
+  {
+    "kind": "card",
+    "text": "Estimated 23:15"
+  },
+  {
+    "kind": "card",
+    "text": " 23:10\n U22732\n Tenerife(TFS)"
+  },
+  {
+    "kind": "card",
+    "text": " A21N\nG-UZMI\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Estimated 23:25"
+  },
+  {
+    "kind": "card",
+    "text": " 23:20\n LS1850\n Dalaman(DLM)"
+  },
+  {
+    "kind": "card",
+    "text": " B738\nG-DRTP\nJet2"
+  },
+  {
+    "kind": "card",
+    "text": "Delayed 00:06"
+  },
+  {
+    "kind": "card",
+    "text": " 23:25\n LS1846\n Antalya(AYT)"
+  },
+  {
+    "kind": "card",
+    "text": " B738\nG-JZBV\nJet2"
+  },
+  {
+    "kind": "card",
+    "text": "Estimated 23:19"
+  },
+  {
+    "kind": "card",
+    "text": " 23:25\n LS1882\n Rhodes(RHO)"
+  },
+  {
+    "kind": "card",
+    "text": " B738\nG-JZDH\nJet2"
+  },
+  {
+    "kind": "card",
+    "text": "Estimated 23:14"
+  },
+  {
+    "kind": "card",
+    "text": " 23:25\n X36505\n Ibiza(IBZ)"
+  },
+  {
+    "kind": "card",
+    "text": " B38M\nG-TUMG\nTUI"
+  },
+  {
+    "kind": "card",
+    "text": "Estimated 22:58"
+  },
+  {
+    "kind": "card",
+    "text": " 23:35\n FR4754\n Tenerife(TFS)"
+  },
+  {
+    "kind": "card",
+    "text": " B38M\n9H-VUT\nRyanair"
+  },
+  {
+    "kind": "card",
+    "text": "Estimated 23:32"
+  },
+  {
+    "kind": "card",
+    "text": " 23:45\n U22734\n Lanzarote(ACE)"
+  },
+  {
+    "kind": "card",
+    "text": " A20N\nG-UZHR\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 23:59\n FR9175\n Barcelona(BCN)"
+  },
+  {
+    "kind": "card",
+    "text": " B738\n9H-QCP\nRyanair"
+  },
+  {
+    "kind": "card",
+    "text": "Estimated 00:25"
+  },
+  {
+    "kind": "card",
+    "text": " 00:20\n U22916\n Hurghada(HRG)"
+  },
+  {
+    "kind": "card",
+    "text": " A20N\nG-UZLZ\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 00:55\n BY781\n Marrakesh(RAK)"
+  },
+  {
+    "kind": "card",
+    "text": " B38M\nG-TUMN\nTUI"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 01:10\n LS1804\n Lanzarote(ACE)"
+  },
+  {
+    "kind": "card",
+    "text": " B738\nG-JZBO\nJet2"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 03:05\n BY383\n Antalya(AYT)"
+  },
+  {
+    "kind": "card",
+    "text": " B38M\nG-TUML\nTUI"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 03:35\n BY649\n Sharm el-Sheikh(SSH)"
+  },
+  {
+    "kind": "card",
+    "text": " B38M\nG-TUMC\nTUI"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 06:55\n FR1362\n Venice(VCE)"
+  },
+  {
+    "kind": "card",
+    "text": " 73H\nRyanair"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 07:10\n FR3160\n Barcelona(BCN)"
+  },
+  {
+    "kind": "card",
+    "text": " 73H\nRyanair"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 07:25\n FR504\n Dublin(DUB)"
+  },
+  {
+    "kind": "card",
+    "text": " 73H\nRyanair"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 07:44\n Dublin(DUB)"
+  },
+  {
+    "kind": "card",
+    "text": " AT76\nEI-FAV\nAer Lingus Regional"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 07:55\n EI3280\n Dublin(DUB)"
+  },
+  {
+    "kind": "card",
+    "text": " AT7\nAer Lingus"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 08:05\n U27367\n Palma de Mallorca(PMI)"
+  },
+  {
+    "kind": "card",
+    "text": " A319\nOE-LQL\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 08:25\n KL1075\n Amsterdam(AMS)"
+  },
+  {
+    "kind": "card",
+    "text": " E75L\nPH-EXX\nKLM"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 08:45\n U27507\n Faro(FAO)"
+  },
+  {
+    "kind": "card",
+    "text": " A319\nOE-LKX\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 09:00\n U25527\n Alicante(ALC)"
+  },
+  {
+    "kind": "card",
+    "text": " A319\nOE-LQB\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 09:30\n XQ584\n Antalya(AYT)"
+  },
+  {
+    "kind": "card",
+    "text": " A320\nLY-NVM\nSunExpress"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 09:35\n U2224\n Belfast(BFS)"
+  },
+  {
+    "kind": "card",
+    "text": " A20N\nG-UZHK\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 09:50\n FR8203\n Knock(NOC)"
+  },
+  {
+    "kind": "card",
+    "text": " 7M8\nRyanair"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 10:15\n U2214\n Edinburgh(EDI)"
+  },
+  {
+    "kind": "card",
+    "text": " A20N\nG-UZHE\neasyJet (NEO Livery)"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 10:15\n U2238\n Newcastle(NCL)"
+  },
+  {
+    "kind": "card",
+    "text": " A320\nG-EZUC\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 10:45\n LS1830\n Girona(GRO)"
+  },
+  {
+    "kind": "card",
+    "text": " 73H\nJet2"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 10:50\n U2208\n Glasgow(GLA)"
+  },
+  {
+    "kind": "card",
+    "text": " A20N\nG-UZHH\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 10:55\n U22896\n Zurich(ZRH)"
+  },
+  {
+    "kind": "card",
+    "text": " A20N\nG-UZLZ\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 11:00\n PC1196\n Istanbul(SAW)"
+  },
+  {
+    "kind": "card",
+    "text": " 321\nPegasus"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 11:10\n FR8255\n Gdansk(GDN)"
+  },
+  {
+    "kind": "card",
+    "text": " 73H\nRyanair"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 11:20\n BY6673\n Reus(REU)"
+  },
+  {
+    "kind": "card",
+    "text": " B38M\nG-TUML\nTUI"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 11:30\n U22748\n Ibiza(IBZ)"
+  },
+  {
+    "kind": "card",
+    "text": " A320\nG-EZUI\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 11:32\n Cork(ORK)"
+  },
+  {
+    "kind": "card",
+    "text": " AT76\nEI-FAV\nAer Lingus Regional"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 11:45\n LS1860\n Mahon(MAH)"
+  },
+  {
+    "kind": "card",
+    "text": " 73H\nJet2"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 11:45\n BY6681\n Mahon(MAH)"
+  },
+  {
+    "kind": "card",
+    "text": " B38M\nG-TUMN\nTUI"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 11:45\n U22722\n Alicante(ALC)"
+  },
+  {
+    "kind": "card",
+    "text": " A320\nG-EZUK\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 11:50\n EI3840\n Cork(ORK)"
+  },
+  {
+    "kind": "card",
+    "text": " AT7\nAer Lingus"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 11:50\n U22766\n Nice(NCE)"
+  },
+  {
+    "kind": "card",
+    "text": " 320\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 12:05\n U2105\n Belfast(BFS)"
+  },
+  {
+    "kind": "card",
+    "text": " A319\nG-EZGE\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 12:10\n U22842\n Olbia(OLB)"
+  },
+  {
+    "kind": "card",
+    "text": " 320\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 12:15\n LS1822\n Faro(FAO)"
+  },
+  {
+    "kind": "card",
+    "text": " 73H\nJet2"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 12:20\n U22704\n Barcelona(BCN)"
+  },
+  {
+    "kind": "card",
+    "text": " A20N\nG-UZEG\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 12:20\n U22714\n Malaga(AGP)"
+  },
+  {
+    "kind": "card",
+    "text": " 321\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 12:30\n U22718\n Almeria(LEI)"
+  },
+  {
+    "kind": "card",
+    "text": " 320\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 12:35\n U22838\n Rome(FCO)"
+  },
+  {
+    "kind": "card",
+    "text": " A21N\nG-UZMI\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 12:45\n FR1332\n Porto(OPO)"
+  },
+  {
+    "kind": "card",
+    "text": " 73H\nRyanair"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 12:50\n U25531\n Amsterdam(AMS)"
+  },
+  {
+    "kind": "card",
+    "text": " A319\nOE-LQB\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 13:05\n LS1806\n Alicante(ALC)"
+  },
+  {
+    "kind": "card",
+    "text": " 73H\nJet2"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 13:05\n LS1872\n Palma de Mallorca(PMI)"
+  },
+  {
+    "kind": "card",
+    "text": " 73H\nJet2"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 13:10\n KL1079\n Amsterdam(AMS)"
+  },
+  {
+    "kind": "card",
+    "text": " E7W\nKLM"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 13:10\n LS1808\n Malaga(AGP)"
+  },
+  {
+    "kind": "card",
+    "text": " B738\nG-JZBO\nJet2"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 13:30\n U22746\n Mahon(MAH)"
+  },
+  {
+    "kind": "card",
+    "text": " 320\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 13:35\n FR4130\n Sofia(SOF)"
+  },
+  {
+    "kind": "card",
+    "text": " 7M8\nRyanair"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 13:40\n U22774\n Paris(CDG)"
+  },
+  {
+    "kind": "card",
+    "text": " 320\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 13:50\n BY6661\n Palma de Mallorca(PMI)"
+  },
+  {
+    "kind": "card",
+    "text": " 737\nTUI Airways"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 14:05\n U2216\n Edinburgh(EDI)"
+  },
+  {
+    "kind": "card",
+    "text": " 320\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 14:13\n Riga(RIX)"
+  },
+  {
+    "kind": "card",
+    "text": " E35L\n9H-WFC\nAirX"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 14:55\n FR8225\n Rzeszow(RZE)"
+  },
+  {
+    "kind": "card",
+    "text": " 7M8\nRyanair"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 15:20\n LS1828\n Fuerteventura(FUE)"
+  },
+  {
+    "kind": "card",
+    "text": " 73H\nJet2"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 15:45\n U22720\n Fuerteventura(FUE)"
+  },
+  {
+    "kind": "card",
+    "text": " 320\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 15:45\n U22734\n Lanzarote(ACE)"
+  },
+  {
+    "kind": "card",
+    "text": " 320\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 15:45\n U27003\n Malaga(AGP)"
+  },
+  {
+    "kind": "card",
+    "text": " 319\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 15:50\n FR508\n Dublin(DUB)"
+  },
+  {
+    "kind": "card",
+    "text": " 73H\nRyanair"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 15:55\n FR6220\n Krakow(KRK)"
+  },
+  {
+    "kind": "card",
+    "text": " 7M8\nRyanair"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 16:05\n U22814\n Heraklion(HER)"
+  },
+  {
+    "kind": "card",
+    "text": " 320\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 16:40\n XQ540\n Antalya(AYT)"
+  },
+  {
+    "kind": "card",
+    "text": " 73H\nSunExpress"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 16:45\n LS1880\n Reus(REU)"
+  },
+  {
+    "kind": "card",
+    "text": " 73H\nJet2"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 16:50\n FR3559\n Milan(BGY)"
+  },
+  {
+    "kind": "card",
+    "text": " 73H\nRyanair"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 16:50\n U22938\n Krakow(KRK)"
+  },
+  {
+    "kind": "card",
+    "text": " 320\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 16:55\n KL1081\n Amsterdam(AMS)"
+  },
+  {
+    "kind": "card",
+    "text": " E7W\nKLM"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 17:40\n LS1892\n Tenerife(TFS)"
+  },
+  {
+    "kind": "card",
+    "text": " 73H\nJet2"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 17:40\n U22904\n Larnaca(LCA)"
+  },
+  {
+    "kind": "card",
+    "text": " 320\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 17:55\n FR8682\n Kaunas(KUN)"
+  },
+  {
+    "kind": "card",
+    "text": " 73H\nRyanair"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 18:25\n FR5342\n Bucharest(OTP)"
+  },
+  {
+    "kind": "card",
+    "text": " 73H\nRyanair"
+  },
+  {
+    "kind": "card",
+    "text": "Scheduled"
+  },
+  {
+    "kind": "card",
+    "text": " 18:55\n U22868\n Lisbon(LIS)"
+  },
+  {
+    "kind": "card",
+    "text": " 320\neasyJet"
+  },
+  {
+    "kind": "card",
+    "text": "Arrival delay statistics\n1.0\nArrival delay index\n5\nMIN\nAverage arrival delay\n0%\nDelayed arrivals\n13%\nCanceled arrivals\nDecreasing\nArrivals delay trend"
+  },
+  {
+    "kind": "card",
+    "text": "1.0\nArrival delay index\n5\nMIN\nAverage arrival delay\n0%\nDelayed arrivals\n13%\nCanceled arrivals\nDecreasing\nArrivals delay trend"
+  },
+  {
+    "kind": "card",
+    "text": " Disclaimer: The information provided on this page is a compilation of data from many different sources including flight scheduling systems, airline booking systems, airports, airlines and other third-party data providers. The data is provided as is, there are no guarantees that the information is fully correct or up to date. Changes and errors may occur. Therefore Flightradar24 cannot be held liable either for the accuracy of the information or for ensuring that the information is up to date at all times. Some of the flights presented may be charter, cargo, ambulance or other types of flights not available for passenger travel."
+  }
+]
