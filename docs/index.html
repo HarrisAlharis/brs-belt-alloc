@@ -19,9 +19,6 @@
       --orange-bg: #3e2a13;
       --red: #ffb3b8;
       --red-bg: #3d151a;
-      --chip-bg: rgba(19,22,30,.6);
-      --chip-border: rgba(255,255,255,.12);
-      --chip-active: rgba(37,66,99,.55);
     }
     * { box-sizing: border-box; }
     body {
@@ -31,10 +28,10 @@
       font: 14px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial;
     }
     header {
-      padding: 14px 16px 6px;
+      padding: 14px 16px;
       border-bottom: 1px solid var(--grid);
-      display: grid;
-      grid-template-columns: 1fr auto;
+      display: flex;
+      justify-content: space-between;
       align-items: baseline;
       gap: 1rem;
     }
@@ -48,30 +45,9 @@
       font-size: 12px;
       white-space: nowrap;
     }
-    .filters {
-      padding: 8px 14px 4px;
-      display: flex;
-      gap: .5rem;
-      flex-wrap: wrap;
+    .wrap {
+      padding: 10px 14px 26px;
     }
-    .chip {
-      display: inline-flex;
-      align-items: center;
-      gap: .5rem;
-      padding: .35rem .7rem;
-      border-radius: 999px;
-      background: var(--chip-bg);
-      border: 1px solid var(--chip-border);
-      color: var(--ink);
-      font-size: 12.5px;
-      cursor: pointer;
-      user-select: none;
-      transition: background .15s ease, border-color .15s ease;
-    }
-    .chip.active { background: var(--chip-active); border-color: rgba(168,216,255,.35); }
-    .chip .count { color: var(--muted); font-variant-numeric: tabular-nums; }
-
-    .wrap { padding: 10px 14px 26px; }
     table {
       width: 100%;
       border-collapse: collapse;
@@ -99,22 +75,35 @@
       font-size: 13.5px;
     }
     tbody tr:last-child td { border-bottom: 0; }
-    .col-flight { width: 9.5ch; font-weight: 600; position: relative; }
-    .col-origin { width: 22ch; }
+    .col-flight { width: 8.5ch; font-weight: 600; }
+    .col-origin { width: 19ch; }
     .col-time { width: 16ch; }
-    .col-status { width: 12ch; }
-    .col-flow { width: 10ch; }
+    .col-status { width: 10ch; }
+    .col-flow { width: 9ch; }
     .col-belt { width: 6ch; }
     .col-start, .col-end { width: 7ch; font-variant-numeric: tabular-nums; }
-
-    .origin-code { font-weight: 700; display: block; }
-    .origin-name { font-size: 12px; color: var(--muted); display: block; max-width: 18ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
-    .time { display: flex; gap: .35rem; align-items: center; font-variant-numeric: tabular-nums; }
+    .origin-code {
+      font-weight: 600;
+      display: block;
+    }
+    .origin-name {
+      font-size: 12px;
+      color: var(--muted);
+      display: block;
+      max-width: 16ch;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .time {
+      display: flex;
+      gap: .35rem;
+      align-items: center;
+      font-variant-numeric: tabular-nums;
+    }
     .time-sched { opacity: .6; }
     .time-arrow { opacity: .45; }
     .time-eta { font-weight: 600; }
-
     .pill {
       display: inline-flex;
       align-items: center;
@@ -131,41 +120,30 @@
     .pill-red   { background: var(--red-bg);   color: var(--red);   border-color: rgba(255,179,184,.4); }
     .pill-flow  { background: rgba(16,25,50,.6); color: #dfe7ff; }
     .pill-belt  { background: rgba(19,22,30,.3); color: #e7edf5; }
-
+    /* NEW — status colours */
+    .pill-gold { background: #3b2f0a; color: #ffd34d; border-color: rgba(255,211,77,.45); }
+    .pill-grey { background: rgba(160,170,185,.12); color: #b8c2d1; border-color: rgba(184,194,209,.35); }
     tfoot td {
       color: var(--muted);
       font-size: 12px;
       padding: 6px 10px;
       text-align: right;
     }
-    .empty { text-align: center; padding: 12px !important; color: var(--muted); font-size: 13px; }
-    .error { color: #ffb3b8; background: rgba(61,21,26,.4); border: 1px solid rgba(255,179,184,.4); }
-
-    /* Tooltip */
-    .tooltip {
-      position: absolute;
-      z-index: 5;
-      top: 100%;
-      left: 0;
-      margin-top: 6px;
-      background: rgba(12,18,26,.95);
-      border: 1px solid rgba(255,255,255,.08);
-      padding: 8px 10px;
-      border-radius: 8px;
-      box-shadow: 0 6px 20px rgba(0,0,0,.35);
-      font-size: 12.5px;
-      color: var(--ink);
-      min-width: 240px;
-      display: none;
+    .empty {
+      text-align: center;
+      padding: 12px !important;
+      color: var(--muted);
+      font-size: 13px;
     }
-    .tooltip .label { color: var(--muted); width: 84px; display: inline-block; }
-    .col-flight:hover .tooltip { display: block; }
-
+    .error {
+      color: #ffb3b8;
+      background: rgba(61,21,26,.4);
+      border: 1px solid rgba(255,179,184,.4);
+    }
     @media (max-width: 980px) {
       .col-reason { display: none; }
       .col-start, .col-end { display: none; }
-      header { grid-template-columns: 1fr; }
-      .filters { padding-top: 6px; }
+      header { flex-wrap: wrap; }
     }
   </style>
 </head>
@@ -174,14 +152,6 @@
     <h1>BRS – Arrivals Belt Plan</h1>
     <div class="meta" id="meta">Loading…</div>
   </header>
-
-  <div class="filters">
-    <div class="chip active" data-filter="early" id="chip-early">Early &gt;5m <span class="count" id="count-early"></span></div>
-    <div class="chip active" data-filter="on_time" id="chip-ontime">Estimated / On-time <span class="count" id="count-ontime"></span></div>
-    <div class="chip active" data-filter="delayed" id="chip-delayed">Delayed <span class="count" id="count-delayed"></span></div>
-    <div class="chip active" data-filter="scheduled" id="chip-scheduled">Scheduled only <span class="count" id="count-scheduled"></span></div>
-  </div>
-
   <div class="wrap">
     <table>
       <thead>
@@ -202,48 +172,25 @@
       </tbody>
       <tfoot>
         <tr>
-          <td colspan="9">Source: FR24 (screen-scrape) • Allocated 15+30 mins per belt. CTA →6 / Domestic →7 / Heavy →5.</td>
+          <td colspan="9">Source: FR24 (screen-scrape) • This view refreshes when JSON updates.</td>
         </tr>
       </tfoot>
     </table>
   </div>
-
   <script>
     (async function () {
-      const meta  = document.querySelector('#meta');
+      const meta = document.querySelector('#meta');
       const tbody = document.querySelector('#tbody');
 
-      // ---- Utilities ----
-      function pad(n){ return String(n).padStart(2,'0'); }
-      function hhmm(iso){
-        if(!iso) return '';
-        const d = new Date(iso);
-        return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
-      }
-      function escapeHtml(s){
-        const map = {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'};
-        return String(s ?? '').replace(/[&<>"']/g, c => map[c]);
-      }
-      function cleanOriginName(name){
-        if (!name) return '';
-        return String(name).replace(/\s*\([A-Za-z0-9]{2,5}\)\s*/,'').trim();
-      }
+      const candidates = [
+        'assignments.json',
+        './assignments.json',
+        '/brs-belt-alloc/assignments.json'
+      ];
 
-      // Button state: all ON initially. If any chip is toggled off, it filters.
-      const active = new Set(['early','on_time','delayed','scheduled']);
-      const chipEls = [...document.querySelectorAll('.chip')];
-      chipEls.forEach(ch => {
-        ch.addEventListener('click', () => {
-          const key = ch.dataset.filter;
-          if (active.has(key)) { active.delete(key); ch.classList.remove('active'); }
-          else { active.add(key); ch.classList.add('active'); }
-          render();
-        });
-      });
+      let data = null;
+      let lastError = null;
 
-      // ---- Fetch data ----
-      const candidates = ['assignments.json','./assignments.json','/brs-belt-alloc/assignments.json'];
-      let data = null, lastError = null;
       for (const url of candidates) {
         try {
           const res = await fetch(url + '?v=' + Date.now(), { cache: 'no-store' });
@@ -251,78 +198,54 @@
           const text = await res.text();
           data = JSON.parse(text);
           break;
-        } catch (err) { lastError = err; }
+        } catch (err) {
+          lastError = err;
+        }
       }
+
       if (!data) {
-        tbody.innerHTML = `<tr><td colspan="9" class="empty error">Could not load <code>assignments.json</code>. ${lastError ? escapeHtml(lastError.message) : ''}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="9" class="empty error">Could not load <code>assignments.json</code> from GitHub Pages. ${lastError ? lastError.message : ''}</td></tr>`;
         meta.textContent = 'Load failed';
         return;
       }
 
-      const rowsRaw = Array.isArray(data.rows) ? data.rows : [];
+      const rows = Array.isArray(data.rows) ? data.rows : [];
       meta.textContent = `Generated ${data.generated_at_local || data.generated_at_utc || ''} • Horizon ${data.horizon_minutes || ''} min`;
 
-      // Normalize rows & compute categories
-      const rows = rowsRaw
-        .filter(r => r && (r.flight || '').trim() !== '')
-        .map(r => {
-          const delay = (typeof r.delay_min === 'number') ? r.delay_min : null;
-          const status = String(r.status || '').toLowerCase();
-          let cat = 'on_time';
-          if (status.startsWith('scheduled')) cat = 'scheduled';
-          if (delay !== null) {
-            if (delay <= -6) cat = 'early';
-            else if (delay >= 10) cat = 'delayed';
-            else if (Math.abs(delay) <= 5) cat = 'on_time';
-          }
-          return { ...r, _cat: cat };
-        });
-
-      // Counters on chips
-      function updateCounts(){
-        const c = {early:0,on_time:0,delayed:0,scheduled:0};
-        for (const r of rows) c[r._cat] = (c[r._cat]||0)+1;
-        document.getElementById('count-early').textContent     = ` (${c.early})`;
-        document.getElementById('count-ontime').textContent    = ` (${c.on_time})`;
-        document.getElementById('count-delayed').textContent   = ` (${c.delayed})`;
-        document.getElementById('count-scheduled').textContent = ` (${c.scheduled})`;
+      if (!rows.length) {
+        tbody.innerHTML = `<tr><td colspan="9" class="empty">No arrivals found (empty rows array).</td></tr>`;
+        return;
       }
 
-      function firstTime(r){
+      // sort by (start || eta) ascending
+      rows.sort((a, b) => {
+        const ta = firstTime(a);
+        const tb = firstTime(b);
+        return ta - tb;
+      });
+
+      tbody.innerHTML = rows.map(r => renderRow(r)).join('');
+
+      function firstTime(r) {
         const t = r.start || r.eta;
         return t ? new Date(t).getTime() : Number.MAX_SAFE_INTEGER;
       }
-
+      function pad(n){ return String(n).padStart(2,'0'); }
+      function hhmm(iso){
+        if(!iso) return '';
+        const d = new Date(iso);
+        return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+      }
+      function escapeHtml(s){
+        return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+      }
       function beltBadge(b){
-        const v = (b===undefined || b==="" || b===null) ? '—' : b;
+        const v = (b===undefined || b==="" || b===null) ? '?' : b;
         return `<span class="pill pill-belt">${v}</span>`;
       }
       function flowBadge(flow){
-        return `<span class="pill pill-flow">${escapeHtml((flow||'').toUpperCase())}</span>`;
+        return `<span class="pill pill-flow">${(flow||'').toUpperCase()}</span>`;
       }
-
-      function statusPill(r){
-        // colour rules:
-        //   early  <= -6  → blue
-        //   on-time ±5    → green
-        //   delayed 10–19 → orange
-        //   delayed ≥20   → red
-        const text = r?.status ? r.status : (r?.eta_local ? `Estimated ${r.eta_local}` : '—');
-        const d = (typeof r.delay_min === 'number') ? r.delay_min : null;
-        let cls = 'pill-green';
-        if (d !== null) {
-          if (d <= -6) cls = 'pill-blue';
-          else if (d >= 20) cls = 'pill-red';
-          else if (d >= 10) cls = 'pill-orange';
-          else cls = 'pill-green';
-        } else {
-          const s = String(text).toLowerCase();
-          if (s.includes('early')) cls = 'pill-blue';
-          else if (s.includes('delayed')) cls = 'pill-orange';
-        }
-        return `<span class="pill ${cls}">${escapeHtml(text)}</span>`;
-      }
-
       function timeCell(r){
         const etaLocal = r.eta_local || hhmm(r.eta);
         const schedLocal = r.scheduled_local || '';
@@ -336,32 +259,91 @@
         return `<div class="time"><span class="time-eta">${escapeHtml(etaLocal || '')}</span></div>`;
       }
 
-      function tooltipFor(r){
-        const items = [
-          ['Airline', r.airline || '—'],
-          ['Aircraft', r.aircraft || '—'],
-          ['PAX est.', (r.pax_estimate ?? '—')],
-          ['Reason', r.reason || '—'],
-          ['ETA ISO', r.eta || '—'],
-        ];
-        return `
-          <div class="tooltip">
-            ${items.map(([k,v]) => `<div><span class="label">${escapeHtml(k)}:</span> ${escapeHtml(String(v))}</div>`).join('')}
-          </div>
-        `;
+      // NEW: parse "HH:MM" as today in local time
+      function parseHHMMLocal(hhmm){
+        if(!hhmm) return null;
+        const [hh, mm] = hhmm.split(':').map(Number);
+        if (Number.isNaN(hh) || Number.isNaN(mm)) return null;
+        const now = new Date();
+        return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hh, mm, 0, 0);
+      }
+
+      // NEW: minutes from now until ETA (positive = in the future)
+      function minutesToEta(r){
+        if (!r || !r.eta) return null;
+        const now = new Date();
+        const eta = new Date(r.eta);
+        return Math.round((eta - now) / 60000);
+      }
+
+      // NEW: compute Δ minutes (ETA - Scheduled). Prefer delay_min if present.
+      function computeDeltaMin(r){
+        if (typeof r?.delay_min === 'number' && !Number.isNaN(r.delay_min)) return r.delay_min;
+
+        const schedDt = parseHHMMLocal(r?.scheduled_local);
+        let etaDt = null;
+
+        if (r?.eta_local) {
+          etaDt = parseHHMMLocal(r.eta_local);
+        } else if (r?.eta) {
+          etaDt = new Date(r.eta);
+        }
+
+        if (!schedDt || !etaDt) return null;
+        return Math.round((etaDt - schedDt) / 60000); // +ve = late, -ve = early
+      }
+
+      // REPLACED: status colour logic per agreed rules
+      function statusPill(r){
+        const text = r?.status ? r.status : (r?.eta_local ? `Estimated ${r.eta_local}` : '—');
+        const s = String(r?.status || '').toLowerCase();
+
+        // Landed → grey
+        if (s.includes('landed')) {
+          return `<span class="pill pill-grey">${escapeHtml(text)}</span>`;
+        }
+
+        // Approaching within 10 minutes → gold
+        const minsTo = minutesToEta(r);
+        if (minsTo !== null && minsTo >= 0 && minsTo <= 10) {
+          return `<span class="pill pill-gold">${escapeHtml(text)}</span>`;
+        }
+
+        // Scheduled with no ETA → grey
+        const hasEta = Boolean(r?.eta || (r?.eta_local && r.eta_local.trim()));
+        if (!hasEta && s.startsWith('scheduled')) {
+          return `<span class="pill pill-grey">${escapeHtml(text)}</span>`;
+        }
+
+        // Estimated: colour by |Δ|
+        const d = computeDeltaMin(r);
+        if (d === null) {
+          return `<span class="pill pill-grey">${escapeHtml(text)}</span>`;
+        }
+
+        const abs = Math.abs(d);
+        // Green: |Δ| ≤ 4
+        // Yellow: 5 ≤ |Δ| ≤ 15
+        // Red: |Δ| > 15
+        let cls = 'pill-green';
+        if (abs <= 4) {
+          cls = 'pill-green';
+        } else if (abs >= 5 && abs <= 15) {
+          cls = 'pill-orange';
+        } else if (abs > 15) {
+          cls = 'pill-red';
+        }
+
+        return `<span class="pill ${cls}">${escapeHtml(text)}</span>`;
       }
 
       function renderRow(r){
-        const originName = cleanOriginName(r.origin || '');
         return `
-          <tr data-cat="${r._cat}">
-            <td class="col-flight">
-              ${escapeHtml(r.flight || '')}
-              ${tooltipFor(r)}
-            </td>
+          <tr>
+            <td class="col-flight">${escapeHtml(r.flight || '')}</td>
             <td class="col-origin">
               <span class="origin-code">${escapeHtml((r.origin_iata || '').toUpperCase())}</span>
-              <span class="origin-name">${escapeHtml(originName)}</span>
+              <span class="origin-name">${escapeHtml(r.origin || '')}</span>
             </td>
             <td class="col-time">${timeCell(r)}</td>
             <td class="col-status">${statusPill(r)}</td>
@@ -373,24 +355,6 @@
           </tr>
         `;
       }
-
-      function filteredRows(){
-        // If no chips are active, show ALL. If some active, show only those categories.
-        if (active.size === 0) return rows;
-        return rows.filter(r => active.has(r._cat));
-      }
-
-      function render(){
-        updateCounts();
-        const list = filteredRows().sort((a,b)=> firstTime(a) - firstTime(b));
-        if (!list.length) {
-          tbody.innerHTML = `<tr><td colspan="9" class="empty">No arrivals match current filters.</td></tr>`;
-          return;
-        }
-        tbody.innerHTML = list.map(renderRow).join('');
-      }
-
-      render();
     })();
   </script>
 </body>
