@@ -201,37 +201,13 @@
         return;
       }
 
-      // --- only change: improved time key for sorting ---
-      function firstTime(r) {
-        // 1) Prefer ETA (ISO)
-        if (r && r.eta) {
-          const t = Date.parse(r.eta);
-          if (!Number.isNaN(t)) return t;
-        }
-        // 2) Fallback: scheduled_local anchored to the JSON's generated date (local)
-        const baseStr = data.generated_at_local || data.generated_at_utc;
-        if (r && r.scheduled_local && baseStr) {
-          const base = new Date(baseStr);
-          const [hh, mm] = String(r.scheduled_local).split(':').map(Number);
-          if (!Number.isNaN(hh) && !Number.isNaN(mm)) {
-            const d = new Date(base.getFullYear(), base.getMonth(), base.getDate(), hh, mm, 0, 0);
-            // small midnight rollover guard: if snapshot is late night and sched is 00–03, roll to next day
-            if (base.getHours() >= 20 && hh <= 3) d.setDate(d.getDate() + 1);
-            const t = d.getTime();
-            if (!Number.isNaN(t)) return t;
-          }
-        }
-        // 3) Last resort: start
-        if (r && r.start) {
-          const t = Date.parse(r.start);
-          if (!Number.isNaN(t)) return t;
-        }
-        return Number.MAX_SAFE_INTEGER;
-      }
-
       rows.sort((a, b) => firstTime(a) - firstTime(b));
       tbody.innerHTML = rows.map(r => renderRow(r)).join('');
 
+      function firstTime(r) {
+        const t = r.start || r.eta;
+        return t ? new Date(t).getTime() : Number.MAX_SAFE_INTEGER;
+      }
       function pad(n){ return String(n).padStart(2,'0'); }
       function hhmm(iso){
         if(!iso) return '';
