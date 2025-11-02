@@ -1,320 +1,212 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <title>BRS – Arrivals Belt Plan</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    :root {
-      --bg: #0f1720;
-      --panel: #111923;
-      --ink: #e7edf5;
-      --muted: #9fb1c5;
-      --grid: rgba(255,255,255,0.05);
-      --green: #b7f3c8;
-      --green-bg: #133d29;
-      --blue: #a8d8ff;
-      --blue-bg: #10314a;
-      /* lightened orange tone */
-      --orange: #ffe1b3;
-      --orange-bg: rgba(255, 212, 154, 0.16);
-      --red: #ffb3b8;
-      --red-bg: #3d151a;
-      /* gold pulse */
-      --gold: #ffd34d;
-      --gold-bg: #3b2f0a;
+<script>
+(async function () {
+  const meta = document.querySelector('#meta');
+  const tbody = document.querySelector('#tbody');
+
+  const candidates = [
+    'assignments.json',
+    './assignments.json',
+    '/brs-belt-alloc/assignments.json'
+  ];
+
+  let data = null;
+  let lastError = null;
+
+  for (const url of candidates) {
+    try {
+      const res = await fetch(url + '?v=' + Date.now(), { cache: 'no-store' });
+      if (!res.ok) throw new Error('HTTP ' + res.status + ' on ' + url);
+      const text = await res.text();
+      data = JSON.parse(text);
+      break;
+    } catch (err) {
+      lastError = err;
     }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--ink);
-      font: 14px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial;
+  }
+
+  if (!data) {
+    tbody.innerHTML = `<tr><td colspan="9" class="empty error">Could not load <code>assignments.json</code>. ${lastError ? lastError.message : ''}</td></tr>`;
+    meta.textContent = 'Load failed';
+    return;
+  }
+
+  const rowsRaw = Array.isArray(data.rows) ? data.rows : [];
+  meta.textContent = `Generated ${data.generated_at_local || data.generated_at_utc || ''} • Horizon ${data.horizon_minutes || ''} min`;
+
+  if (!rowsRaw.length) {
+    tbody.innerHTML = `<tr><td colspan="9" class="empty">No arrivals found (empty rows array).</td></tr>`;
+    return;
+  }
+
+  // === NEW: robust time key, dedupe by flight, keep a rolling window ===
+  const snapshot = new Date(data.generated_at_local || data.generated_at_utc || Date.now());
+  const now      = snapshot; // anchor to snapshot time for consistent ordering
+  const pastTailMin = 90; // show last ~90 min for context
+  const futureMin   = Number.isFinite(data.horizon_minutes) ? data.horizon_minutes : 180;
+
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function hhmm(iso){
+    if(!iso) return '';
+    const d = new Date(iso);
+    return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  }
+  function escapeHtml(s){
+    return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  function parseHHMMonDate(hhmmStr, baseDate) {
+    if (!hhmmStr) return null;
+    const m = /^(\d{1,2}):(\d{2})$/.exec(hhmmStr.trim());
+    if (!m) return null;
+    const h = +m[1], mi = +m[2];
+    return new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate(), h, mi, 0, 0);
+  }
+
+  // Prefer: ETA (ISO) → ETA (eta_local) → scheduled_local → start
+  function timeKey(r) {
+    if (r.eta) {
+      const t = Date.parse(r.eta);
+      if (!Number.isNaN(t)) return t;
     }
-    header {
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--grid);
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 1rem;
+    if (r.eta_local) {
+      const d = parseHHMMonDate(r.eta_local, snapshot);
+      if (d) return +d;
     }
-    h1 { margin: 0; font-size: 18px; font-weight: 700; }
-    .meta { color: var(--muted); font-size: 12px; white-space: nowrap; }
-
-    .wrap { padding: 10px 14px 26px; }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: var(--panel);
-      border: 1px solid rgba(255,255,255,0.04);
-      border-radius: 8px;
-      overflow: hidden;
+    if (r.scheduled_local) {
+      const d = parseHHMMonDate(r.scheduled_local, snapshot);
+      if (d) return +d;
     }
-    thead th {
-      text-align: left;
-      font-weight: 600;
-      color: var(--muted);
-      font-size: 11px;
-      letter-spacing: .25px;
-      text-transform: uppercase;
-      padding: 9px 10px;
-      border-bottom: 1px solid rgba(255,255,255,0.03);
-      background: rgba(0,0,0,0.05);
-      white-space: nowrap;
+    if (r.start) {
+      const t = Date.parse(r.start);
+      if (!Number.isNaN(t)) return t;
     }
-    tbody td {
-      padding: 7px 10px;
-      border-bottom: 1px solid rgba(255,255,255,0.02);
-      vertical-align: middle;
-      font-size: 13.5px;
+    return Number.POSITIVE_INFINITY;
+  }
+
+  // Rank: landed > has ETA > only scheduled
+  function rank(r) {
+    const s = String(r.status || '').toLowerCase();
+    if (s.includes('landed')) return 3;
+    if (r.eta || (r.eta_local && r.eta_local.trim())) return 2;
+    return 1;
+  }
+
+  // Deduplicate by flight (keep the higher-ranked; if tie, keep later time)
+  const byFlight = new Map();
+  for (const r of rowsRaw) {
+    const tk = timeKey(r);
+    if (!Number.isFinite(tk)) continue;
+    const prev = byFlight.get(r.flight);
+    if (!prev) {
+      byFlight.set(r.flight, { r, tk, rk: rank(r) });
+    } else {
+      if (rank(r) > prev.rk || (rank(r) === prev.rk && tk >= prev.tk)) {
+        byFlight.set(r.flight, { r, tk, rk: rank(r) });
+      }
     }
-    tbody tr:last-child td { border-bottom: 0; }
-    .col-flight { width: 8.5ch; font-weight: 600; }
-    .col-origin { width: 19ch; }
-    .col-time { width: 16ch; }
-    .col-status { width: 10ch; }
-    .col-flow { width: 9ch; }
-    .col-belt { width: 6ch; }
-    .col-start, .col-end { width: 7ch; font-variant-numeric: tabular-nums; }
-    .origin-code { font-weight: 600; display: block; }
-    .origin-name {
-      font-size: 12px; color: var(--muted); display: block; max-width: 16ch;
-      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+
+  // Window: (now - 90m) .. (now + horizon)
+  const minT = +now - pastTailMin * 60_000;
+  const maxT = +now + futureMin   * 60_000;
+
+  const rows = [...byFlight.values()]
+    .map(x => ({ ...x.r, _tk: x.tk }))
+    .filter(r => r._tk >= minT && r._tk <= maxT)
+    .sort((a,b) => a._tk - b._tk);
+
+  // === /NEW ===
+
+  tbody.innerHTML = rows.map(r => renderRow(r)).join('');
+
+  function beltBadge(b){
+    const v = (b===undefined || b==="" || b===null) ? '?' : b;
+    return `<span class="pill pill-belt">${v}</span>`;
+  }
+  function flowBadge(flow){
+    return `<span class="pill pill-flow">${(flow||'').toUpperCase()}</span>`;
+  }
+  function timeCell(r){
+    const etaLocal = r.eta_local || hhmm(r.eta);
+    const schedLocal = r.scheduled_local || '';
+    if (schedLocal) {
+      return `<div class="time">
+        <span class="time-sched">${escapeHtml(schedLocal)}</span>
+        <span class="time-arrow">→</span>
+        <span class="time-eta">${escapeHtml(etaLocal || '')}</span>
+      </div>`;
     }
-    .time { display: flex; gap: .35rem; align-items: center; font-variant-numeric: tabular-nums; }
-    .time-sched { opacity: .6; }
-    .time-arrow { opacity: .45; }
-    .time-eta { font-weight: 600; }
+    return `<div class="time"><span class="time-eta">${escapeHtml(etaLocal || '')}</span></div>`;
+  }
 
-    .pill {
-      display: inline-flex; align-items: center; justify-content: center;
-      border-radius: 999px; padding: .15rem .55rem; font-size: 12.5px;
-      white-space: nowrap; border: 1px solid rgba(255,255,255,.09);
+  function parseHHMMLocal(hhmmStr){
+    return parseHHMMonDate(hhmmStr, snapshot);
+  }
+  function minutesToEta(r){
+    if (!r || (!r.eta && !r.eta_local)) return null;
+    const eta = r.eta ? new Date(r.eta) : parseHHMMonDate(r.eta_local, snapshot);
+    if (!eta) return null;
+    return Math.round((eta - snapshot) / 60000);
     }
-    .pill-green  { background: var(--green-bg);  color: var(--green);  border-color: rgba(183,243,200,.4); }
-    .pill-blue   { background: var(--blue-bg);   color: var(--blue);   border-color: rgba(168,216,255,.35); }
-    /* LIGHTER ORANGE */
-    .pill-orange { background: var(--orange-bg); color: var(--orange); border-color: rgba(255,212,154,.55); }
-    .pill-red    { background: var(--red-bg);    color: var(--red);    border-color: rgba(255,179,184,.4); }
-    .pill-flow   { background: rgba(16,25,50,.6); color: #dfe7ff; }
-    .pill-belt   { background: rgba(19,22,30,.3); color: #e7edf5; }
-    .pill-grey   { background: rgba(160,170,185,.12); color: #b8c2d1; border-color: rgba(184,194,209,.35); }
+  function computeDeltaMin(r){
+    if (typeof r?.delay_min === 'number' && !Number.isNaN(r.delay_min)) return r.delay_min;
+    const schedDt = parseHHMMonDate(r?.scheduled_local, snapshot);
+    let etaDt = null;
+    if (r?.eta_local) etaDt = parseHHMMonDate(r.eta_local, snapshot);
+    else if (r?.eta) etaDt = new Date(r.eta);
+    if (!schedDt || !etaDt) return null;
+    return Math.round((etaDt - schedDt) / 60000);
+  }
 
-    /* GOLD "FINALS" PILL WITH SOFT INSET STROBE (kept subtle, not outside) */
-    .pill-gold {
-      background: var(--gold-bg);
-      color: var(--gold);
-      border-color: rgba(255,211,77,.55);
-      text-transform: uppercase;
-      letter-spacing: .2px;
-      box-shadow:
-        inset 0 0 0 1px rgba(255,211,77,.25);
-    }
-    .pulse {
-      animation: goldPulse 1.8s ease-in-out infinite;
-    }
-    @keyframes goldPulse {
-      0%   { border-color: rgba(255,211,77,.25); box-shadow: inset 0 0 0 1px rgba(255,211,77,.20); }
-      50%  { border-color: rgba(255,211,77,.70); box-shadow: inset 0 0 0 1px rgba(255,211,77,.55); }
-      100% { border-color: rgba(255,211,77,.25); box-shadow: inset 0 0 0 1px rgba(255,211,77,.20); }
+  // GOLD “FINALS” + lighter orange kept from your styles
+  function statusPill(r){
+    const baseText = r?.status ? r.status : (r?.eta_local ? `Estimated ${r.eta_local}` : '—');
+    const s = String(r?.status || '').toLowerCase();
+
+    if (s.includes('landed')) {
+      return `<span class="pill pill-grey">${escapeHtml(baseText)}</span>`;
     }
 
-    tfoot td { color: var(--muted); font-size: 12px; padding: 6px 10px; text-align: right; }
-    .empty { text-align: center; padding: 12px !important; color: var(--muted); font-size: 13px; }
-    .error { color: #ffb3b8; background: rgba(61,21,26,.4); border: 1px solid rgba(255,179,184,.4); }
-
-    @media (max-width: 980px) {
-      .col-reason { display: none; }
-      .col-start, .col-end { display: none; }
-      header { flex-wrap: wrap; }
+    const minsTo = minutesToEta(r);
+    if (minsTo !== null && minsTo >= 0 && minsTo <= 10) {
+      const finalsTime = r?.eta_local || hhmm(r?.eta);
+      const txt = finalsTime ? `FINALS ${finalsTime}` : 'FINALS';
+      return `<span class="pill pill-gold pulse">${escapeHtml(txt)}</span>`;
     }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>BRS – Arrivals Belt Plan</h1>
-    <div class="meta" id="meta">Loading…</div>
-  </header>
-  <div class="wrap">
-    <table>
-      <thead>
-        <tr>
-          <th class="col-flight">Flight</th>
-          <th class="col-origin">Origin</th>
-          <th class="col-time">Time</th>
-          <th class="col-status">Status</th>
-          <th class="col-flow">Flow</th>
-          <th class="col-belt">Belt</th>
-          <th class="col-start">Start</th>
-          <th class="col-end">End</th>
-          <th class="col-reason">Reason</th>
-        </tr>
-      </thead>
-      <tbody id="tbody">
-        <tr><td colspan="9" class="empty">Loading…</td></tr>
-      </tbody>
-      <tfoot>
-        <tr>
-          <td colspan="9">Source: FR24 (screen-scrape) • This view refreshes when JSON updates.</td>
-        </tr>
-      </tfoot>
-    </table>
-  </div>
-  <script>
-    (async function () {
-      const meta = document.querySelector('#meta');
-      const tbody = document.querySelector('#tbody');
 
-      const candidates = [
-        'assignments.json',
-        './assignments.json',
-        '/brs-belt-alloc/assignments.json'
-      ];
+    const hasEta = Boolean(r?.eta || (r?.eta_local && r.eta_local.trim()));
+    if (!hasEta && s.startsWith('scheduled')) {
+      return `<span class="pill pill-grey">${escapeHtml(baseText)}</span>`;
+    }
 
-      let data = null;
-      let lastError = null;
+    const d = computeDeltaMin(r);
+    if (d === null) {
+      return `<span class="pill pill-grey">${escapeHtml(baseText)}</span>`;
+    }
+    const abs = Math.abs(d);
+    let cls = 'pill-green';                     // ≤ 4 min
+    if (abs >= 5 && abs <= 15) cls = 'pill-orange'; // 5–15
+    else if (abs > 15) cls = 'pill-red';           // > 15
+    return `<span class="pill ${cls}">${escapeHtml(baseText)}</span>`;
+  }
 
-      for (const url of candidates) {
-        try {
-          const res = await fetch(url + '?v=' + Date.now(), { cache: 'no-store' });
-          if (!res.ok) throw new Error('HTTP ' + res.status + ' on ' + url);
-          const text = await res.text();
-          data = JSON.parse(text);
-          break;
-        } catch (err) {
-          lastError = err;
-        }
-      }
-
-      if (!data) {
-        tbody.innerHTML = `<tr><td colspan="9" class="empty error">Could not load <code>assignments.json</code>. ${lastError ? lastError.message : ''}</td></tr>`;
-        meta.textContent = 'Load failed';
-        return;
-      }
-
-      const rows = Array.isArray(data.rows) ? data.rows : [];
-      meta.textContent = `Generated ${data.generated_at_local || data.generated_at_utc || ''} • Horizon ${data.horizon_minutes || ''} min`;
-
-      if (!rows.length) {
-        tbody.innerHTML = `<tr><td colspan="9" class="empty">No arrivals found (empty rows array).</td></tr>`;
-        return;
-      }
-
-      rows.sort((a, b) => firstTime(a) - firstTime(b));
-      tbody.innerHTML = rows.map(r => renderRow(r)).join('');
-
-      function firstTime(r) {
-        const t = r.start || r.eta;
-        return t ? new Date(t).getTime() : Number.MAX_SAFE_INTEGER;
-      }
-      function pad(n){ return String(n).padStart(2,'0'); }
-      function hhmm(iso){
-        if(!iso) return '';
-        const d = new Date(iso);
-        return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
-      }
-      function escapeHtml(s){
-        return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-      }
-      function beltBadge(b){
-        const v = (b===undefined || b==="" || b===null) ? '?' : b;
-        return `<span class="pill pill-belt">${v}</span>`;
-      }
-      function flowBadge(flow){
-        return `<span class="pill pill-flow">${(flow||'').toUpperCase()}</span>`;
-      }
-      function timeCell(r){
-        const etaLocal = r.eta_local || hhmm(r.eta);
-        const schedLocal = r.scheduled_local || '';
-        if (schedLocal) {
-          return `<div class="time">
-            <span class="time-sched">${escapeHtml(schedLocal)}</span>
-            <span class="time-arrow">→</span>
-            <span class="time-eta">${escapeHtml(etaLocal || '')}</span>
-          </div>`;
-        }
-        return `<div class="time"><span class="time-eta">${escapeHtml(etaLocal || '')}</span></div>`;
-      }
-
-      function parseHHMMLocal(hhmm){
-        if(!hhmm) return null;
-        const [hh, mm] = hhmm.split(':').map(Number);
-        if (Number.isNaN(hh) || Number.isNaN(mm)) return null;
-        const now = new Date();
-        return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hh, mm, 0, 0);
-      }
-      function minutesToEta(r){
-        if (!r || !r.eta) return null;
-        const now = new Date();
-        const eta = new Date(r.eta);
-        return Math.round((eta - now) / 60000);
-      }
-      function computeDeltaMin(r){
-        if (typeof r?.delay_min === 'number' && !Number.isNaN(r.delay_min)) return r.delay_min;
-        const schedDt = parseHHMMLocal(r?.scheduled_local);
-        let etaDt = null;
-        if (r?.eta_local) etaDt = parseHHMMLocal(r.eta_local);
-        else if (r?.eta) etaDt = new Date(r.eta);
-        if (!schedDt || !etaDt) return null;
-        return Math.round((etaDt - schedDt) / 60000);
-      }
-
-      // UPDATED: gold “FINALS” + lighter orange
-      function statusPill(r){
-        const baseText = r?.status ? r.status : (r?.eta_local ? `Estimated ${r.eta_local}` : '—');
-        const s = String(r?.status || '').toLowerCase();
-
-        // Landed → grey
-        if (s.includes('landed')) {
-          return `<span class="pill pill-grey">${escapeHtml(baseText)}</span>`;
-        }
-
-        // Approaching within 10 minutes → GOLD + “FINALS”
-        const minsTo = minutesToEta(r);
-        if (minsTo !== null && minsTo >= 0 && minsTo <= 10) {
-          const finalsTime = r?.eta_local || hhmm(r?.eta);
-          const txt = finalsTime ? `FINALS ${finalsTime}` : 'FINALS';
-          return `<span class="pill pill-gold pulse">${escapeHtml(txt)}</span>`;
-        }
-
-        // Scheduled with no ETA → grey
-        const hasEta = Boolean(r?.eta || (r?.eta_local && r.eta_local.trim()));
-        if (!hasEta && s.startsWith('scheduled')) {
-          return `<span class="pill pill-grey">${escapeHtml(baseText)}</span>`;
-        }
-
-        // Estimated: colour by |Δ|
-        const d = computeDeltaMin(r);
-        if (d === null) {
-          return `<span class="pill pill-grey">${escapeHtml(baseText)}</span>`;
-        }
-        const abs = Math.abs(d);
-        let cls = 'pill-green';              // ≤ 4 min → green
-        if (abs >= 5 && abs <= 15) cls = 'pill-orange'; // 5–15 → yellow/orange (lighter)
-        else if (abs > 15) cls = 'pill-red';             // > 15 → red
-        return `<span class="pill ${cls}">${escapeHtml(baseText)}</span>`;
-      }
-
-      function renderRow(r){
-        return `
-          <tr>
-            <td class="col-flight">${escapeHtml(r.flight || '')}</td>
-            <td class="col-origin">
-              <span class="origin-code">${escapeHtml((r.origin_iata || '').toUpperCase())}</span>
-              <span class="origin-name">${escapeHtml(r.origin || '')}</span>
-            </td>
-            <td class="col-time">${timeCell(r)}</td>
-            <td class="col-status">${statusPill(r)}</td>
-            <td class="col-flow">${flowBadge(r.flow || '')}</td>
-            <td class="col-belt">${beltBadge(r.belt)}</td>
-            <td class="col-start">${hhmm(r.start)}</td>
-            <td class="col-end">${hhmm(r.end)}</td>
-            <td class="col-reason">${escapeHtml(r.reason || '')}</td>
-          </tr>
-        `;
-      }
-    })();
-  </script>
-</body>
-</html>
+  function renderRow(r){
+    return `
+      <tr>
+        <td class="col-flight">${escapeHtml(r.flight || '')}</td>
+        <td class="col-origin">
+          <span class="origin-code">${escapeHtml((r.origin_iata || '').toUpperCase())}</span>
+          <span class="origin-name">${escapeHtml(r.origin || '')}</span>
+        </td>
+        <td class="col-time">${timeCell(r)}</td>
+        <td class="col-status">${statusPill(r)}</td>
+        <td class="col-flow">${flowBadge(r.flow || '')}</td>
+        <td class="col-belt">${beltBadge(r.belt)}</td>
+        <td class="col-start">${hhmm(r.start)}</td>
+        <td class="col-end">${hhmm(r.end)}</td>
+        <td class="col-reason">${escapeHtml(r.reason || '')}</td>
+      </tr>
+    `;
+  }
+})();
+</script>
