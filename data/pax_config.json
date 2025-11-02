@@ -1,0 +1,76 @@
+{
+  "default_load_factor": 0.92,
+
+  "belts": [
+    { "id": 5, "length": 100, "role": "INTL_LONG" },
+    { "id": 1, "length": 67,  "role": "INTL_STD" },
+    { "id": 2, "length": 67,  "role": "INTL_STD" },
+    { "id": 3, "length": 67,  "role": "INTL_STD" },
+    { "id": 6, "length": 55,  "role": "CTA_PREF", "avoid_for_international": true }
+  ],
+
+  "belt_pick_order": [1, 2, 3, 5, 6],
+
+  "long_belt_threshold_pax": 180,
+
+  "aircraft_avg_pax": {
+    "A20N": 186,
+    "A21N": 230,
+    "A320": 180,
+    "A321": 220,
+    "B738": 189,
+    "B38M": 197,
+    "B737": 180,
+    "E190": 100,
+    "AT7": 72
+  },
+
+  "airline_bias": {
+    "Jet2": 1.05,
+    "Ryanair": 0.98,
+    "easyJet": 0.97,
+    "TUI": 1.00
+  },
+
+  "cta_airports": [
+    "BFS","BHD","DUB","ORK","SNN","NOC","IOM","JER","GCI",
+    "GLA","EDI","NCL","LBA","LPL","MAN","EMA","BHX","SOU",
+    "LGW","LTN","STN","LHR","BRS","CWL","DSA","HUY","SEN","INV","EXT","NQY"
+  ],
+
+  "flows": {
+    "CTA_iata": ["BFS","BHD","DUB","ORK","SNN","NOC","IOM","JER","GCI"],
+    "DOMESTIC_iata": ["EDI","GLA","ABZ","NCL","INV","NQY","EXT","IOM","SOU","LBA","EMA","MAN","LPL","BFS"]
+  },
+
+  "thresholds": {
+    "belt5_high_pax": 180,
+    "density_minutes": 20
+  },
+
+  "aircraft_seats": {
+    "A20N": 186,
+    "A21N": 230,
+    "A320": 180,
+    "A321": 220,
+    "B738": 189,
+    "B38M": 197,
+    "B737": 180,
+    "E190": 100,
+    "AT72": 72
+  },
+
+  "airline_load_factor": {
+    "LS": 0.966,
+    "FR": 0.902,
+    "U2": 0.892,
+    "BY": 0.920
+  },
+
+  "bag_factor_by_airline": {},
+
+  "route_adjustments": {
+    "plus10pct_iata": [],
+    "plus05pct_iata": []
+  }
+}
