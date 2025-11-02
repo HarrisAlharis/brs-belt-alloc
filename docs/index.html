@@ -1,482 +1,320 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>BRS – Arrivals Belt Plan</title>
-<meta id="meta" content="" />
-
-<style>
+  <meta charset="utf-8" />
+  <title>BRS – Arrivals Belt Plan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
     :root {
-        --bg-main:#1a222b;
-        --bg-card:#1f2a37;
-        --text-main:#cfd8e3;
-        --text-dim:#8a94a7;
-        --line:#2a3544;
-        --chip-border:#4b5563;
-        --pill-grey-bg:#374151;
-        --pill-grey-text:#d1d5db;
-        --pill-green-bg:#0f2f1a;
-        --pill-green-border:#3ba66a;
-        --pill-green-text:#8bffb9;
-        --pill-yellow-bg:#3a2f12;
-        --pill-yellow-border:#d4b94a;
-        --pill-yellow-text:#ffeea3;
-        --pill-red-bg:#3a0f0f;
-        --pill-red-border:#b43c3c;
-        --pill-red-text:#ffb2b2;
-        --pill-gold-bg:#3a2d10;
-        --pill-gold-border:#ffdf6a;
-        --pill-gold-text:#ffdf6a;
+      --bg: #0f1720;
+      --panel: #111923;
+      --ink: #e7edf5;
+      --muted: #9fb1c5;
+      --grid: rgba(255,255,255,0.05);
+      --green: #b7f3c8;
+      --green-bg: #133d29;
+      --blue: #a8d8ff;
+      --blue-bg: #10314a;
+      /* lightened orange tone */
+      --orange: #ffe1b3;
+      --orange-bg: rgba(255, 212, 154, 0.16);
+      --red: #ffb3b8;
+      --red-bg: #3d151a;
+      /* gold pulse */
+      --gold: #ffd34d;
+      --gold-bg: #3b2f0a;
     }
-
+    * { box-sizing: border-box; }
     body {
-        background-color:var(--bg-main);
-        color:var(--text-main);
-        font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-        font-size:14px;
-        line-height:1.4;
-        margin:0;
-        padding:12px;
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 14px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial;
     }
+    header {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--grid);
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+    }
+    h1 { margin: 0; font-size: 18px; font-weight: 700; }
+    .meta { color: var(--muted); font-size: 12px; white-space: nowrap; }
 
-    .page-header {
-        display:flex;
-        flex-wrap:wrap;
-        align-items:flex-start;
-        justify-content:space-between;
-        margin-bottom:8px;
-    }
-
-    .title {
-        font-size:14px;
-        font-weight:600;
-        color:var(--text-main);
-        margin:0 0 8px 0;
-    }
-
-    .meta-block {
-        font-size:11px;
-        color:var(--text-dim);
-        text-align:right;
-        min-width:180px;
-    }
-
-    .filter-bar {
-        display:flex;
-        flex-wrap:wrap;
-        gap:6px;
-        margin-bottom:10px;
-        justify-content:center;
-    }
-
-    .filter-chip {
-        background:var(--bg-card);
-        color:var(--text-main);
-        border:1px solid var(--chip-border);
-        border-radius:16px;
-        padding:4px 8px;
-        font-size:11px;
-        line-height:1.2;
-        cursor:pointer;
-        user-select:none;
-    }
-    .filter-chip.off {
-        opacity:.3;
-        filter:grayscale(1);
-    }
-
+    .wrap { padding: 10px 14px 26px; }
     table {
-        width:100%;
-        border-collapse:collapse;
-        table-layout:auto;
-        color:var(--text-main);
-        font-size:12px;
-        min-width:900px;
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--panel);
+      border: 1px solid rgba(255,255,255,0.04);
+      border-radius: 8px;
+      overflow: hidden;
     }
-
     thead th {
-        text-align:left;
-        font-size:10px;
-        font-weight:500;
-        color:var(--text-dim);
-        padding:6px 8px;
-        border-bottom:1px solid rgba(255,255,255,.08);
-        white-space:nowrap;
+      text-align: left;
+      font-weight: 600;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: .25px;
+      text-transform: uppercase;
+      padding: 9px 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+      background: rgba(0,0,0,0.05);
+      white-space: nowrap;
     }
-
     tbody td {
-        padding:6px 8px;
-        border-bottom:1px solid rgba(255,255,255,.05);
-        white-space:nowrap;
-        vertical-align:top;
-        font-size:12px;
-        color:var(--text-main);
+      padding: 7px 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.02);
+      vertical-align: middle;
+      font-size: 13.5px;
     }
-
-    .td-flight .flight-code {
-        color:#93c5fd;
-        text-decoration:none;
-        cursor:default;
+    tbody tr:last-child td { border-bottom: 0; }
+    .col-flight { width: 8.5ch; font-weight: 600; }
+    .col-origin { width: 19ch; }
+    .col-time { width: 16ch; }
+    .col-status { width: 10ch; }
+    .col-flow { width: 9ch; }
+    .col-belt { width: 6ch; }
+    .col-start, .col-end { width: 7ch; font-variant-numeric: tabular-nums; }
+    .origin-code { font-weight: 600; display: block; }
+    .origin-name {
+      font-size: 12px; color: var(--muted); display: block; max-width: 16ch;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
     }
+    .time { display: flex; gap: .35rem; align-items: center; font-variant-numeric: tabular-nums; }
+    .time-sched { opacity: .6; }
+    .time-arrow { opacity: .45; }
+    .time-eta { font-weight: 600; }
 
     .pill {
-        display:inline-block;
-        min-width:60px;
-        padding:2px 6px;
-        border-radius:4px;
-        font-size:11px;
-        font-weight:500;
-        line-height:1.2;
-        border:1px solid transparent;
-        white-space:nowrap;
+      display: inline-flex; align-items: center; justify-content: center;
+      border-radius: 999px; padding: .15rem .55rem; font-size: 12.5px;
+      white-space: nowrap; border: 1px solid rgba(255,255,255,.09);
     }
+    .pill-green  { background: var(--green-bg);  color: var(--green);  border-color: rgba(183,243,200,.4); }
+    .pill-blue   { background: var(--blue-bg);   color: var(--blue);   border-color: rgba(168,216,255,.35); }
+    /* LIGHTER ORANGE */
+    .pill-orange { background: var(--orange-bg); color: var(--orange); border-color: rgba(255,212,154,.55); }
+    .pill-red    { background: var(--red-bg);    color: var(--red);    border-color: rgba(255,179,184,.4); }
+    .pill-flow   { background: rgba(16,25,50,.6); color: #dfe7ff; }
+    .pill-belt   { background: rgba(19,22,30,.3); color: #e7edf5; }
+    .pill-grey   { background: rgba(160,170,185,.12); color: #b8c2d1; border-color: rgba(184,194,209,.35); }
 
-    .pill-grey {
-        background-color:var(--pill-grey-bg);
-        border-color:var(--pill-grey-border,var(--pill-grey-bg));
-        color:var(--pill-grey-text);
-    }
-
-    .pill-green {
-        background-color:var(--pill-green-bg);
-        border-color:var(--pill-green-border);
-        color:var(--pill-green-text);
-    }
-
-    .pill-yellow {
-        background-color:var(--pill-yellow-bg);
-        border-color:var(--pill-yellow-border);
-        color:var(--pill-yellow-text);
-    }
-
-    .pill-red {
-        background-color:var(--pill-red-bg);
-        border-color:var(--pill-red-border);
-        color:var(--pill-red-text);
-    }
-
+    /* GOLD "FINALS" PILL WITH SOFT INSET STROBE (kept subtle, not outside) */
     .pill-gold {
-        background-color:var(--pill-gold-bg);
-        border-color:var(--pill-gold-border);
-        color:var(--pill-gold-text);
-        box-shadow:0 0 4px 1px rgba(255,223,106,.6);
-    }
-
-    @keyframes pulseBorder {
-        0%   { box-shadow:0 0 4px 1px rgba(255,223,106,.6); }
-        50%  { box-shadow:0 0 8px 3px rgba(255,223,106,.15); }
-        100% { box-shadow:0 0 4px 1px rgba(255,223,106,.6); }
+      background: var(--gold-bg);
+      color: var(--gold);
+      border-color: rgba(255,211,77,.55);
+      text-transform: uppercase;
+      letter-spacing: .2px;
+      box-shadow:
+        inset 0 0 0 1px rgba(255,211,77,.25);
     }
     .pulse {
-        animation:pulseBorder 1.5s infinite;
+      animation: goldPulse 1.8s ease-in-out infinite;
+    }
+    @keyframes goldPulse {
+      0%   { border-color: rgba(255,211,77,.25); box-shadow: inset 0 0 0 1px rgba(255,211,77,.20); }
+      50%  { border-color: rgba(255,211,77,.70); box-shadow: inset 0 0 0 1px rgba(255,211,77,.55); }
+      100% { border-color: rgba(255,211,77,.25); box-shadow: inset 0 0 0 1px rgba(255,211,77,.20); }
     }
 
-    .source-line {
-        font-size:10px;
-        color:var(--text-dim);
-        margin-top:6px;
-        line-height:1.4;
-    }
+    tfoot td { color: var(--muted); font-size: 12px; padding: 6px 10px; text-align: right; }
+    .empty { text-align: center; padding: 12px !important; color: var(--muted); font-size: 13px; }
+    .error { color: #ffb3b8; background: rgba(61,21,26,.4); border: 1px solid rgba(255,179,184,.4); }
 
-    /* simple responsive wrapper so table can scroll horizontally if phone */
-    .table-wrap {
-        width:100%;
-        overflow-x:auto;
+    @media (max-width: 980px) {
+      .col-reason { display: none; }
+      .col-start, .col-end { display: none; }
+      header { flex-wrap: wrap; }
     }
-</style>
+  </style>
 </head>
-
-<body id="body">
-    <div class="page-header">
-        <h1 class="title">BRS – Arrivals Belt Plan</h1>
-        <div class="meta-block" id="meta-line">Loading…</div>
-    </div>
-
-    <div class="filter-bar">
-        <div class="filter-chip" data-cat="early">Early &gt;5m</div>
-        <div class="filter-chip" data-cat="ontime">Estimated / On-time</div>
-        <div class="filter-chip" data-cat="delayed">Delayed</div>
-        <div class="filter-chip" data-cat="scheduled">Scheduled only</div>
-    </div>
-
-    <div class="table-wrap">
-        <table>
-            <thead>
-                <tr>
-                    <th>FLIGHT</th>
-                    <th>ORIGIN</th>
-                    <th>TIME</th>
-                    <th>STATUS</th>
-                    <th>FLOW</th>
-                    <th>BELT</th>
-                    <th>START</th>
-                    <th>END</th>
-                    <th>REASON</th>
-                </tr>
-            </thead>
-            <tbody id="tbl-body">
-                <tr><td colspan="9" style="padding:12px;color:#9ca3af;">Loading…</td></tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div class="source-line">
-        Source: FR24 (screen-scrape) • Allocated 15+30 mins per belt. CTA →6 / Domestic →7 / Heavy →5.
-    </div>
-
-    <script type="module">
+<body>
+  <header>
+    <h1>BRS – Arrivals Belt Plan</h1>
+    <div class="meta" id="meta">Loading…</div>
+  </header>
+  <div class="wrap">
+    <table>
+      <thead>
+        <tr>
+          <th class="col-flight">Flight</th>
+          <th class="col-origin">Origin</th>
+          <th class="col-time">Time</th>
+          <th class="col-status">Status</th>
+          <th class="col-flow">Flow</th>
+          <th class="col-belt">Belt</th>
+          <th class="col-start">Start</th>
+          <th class="col-end">End</th>
+          <th class="col-reason">Reason</th>
+        </tr>
+      </thead>
+      <tbody id="tbody">
+        <tr><td colspan="9" class="empty">Loading…</td></tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="9">Source: FR24 (screen-scrape) • This view refreshes when JSON updates.</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+  <script>
     (async function () {
-        const metaEl  = document.querySelector('#meta-line');
-        const tbody   = document.querySelector('#tbl-body');
+      const meta = document.querySelector('#meta');
+      const tbody = document.querySelector('#tbody');
 
-        // try a couple of possible URLs for assignments.json (GH Pages path quirks)
-        const candidates = [
-            'assignments.json',
-            './assignments.json',
-            '/assignments.json',
-            '/brs-belt-alloc/assignments.json'
-        ];
+      const candidates = [
+        'assignments.json',
+        './assignments.json',
+        '/brs-belt-alloc/assignments.json'
+      ];
 
-        let data = null;
-        for (const url of candidates) {
-            try {
-                const res = await fetch(url + '?v=' + Date.now(), { cache:'no-store' });
-                if (!res.ok) continue;
-                const json = await res.json();
-                // we consider "good" if json.rows exists
-                if (json && Array.isArray(json.rows)) {
-                    data = json;
-                    break;
-                }
-            } catch (_) {}
+      let data = null;
+      let lastError = null;
+
+      for (const url of candidates) {
+        try {
+          const res = await fetch(url + '?v=' + Date.now(), { cache: 'no-store' });
+          if (!res.ok) throw new Error('HTTP ' + res.status + ' on ' + url);
+          const text = await res.text();
+          data = JSON.parse(text);
+          break;
+        } catch (err) {
+          lastError = err;
+        }
+      }
+
+      if (!data) {
+        tbody.innerHTML = `<tr><td colspan="9" class="empty error">Could not load <code>assignments.json</code>. ${lastError ? lastError.message : ''}</td></tr>`;
+        meta.textContent = 'Load failed';
+        return;
+      }
+
+      const rows = Array.isArray(data.rows) ? data.rows : [];
+      meta.textContent = `Generated ${data.generated_at_local || data.generated_at_utc || ''} • Horizon ${data.horizon_minutes || ''} min`;
+
+      if (!rows.length) {
+        tbody.innerHTML = `<tr><td colspan="9" class="empty">No arrivals found (empty rows array).</td></tr>`;
+        return;
+      }
+
+      rows.sort((a, b) => firstTime(a) - firstTime(b));
+      tbody.innerHTML = rows.map(r => renderRow(r)).join('');
+
+      function firstTime(r) {
+        const t = r.start || r.eta;
+        return t ? new Date(t).getTime() : Number.MAX_SAFE_INTEGER;
+      }
+      function pad(n){ return String(n).padStart(2,'0'); }
+      function hhmm(iso){
+        if(!iso) return '';
+        const d = new Date(iso);
+        return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+      }
+      function escapeHtml(s){
+        return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+      }
+      function beltBadge(b){
+        const v = (b===undefined || b==="" || b===null) ? '?' : b;
+        return `<span class="pill pill-belt">${v}</span>`;
+      }
+      function flowBadge(flow){
+        return `<span class="pill pill-flow">${(flow||'').toUpperCase()}</span>`;
+      }
+      function timeCell(r){
+        const etaLocal = r.eta_local || hhmm(r.eta);
+        const schedLocal = r.scheduled_local || '';
+        if (schedLocal) {
+          return `<div class="time">
+            <span class="time-sched">${escapeHtml(schedLocal)}</span>
+            <span class="time-arrow">→</span>
+            <span class="time-eta">${escapeHtml(etaLocal || '')}</span>
+          </div>`;
+        }
+        return `<div class="time"><span class="time-eta">${escapeHtml(etaLocal || '')}</span></div>`;
+      }
+
+      function parseHHMMLocal(hhmm){
+        if(!hhmm) return null;
+        const [hh, mm] = hhmm.split(':').map(Number);
+        if (Number.isNaN(hh) || Number.isNaN(mm)) return null;
+        const now = new Date();
+        return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hh, mm, 0, 0);
+      }
+      function minutesToEta(r){
+        if (!r || !r.eta) return null;
+        const now = new Date();
+        const eta = new Date(r.eta);
+        return Math.round((eta - now) / 60000);
+      }
+      function computeDeltaMin(r){
+        if (typeof r?.delay_min === 'number' && !Number.isNaN(r.delay_min)) return r.delay_min;
+        const schedDt = parseHHMMLocal(r?.scheduled_local);
+        let etaDt = null;
+        if (r?.eta_local) etaDt = parseHHMMLocal(r.eta_local);
+        else if (r?.eta) etaDt = new Date(r.eta);
+        if (!schedDt || !etaDt) return null;
+        return Math.round((etaDt - schedDt) / 60000);
+      }
+
+      // UPDATED: gold “FINALS” + lighter orange
+      function statusPill(r){
+        const baseText = r?.status ? r.status : (r?.eta_local ? `Estimated ${r.eta_local}` : '—');
+        const s = String(r?.status || '').toLowerCase();
+
+        // Landed → grey
+        if (s.includes('landed')) {
+          return `<span class="pill pill-grey">${escapeHtml(baseText)}</span>`;
         }
 
-        if (!data) {
-            tbody.innerHTML =
-              '<tr><td colspan="9" style="padding:12px;color:#f87171;">Could not load assignments.json from GitHub Pages.</td></tr>';
-            metaEl.textContent = 'Load failed';
-            return;
+        // Approaching within 10 minutes → GOLD + “FINALS”
+        const minsTo = minutesToEta(r);
+        if (minsTo !== null && minsTo >= 0 && minsTo <= 10) {
+          const finalsTime = r?.eta_local || hhmm(r?.eta);
+          const txt = finalsTime ? `FINALS ${finalsTime}` : 'FINALS';
+          return `<span class="pill pill-gold pulse">${escapeHtml(txt)}</span>`;
         }
 
-        // ----- constants / helpers -----
-
-        const ALL_ROWS = Array.isArray(data.rows) ? data.rows : [];
-
-        // chip state: true = visible
-        const filtersState = {
-            early:      true, // Early >5m (row.delay_min < -5)
-            ontime:     true, // Estimated / on-time (abs(delay) <=4 etc, incl FINALS, Landed)
-            delayed:    true, // >5m late
-            scheduled:  true  // Scheduled only (no ETA yet)
-        };
-
-        // minutes from "now" until ETA, used for FINALS
-        function minsToETA(row) {
-            if (!row.eta) return null;
-            const etaMs = Date.parse(row.eta);
-            if (isNaN(etaMs)) return null;
-            const diffMin = (etaMs - Date.now()) / 60000;
-            return diffMin;
+        // Scheduled with no ETA → grey
+        const hasEta = Boolean(r?.eta || (r?.eta_local && r.eta_local.trim()));
+        if (!hasEta && s.startsWith('scheduled')) {
+          return `<span class="pill pill-grey">${escapeHtml(baseText)}</span>`;
         }
 
-        function isLanded(row) {
-            const st = (row.status || '').toLowerCase();
-            return st.startsWith('landed');
+        // Estimated: colour by |Δ|
+        const d = computeDeltaMin(r);
+        if (d === null) {
+          return `<span class="pill pill-grey">${escapeHtml(baseText)}</span>`;
         }
+        const abs = Math.abs(d);
+        let cls = 'pill-green';              // ≤ 4 min → green
+        if (abs >= 5 && abs <= 15) cls = 'pill-orange'; // 5–15 → yellow/orange (lighter)
+        else if (abs > 15) cls = 'pill-red';             // > 15 → red
+        return `<span class="pill ${cls}">${escapeHtml(baseText)}</span>`;
+      }
 
-        // FINALS = arriving within next 10 min, not already landed
-        function isFinals(row) {
-            const m = minsToETA(row);
-            if (m === null) return false;
-            return m >= 0 && m <= 10 && !isLanded(row);
-        }
-
-        // scheduled-only = status starts "scheduled" AND there's no eta_local/ETA yet
-        function isScheduledOnly(row) {
-            const st = (row.status || '').toLowerCase();
-            const hasETA = row.eta_local && row.eta_local.trim() !== '';
-            return st.startsWith('scheduled') && !hasETA;
-        }
-
-        // early if >5 min early
-        function isEarly(row) {
-            if (typeof row.delay_min !== 'number') return false;
-            return row.delay_min < -5;
-        }
-
-        // delayed if >5 min late
-        function isDelayed(row) {
-            if (typeof row.delay_min !== 'number') return false;
-            return row.delay_min > 5;
-        }
-
-        // everything else that isn't scheduled-only / early / delayed counts as on-time
-        function categoryOf(row) {
-            if (isScheduledOnly(row)) return 'scheduled';
-            if (isEarly(row))        return 'early';
-            if (isDelayed(row))      return 'delayed';
-            return 'ontime';
-        }
-
-        // Build text that shows under STATUS column
-        function statusText(row) {
-            if (isFinals(row)) {
-                return 'FINALS ' + (row.eta_local || '').trim();
-            }
-            if (isLanded(row)) {
-                // e.g. "landed 00:34" -> "Landed 00:34"
-                return (row.status || '').replace(/^./, c => c.toUpperCase());
-            }
-            if (isScheduledOnly(row)) {
-                return 'Scheduled';
-            }
-
-            if (row.status) {
-                const lower = row.status.toLowerCase();
-                if (lower.startsWith('estimated')) {
-                    return 'Estimated ' + (row.eta_local || '').trim();
-                }
-                if (lower.startsWith('landed')) {
-                    return (row.status || '').replace(/^./, c => c.toUpperCase());
-                }
-            }
-            return row.status || '';
-        }
-
-        // Pick pill class (colour) based on timing rules
-        // Rules:
-        // - FINALS (ETA within 10 min, not landed) -> gold pulse
-        // - Landed -> grey
-        // - Scheduled only (no ETA yet) -> grey
-        // - abs(delay_min) <= 4 min  -> green
-        // - abs(delay_min) 5..15 min -> yellow
-        // - abs(delay_min) > 15 min  -> red
-        function statusClass(row) {
-            if (isFinals(row)) return 'pill pill-gold pulse';
-            if (isLanded(row)) return 'pill pill-grey';
-            if (isScheduledOnly(row)) return 'pill pill-grey';
-
-            if (typeof row.delay_min === 'number') {
-                const d = Math.abs(row.delay_min);
-                if (d <= 4) {
-                    return 'pill pill-green';
-                } else if (d <= 15) {
-                    return 'pill pill-yellow';
-                } else {
-                    return 'pill pill-red';
-                }
-            }
-            return 'pill pill-grey';
-        }
-
-        // parse time to ms for sorting: prefer ETA, else scheduled_local
-        function rowTimeMs(row) {
-            if (row.eta) {
-                const ms = Date.parse(row.eta);
-                if (!isNaN(ms)) return ms;
-            }
-            if (row.scheduled_local) {
-                const m = row.scheduled_local.match(/^(\d{1,2}):(\d{2})$/);
-                if (m) {
-                    const now = new Date();
-                    const hh = parseInt(m[1],10);
-                    const mm = parseInt(m[2],10);
-                    const dt = new Date(
-                        now.getFullYear(),
-                        now.getMonth(),
-                        now.getDate(),
-                        hh, mm, 0, 0
-                    );
-                    return dt.getTime();
-                }
-            }
-            return Number.MAX_SAFE_INTEGER;
-        }
-
-        // helper to render start/end belt window to HH:MM local
-        function timeLocalHM(iso) {
-            if (!iso) return '';
-            const d = new Date(iso);
-            if (isNaN(d)) return '';
-            const hh = String(d.getHours()).padStart(2,'0');
-            const mm = String(d.getMinutes()).padStart(2,'0');
-            return hh + ':' + mm;
-        }
-
-        // Render table rows subject to current filters
-        function renderTable() {
-            const shown = ALL_ROWS
-                .filter(r => {
-                    const cat = categoryOf(r);
-                    if (cat === 'early'     && !filtersState.early)     return false;
-                    if (cat === 'ontime'    && !filtersState.ontime)    return false;
-                    if (cat === 'delayed'   && !filtersState.delayed)   return false;
-                    if (cat === 'scheduled' && !filtersState.scheduled) return false;
-                    return true;
-                })
-                .sort((a,b) => rowTimeMs(a) - rowTimeMs(b));
-
-            if (shown.length === 0) {
-                tbody.innerHTML =
-                  '<tr><td colspan="9" style="padding:12px;color:#9ca3af;">No arrivals match current filters.</td></tr>';
-                return;
-            }
-
-            tbody.innerHTML = shown.map(r => {
-                // origin cell: "AYT Antalya"
-                let originCity = (r.origin || '').replace(/\(.+\)/,'').trim();
-                let originCell = r.origin_iata
-                    ? (r.origin_iata + ' ' + originCity)
-                    : (r.origin || '');
-
-                // TIME col -> "STA → ETA" if ETA exists
-                const timeCol = (r.scheduled_local || '') +
-                                (r.eta_local ? (' → ' + r.eta_local) : '');
-
-                // tooltip on flight code
-                const tipParts = [];
-                if (r.airline)               tipParts.push(r.airline.trim());
-                if (r.aircraft)              tipParts.push(r.aircraft.trim());
-                if (typeof r.pax_estimate === 'number')
-                                             tipParts.push('~' + r.pax_estimate + ' pax');
-                const tipText = tipParts.join(' • ');
-
-                return `
-                <tr>
-                    <td class="td-flight">
-                        <span class="flight-code" title="${tipText}">${r.flight || ''}</span>
-                    </td>
-                    <td>${originCell}</td>
-                    <td>${timeCol}</td>
-                    <td><span class="${statusClass(r)}">${statusText(r)}</span></td>
-                    <td>${r.flow || ''}</td>
-                    <td>${r.belt == null ? '' : r.belt}</td>
-                    <td>${r.start ? timeLocalHM(r.start) : ''}</td>
-                    <td>${r.end   ? timeLocalHM(r.end)   : ''}</td>
-                    <td>${r.reason || ''}</td>
-                </tr>`;
-            }).join('');
-        }
-
-        // hook up the chips
-        document.querySelectorAll('.filter-chip').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const cat = btn.getAttribute('data-cat'); // early / ontime / delayed / scheduled
-                if (!cat) return;
-                filtersState[cat] = !filtersState[cat];
-                btn.classList.toggle('off', !filtersState[cat]);
-                renderTable();
-            });
-        });
-
-        // fill meta block
-        const metaTxt = `Generated ${data.generated_at_local || data.generated_at_utc || ''} | Horizon ${data.horizon_minutes || ''} min`;
-        metaEl.textContent = metaTxt;
-
-        // initial table
-        renderTable();
+      function renderRow(r){
+        return `
+          <tr>
+            <td class="col-flight">${escapeHtml(r.flight || '')}</td>
+            <td class="col-origin">
+              <span class="origin-code">${escapeHtml((r.origin_iata || '').toUpperCase())}</span>
+              <span class="origin-name">${escapeHtml(r.origin || '')}</span>
+            </td>
+            <td class="col-time">${timeCell(r)}</td>
+            <td class="col-status">${statusPill(r)}</td>
+            <td class="col-flow">${flowBadge(r.flow || '')}</td>
+            <td class="col-belt">${beltBadge(r.belt)}</td>
+            <td class="col-start">${hhmm(r.start)}</td>
+            <td class="col-end">${hhmm(r.end)}</td>
+            <td class="col-reason">${escapeHtml(r.reason || '')}</td>
+          </tr>
+        `;
+      }
     })();
-    </script>
+  </script>
 </body>
 </html>
