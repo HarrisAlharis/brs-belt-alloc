@@ -1,140 +1,207 @@
-// feeder/feeder.js
-// BRS allocator, reusable
-// - Auto belts: 1,2,3,5,6
-// - Keep 7 (domestic/CTA target)
-// - If none fits → force to earliest-clearing belt (the one whose last end time is smallest)
-
-const AUTO_BELTS = [1, 2, 3, 5, 6];
-const MIN_GAP_MIN = 1;
-
-// --- time helpers ---
-function toMs(t) {
-  return (t instanceof Date) ? +t : +new Date(t);
-}
-
-// overlap + cooldown check
-function overlapsOrTooClose(f1, f2, minGapMin) {
-  const s1 = toMs(f1.start);
-  const e1 = toMs(f1.end);
-  const s2 = toMs(f2.start);
-  const e2 = toMs(f2.end);
-
-  // true overlap
-  if (s1 < e2 && s2 < e1) return true;
-
-  // cooldown
-  const gap1 = Math.abs(s2 - e1) / 60000;
-  const gap2 = Math.abs(s1 - e2) / 60000;
-  if (gap1 < minGapMin || gap2 < minGapMin) return true;
-
-  return false;
-}
-
-// create empty usage map
-function initUsage() {
-  const usage = {};
-  for (const b of AUTO_BELTS) usage[b] = [];
-  return usage;
-}
-
-// last end time on a belt
-function getBeltFreeTime(beltSlots) {
-  if (!beltSlots || beltSlots.length === 0) return 0;
-  const last = beltSlots[beltSlots.length - 1];
-  return last.endMs;
-}
-
-// pick the belt that will clear earliest
-function pickEarliestClearingBelt(usage) {
-  let bestBelt = null;
-  let bestEnd = Infinity;
-  for (const b of AUTO_BELTS) {
-    const end = getBeltFreeTime(usage[b]);
-    if (end < bestEnd) {
-      bestEnd = end;
-      bestBelt = b;
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>BRS – Arrivals Belt Plan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #0f1720; --panel: #111923; --ink: #e7edf5; --muted: #9fb1c5; --grid: rgba(255,255,255,0.05);
+      --green: #b7f3c8; --green-bg: #133d29;
+      --blue: #a8d8ff; --blue-bg: #10314a;
+      --orange: #ffe1b3; --orange-bg: rgba(255,212,154,0.16);
+      --red: #ffb3b8; --red-bg: #3d151a;
+      --gold: #ffd34d; --gold-bg: #3b2f0a;
     }
-  }
-  return bestBelt || AUTO_BELTS[0];
-}
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--bg); color:var(--ink); font:14px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial; }
+    header { padding:14px 16px; border-bottom:1px solid var(--grid); display:flex; justify-content:space-between; align-items:baseline; gap:1rem; }
+    h1 { margin:0; font-size:18px; font-weight:700; }
+    .meta { color:var(--muted); font-size:12px; white-space:nowrap; }
+    .wrap { padding:10px 14px 26px; }
+    table { width:100%; border-collapse:collapse; background:var(--panel); border:1px solid rgba(255,255,255,.04); border-radius:8px; overflow:hidden; }
+    thead th { text-align:left; font-weight:600; color:var(--muted); font-size:11px; letter-spacing:.25px; text-transform:uppercase; padding:9px 10px; border-bottom:1px solid rgba(255,255,255,.03); background:rgba(0,0,0,.05); white-space:nowrap; }
+    tbody td { padding:7px 10px; border-bottom:1px solid rgba(255,255,255,.02); vertical-align:middle; font-size:13.5px; }
+    tbody tr:last-child td{border-bottom:0;}
+    .col-flight{width:8.5ch;font-weight:600;}
+    .col-origin{width:19ch;}
+    .col-time{width:16ch;}
+    .col-status{width:10ch;}
+    .col-flow{width:9ch;}
+    .col-belt{width:6ch;}
+    .col-start,.col-end{width:7ch;font-variant-numeric:tabular-nums;}
+    .origin-code{font-weight:600;display:block;}
+    .origin-name{font-size:12px;color:var(--muted);display:block;max-width:16ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .time{display:flex;gap:.35rem;align-items:center;font-variant-numeric:tabular-nums;}
+    .time-sched{opacity:.6;} .time-arrow{opacity:.45;} .time-eta{font-weight:600;}
 
-// can this flight go on this belt under strict rules?
-function canPlaceOnBeltStrict(flight, belt, usage) {
-  const beltSlots = usage[belt] || [];
-  for (const slot of beltSlots) {
-    if (
-      overlapsOrTooClose(
-        { start: flight.start, end: flight.end },
-        { start: slot.flightRef.start, end: slot.flightRef.end },
-        MIN_GAP_MIN
-      )
-    ) {
-      return false;
+    .pill{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:.15rem .55rem;font-size:12.5px;white-space:nowrap;border:1px solid rgba(255,255,255,.09);}
+    .pill-green{background:var(--green-bg);color:var(--green);border-color:rgba(183,243,200,.4);}
+    .pill-blue{background:var(--blue-bg);color:var(--blue);border-color:rgba(168,216,255,.35);}
+    .pill-orange{background:var(--orange-bg);color:var(--orange);border-color:rgba(255,212,154,.55);}
+    .pill-red{background:var(--red-bg);color:var(--red);border-color:rgba(255,179,184,.4);}
+    .pill-flow{background:rgba(16,25,50,.6);color:#dfe7ff;}
+    .pill-belt{background:rgba(19,22,30,.3);color:#e7edf5;}
+    .pill-grey{background:rgba(160,170,185,.12);color:#b8c2d1;border-color:rgba(184,194,209,.35);}
+
+    .pill-gold{background:var(--gold-bg);color:var(--gold);border-color:rgba(255,211,77,.55);text-transform:uppercase;letter-spacing:.2px;box-shadow:inset 0 0 0 1px rgba(255,211,77,.25);}
+    .pulse{animation:goldPulse 1.8s ease-in-out infinite;}
+    @keyframes goldPulse{0%{border-color:rgba(255,211,77,.25);box-shadow:inset 0 0 0 1px rgba(255,211,77,.20);}50%{border-color:rgba(255,211,77,.70);box-shadow:inset 0 0 0 1px rgba(255,211,77,.55);}100%{border-color:rgba(255,211,77,.25);box-shadow:inset 0 0 0 1px rgba(255,211,77,.20);}}
+    tfoot td{color:var(--muted);font-size:12px;padding:6px 10px;text-align:right;}
+    .empty{text-align:center;padding:12px!important;color:var(--muted);font-size:13px;}
+    .error{color:#ffb3b8;background:rgba(61,21,26,.4);border:1px solid rgba(255,179,184,.4);}
+    @media (max-width:980px){.col-reason{display:none}.col-start,.col-end{display:none} header{flex-wrap:wrap}}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>BRS – Arrivals Belt Plan</h1>
+    <div class="meta" id="meta">Loading…</div>
+  </header>
+  <div class="wrap">
+    <table>
+      <thead>
+        <tr>
+          <th class="col-flight">Flight</th>
+          <th class="col-origin">Origin</th>
+          <th class="col-time">Time</th>
+          <th class="col-status">Status</th>
+          <th class="col-flow">Flow</th>
+          <th class="col-belt">Belt</th>
+          <th class="col-start">Start</th>
+          <th class="col-end">End</th>
+          <th class="col-reason">Reason</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"><tr><td colspan="9" class="empty">Loading…</td></tr></tbody>
+      <tfoot><tr><td colspan="9">Source: FR24 (screen-scrape) • This view refreshes when JSON updates.</td></tr></tfoot>
+    </table>
+  </div>
+  <script>
+  (async function(){
+    const meta = document.querySelector('#meta');
+    const tbody = document.querySelector('#tbody');
+
+    const candidates = ['assignments.json','./assignments.json','/brs-belt-alloc/assignments.json'];
+    let data=null,lastError=null;
+    for (const url of candidates){
+      try{
+        const res=await fetch(url+'?v='+Date.now(),{cache:'no-store'});
+        if(!res.ok) throw new Error('HTTP '+res.status+' on '+url);
+        data=JSON.parse(await res.text()); break;
+      }catch(e){ lastError=e; }
     }
-  }
-  return true;
-}
+    if(!data){
+      tbody.innerHTML=`<tr><td colspan="9" class="empty error">Could not load <code>assignments.json</code>. ${lastError?lastError.message:''}</td></tr>`;
+      meta.textContent='Load failed'; return;
+    }
+    let rows = Array.isArray(data.rows)?data.rows:[];
+    meta.textContent=`Generated ${data.generated_at_local||data.generated_at_utc||''} • Horizon ${data.horizon_minutes||''} min`;
+    if(!rows.length){ tbody.innerHTML=`<tr><td colspan="9" class="empty">No arrivals found (empty rows array).</td></tr>`; return; }
 
-// actually record placement
-function recordPlacement(flight, belt, usage) {
-  flight.belt = belt;
-  usage[belt].push({
-    startMs: toMs(flight.start),
-    endMs: toMs(flight.end),
-    flightRef: flight
-  });
-  usage[belt].sort((a, b) => a.startMs - b.startMs);
-}
-
-// main
-function assignBelts(rowsIn) {
-  // clone to avoid mutating caller’s array
-  const rows = rowsIn.map(r => ({ ...r }));
-
-  // sort by start time so we place in chronological order
-  rows.sort((a, b) => toMs(a.start) - toMs(b.start));
-
-  const usage = initUsage();
-
-  for (const flight of rows) {
-    const currentBelt = parseInt(flight.belt, 10);
-
-    // keep belt 7 (domestic/CTA case)
-    if (currentBelt === 7) {
-      continue;
+    // --- helpers ---
+    function pad(n){return String(n).padStart(2,'0');}
+    function hhmm(iso){ if(!iso) return ''; const d=new Date(iso); return `${pad(d.getHours())}:${pad(d.getMinutes())}`; }
+    function parseHHMMLocal(s){
+      if(!s) return null; const m=/^(\d{1,2}):(\d{2})$/.exec(s.trim()); if(!m) return null;
+      const now=new Date(); return new Date(now.getFullYear(),now.getMonth(),now.getDate(),+m[1],+m[2],0,0);
+    }
+    function escapeHtml(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+    function minutesToEta(r){ if(!r||!r.eta) return null; const now=new Date(); return Math.round((new Date(r.eta)-now)/60000); }
+    function computeDeltaMin(r){
+      if (typeof r?.delay_min==='number' && !Number.isNaN(r.delay_min)) return r.delay_min;
+      const sched=parseHHMMLocal(r?.scheduled_local);
+      let etaDT=null; if(r?.eta_local) etaDT=parseHHMMLocal(r.eta_local); else if(r?.eta) etaDT=new Date(r.eta);
+      if(!sched||!etaDT) return null; return Math.round((etaDT - sched)/60000);
+    }
+    const beltBadge = b => `<span class="pill pill-belt">${(b??'?')}</span>`;
+    const flowBadge = f => `<span class="pill pill-flow">${(f||'').toUpperCase()}</span>`;
+    function timeCell(r){
+      const etaLocal=r.eta_local||hhmm(r.eta); const schedLocal=r.scheduled_local||'';
+      if(schedLocal){return `<div class="time"><span class="time-sched">${escapeHtml(schedLocal)}</span><span class="time-arrow">→</span><span class="time-eta">${escapeHtml(etaLocal||'')}</span></div>`;}
+      return `<div class="time"><span class="time-eta">${escapeHtml(etaLocal||'')}</span></div>`;
     }
 
-    // if flight already sits on a valid auto belt → just track it
-    if (AUTO_BELTS.includes(currentBelt)) {
-      recordPlacement(flight, currentBelt, usage);
-      continue;
+    // --- NEW: prefer live row per flight (Estimated/Delayed/Landed over plain Scheduled) ---
+    function statusRank(r){
+      const s=String(r?.status||'').toLowerCase();
+      if (s.includes('landed')) return 3;
+      if (s.includes('estimated') || s.includes('delayed') || r?.eta) return 2;
+      return 1; // scheduled / unknown
     }
-
-    // otherwise we must place it
-    let placed = false;
-    for (const b of AUTO_BELTS) {
-      if (canPlaceOnBeltStrict(flight, b, usage)) {
-        recordPlacement(flight, b, usage);
-        placed = true;
-        break;
+    const bestByFlight = new Map();
+    for (const r of rows){
+      const key = String(r.flight||'').trim() || `${r.origin_iata||''}:${r.scheduled_local||''}`;
+      const cur = bestByFlight.get(key);
+      if(!cur){ bestByFlight.set(key,r); continue; }
+      const ra=statusRank(r), rb=statusRank(cur);
+      if (ra>rb) bestByFlight.set(key,r);
+      else if (ra===rb){
+        // tie-breaker: prefer one with ETA; else earlier ETA; else earlier start
+        const aEta = r.eta ? new Date(r.eta).getTime() : Number.POSITIVE_INFINITY;
+        const bEta = cur.eta ? new Date(cur.eta).getTime() : Number.POSITIVE_INFINITY;
+        if (aEta!==bEta) bestByFlight.set(key, aEta<bEta? r:cur);
+        else {
+          const aStart = r.start ? new Date(r.start).getTime() : Number.POSITIVE_INFINITY;
+          const bStart = cur.start ? new Date(cur.start).getTime() : Number.POSITIVE_INFINITY;
+          if (aStart<bStart) bestByFlight.set(key,r);
+        }
       }
     }
+    rows = Array.from(bestByFlight.values());
 
-    // if no belt passed the rules → force to earliest-clearing belt
-    if (!placed) {
-      const fb = pickEarliestClearingBelt(usage);
-      recordPlacement(flight, fb, usage);
+    // --- ORDER: ETA first, then start, then scheduled_local; nulls last ---
+    function firstTimeMs(r){
+      if (r?.eta) return new Date(r.eta).getTime();
+      if (r?.start) return new Date(r.start).getTime();
+      const sched=parseHHMMLocal(r?.scheduled_local);
+      return sched? sched.getTime() : Number.MAX_SAFE_INTEGER;
+    }
+    rows.sort((a,b)=> firstTimeMs(a)-firstTimeMs(b));
+
+    // --- render ---
+    tbody.innerHTML = rows.map(r=>renderRow(r)).join('');
+
+    function statusPill(r){
+      const baseText = r?.status ? r.status : (r?.eta_local ? `Estimated ${r.eta_local}` : '—');
+      const s = String(r?.status||'').toLowerCase();
+
+      if (s.includes('landed')) return `<span class="pill pill-grey">${escapeHtml(baseText)}</span>`;
+
+      const minsTo = minutesToEta(r);
+      if (minsTo!==null && minsTo>=0 && minsTo<=10){
+        const finalsTime = r?.eta_local || hhmm(r?.eta);
+        const txt = finalsTime ? `FINALS ${finalsTime}` : 'FINALS';
+        return `<span class="pill pill-gold pulse">${escapeHtml(txt)}</span>`;
+      }
+
+      const hasEta = Boolean(r?.eta || (r?.eta_local && r.eta_local.trim()));
+      if (!hasEta && s.startsWith('scheduled')) return `<span class="pill pill-grey">${escapeHtml(baseText)}</span>`;
+
+      const d = computeDeltaMin(r);
+      if (d===null) return `<span class="pill pill-grey">${escapeHtml(baseText)}</span>`;
+      const abs = Math.abs(d);
+      let cls='pill-green'; if (abs>=5 && abs<=15) cls='pill-orange'; else if (abs>15) cls='pill-red';
+      return `<span class="pill ${cls}">${escapeHtml(baseText)}</span>`;
     }
 
-    // normalise reason
-    if (!flight.reason || flight.reason === 'no_slot_available') {
-      flight.reason = 'auto-assign';
+    function renderRow(r){
+      return `<tr>
+        <td class="col-flight">${escapeHtml(r.flight||'')}</td>
+        <td class="col-origin">
+          <span class="origin-code">${escapeHtml((r.origin_iata||'').toUpperCase())}</span>
+          <span class="origin-name">${escapeHtml(r.origin||'')}</span>
+        </td>
+        <td class="col-time">${timeCell(r)}</td>
+        <td class="col-status">${statusPill(r)}</td>
+        <td class="col-flow">${flowBadge(r.flow||'')}</td>
+        <td class="col-belt">${beltBadge(r.belt)}</td>
+        <td class="col-start">${hhmm(r.start)}</td>
+        <td class="col-end">${hhmm(r.end)}</td>
+        <td class="col-reason">${escapeHtml(r.reason||'')}</td>
+      </tr>`;
     }
-  }
-
-  return rows;
-}
-
-module.exports = {
-  assignBelts
-};
+  })();
+  </script>
+</body>
+</html>
