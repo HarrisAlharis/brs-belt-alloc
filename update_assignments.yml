@@ -1,0 +1,42 @@
+name: Update assignments
+
+# This workflow scrapes data every 5 minutes and commits updates.
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate assignments
+        run: |
+          node feeder/fr24_snap.js
+          node feeder/fr24_feeder.js
+
+      - name: Commit and push changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if ! git diff --quiet docs/assignments.json; then
+            git add docs/assignments.json
+            git commit -m "chore: automatic update of assignments.json"
+            git push
+          fi
